@@ -19,10 +19,10 @@ namespace Alcatraz
                 // echo message back to sender
                 Sender.Tell("ss");
             });
-            Receive<Client>(client => {
-                Console.WriteLine("received message from" + client.getPlayerID());
+            Receive<Client[]>(client => {
+                Console.WriteLine("received message from" + client[0].playerID);
 
-                clientArr[iterator] = client;
+                clientArr[iterator] = client[0];
                 iterator++;
                 Sender.Tell("ss");
 

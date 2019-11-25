@@ -33,7 +33,7 @@ namespace Alcatraz
             for (int i = 0; i < data.Length; i++)
             {
                 actorSystem = ActorSystem.Create(uniqueName);
-                string remoteActorAddressClient1 = data[i].getAddress() + data[i].getPort() + data[i].getUrlAddition();
+                string remoteActorAddressClient1 = data[i].address + data[i].port + data[i].urlAddition;
                 remoteChatActorClient[iterator] = actorSystem.ActorSelection(remoteActorAddressClient1);
                 iterator++;
             }
@@ -42,7 +42,7 @@ namespace Alcatraz
             
         }
 
-        public Client initializeClient(int playerID, int numberOfPlayer, ClientData[] data, string uniqueName)
+        public Client initializeClient(int playerID, int numberOfPlayer, ClientData[] data)
         {
             //Game logic
             clientAlcatraz.init(numberOfPlayer, playerID);
@@ -52,7 +52,7 @@ namespace Alcatraz
                 int help = j - 1;
                 clientAlcatraz.getPlayer(help).Name = "Player " + j;
             }
-            Client client = new Client(clientAlcatraz, playerID);
+            Client client = new Client(clientAlcatraz, data[0]);
 
             for (int jj = 0; jj < numberOfPlayer-1; jj++)
             {

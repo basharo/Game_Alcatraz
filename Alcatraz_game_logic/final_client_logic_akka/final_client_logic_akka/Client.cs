@@ -9,46 +9,22 @@ namespace Alcatraz
 {
     public class Client
     {
-        private Alcatraz alcatraz;
-        private int playerID;
 
-       // private string address;
-       // private int port;
+        public Alcatraz alcatraz { get; set; }
+        public int playerID { get; set; }
+        public ClientData clientData { get; set; }
 
-        public Client()
+        public Client() { }
+
+        public Client(Alcatraz alcatraz, ClientData clientData)
         {
-            
-        }
-        public Client(Alcatraz alcatraz, int playerID)
-        {
-            //this.clientClass = clientClass;
             this.alcatraz = alcatraz;
-            this.playerID = playerID;
-         //   this.port = port;
-           // this.address = address;
+            this.playerID = clientData.playerID;
+            this.clientData = clientData;
+
         }
 
-        public void setPlayerID(int playerID)
-        {
-            this.playerID = playerID;
-        }
-        public int getPlayerID()
-        {
-            return playerID;
-        }        
 
-        //public void setPort(int port)
-        //{
-        //    this.port = port;
-        //}
-        //public int getPort()
-        //{
-        //    return this.port;
-        //}
 
-        public Alcatraz getAlcatraz()
-        {
-            return alcatraz;
-        }
     }
 }

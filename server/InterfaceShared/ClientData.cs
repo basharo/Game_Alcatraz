@@ -8,7 +8,6 @@ namespace Alcatraz
 {
     public class ClientData
     {
-
         public string address { get; set; }
         public int playerID { get; set; }
         public string uniqueName { get; set; }

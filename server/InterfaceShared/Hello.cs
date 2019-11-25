@@ -1,4 +1,4 @@
-﻿namespace GameInterface
+﻿namespace Alcatraz
 {
     public class Hello
     {

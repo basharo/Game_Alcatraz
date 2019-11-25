@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Akka.Actor;
 using Alcatraz;
+using Newtonsoft.Json;
 
 namespace Alcatraz
 
@@ -14,7 +15,7 @@ namespace Alcatraz
         private static Client clientItem;
         private static Client[] clientItems;
         private static ClientClass clientClass;
-        private static Alcatraz clientAlcatraz;
+        private static Alcatraz clientAlcatraz = new Alcatraz();
         private static Alcatraz[] other;
         private static ClientData[] data;
         private int numPlayer;
@@ -31,15 +32,65 @@ namespace Alcatraz
         public static void Main(String[] args)
         {
 
+            Console.WriteLine("Please choose a player name:");
+            string playerName = Console.ReadLine();
+
+            try
+            {
+                using (var actorSystem = ActorSystem.Create(playerName))
+                {
+
+                    clientAlcatraz = new Alcatraz();
+                    clientAlcatraz.init(2, 1);
+                    clientItem = new Client(clientAlcatraz, new ClientData("", 1111, "", 0, ""));
+
+
+                    var localChatActor = actorSystem.ActorOf(Props.Create<GameActor>(), "GameActor");
+
+                    //Players players = new Players(new string[10, 10]);
+                    //players.players[1, 1] = actorSystemName;
+                    string remoteActorAddressClient1 = "akka.tcp://server@localhost:5555/user/RegisterActor";
+                    //string remoteActorAddressClient2 = "akka.tcp://client2@localhost:2222/user/EchoActor";
+                    var remoteChatActorClient1 = actorSystem.ActorSelection(remoteActorAddressClient1);
+                    //var remoteChatActorClient2 = actorSystem.ActorSelection(remoteActorAddressClient2);
+
+                    //string serverActor = "akka.tcp://server@localhost:1111/user/EchoActor";
+
+                    if (remoteChatActorClient1 != null)
+                    {
+                        string line = string.Empty;
+                        while (line != null)
+                        {
+
+                            //remoteChatActorClient1.Tell("test", localChatActor);
+                            remoteChatActorClient1.Tell(new Client(), localChatActor);
+                            //remoteChatActorClient2.Tell(players, child);
+                            line = Console.ReadLine();
+                            //remoteChatActorClient1.Tell(line, child);
+                            //remoteChatActorClient2.Tell(line, child);
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Could not get remote actor ref");
+                        Console.ReadLine();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+
             data = new ClientData[1];
-            data[0] = new ClientData("akka.tcp://client2@localhost:", 2222, "/user/GameActor", 1, "client2");
+            data[0] = new ClientData("akka.tcp://" + playerName + "@localhost:", 1111, "/user/GameActor", 1, playerName);
             other = new Alcatraz[data.Length+1];
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            clientClass = new ClientClass(data,"client1");
-            clientItem = clientClass.initializeClient(1, data.Length+1, data, "client1");
+            clientClass = new ClientClass(data,playerName);
+            clientItem = clientClass.initializeClient(1, data.Length+1, data);
 
             t1 = new Test();
             t1.setNumPlayer(data.Length+1);
@@ -54,11 +105,11 @@ namespace Alcatraz
                 line = Console.ReadLine();
                 if(line == "start")
                 {
-                    clientAlcatraz = clientItem.getAlcatraz();
-                    clientItem.getAlcatraz().showWindow();
+                    clientAlcatraz = clientItem.alcatraz;
+                    clientItem.alcatraz.showWindow();
                     clientAlcatraz.addMoveListener(t1);
-                    clientItem.getAlcatraz().getWindow().FormClosed += new FormClosedEventHandler(Test_FormClosed);
-                    clientItem.getAlcatraz().start();
+                    clientItem.alcatraz.getWindow().FormClosed += new FormClosedEventHandler(Test_FormClosed);
+                    clientItem.alcatraz.start();
                     Application.Run();
                 }
                
@@ -78,7 +129,7 @@ namespace Alcatraz
             Console.WriteLine(clients.Length);
             for(int i = 0; i < clients.Length; i++)
             {
-                t1.setOther(i,clients[i].getAlcatraz());
+                t1.setOther(i,clients[i].alcatraz);
             }
             line = "start";
         }
