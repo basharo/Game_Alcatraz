@@ -257,6 +257,8 @@ namespace Alcatraz
             */
 
 
+            Globals.myPlayerId = 2;
+
             if (Globals.AllPlayers.Count == 2)
             {
                 Game t1 = new Game();
@@ -276,10 +278,12 @@ namespace Alcatraz
                 if (Globals.myPlayerId == 0)
                 {
                     a1.showWindow();
+                    var localReceivingActor = Globals.ActSys.ActorOf(Props.Create<ReceivingActor>(a1), "ReceivingActor");
                 }
                 else if (Globals.myPlayerId == 1)
                 {
                     a2.showWindow();
+                    var localReceivingActor = Globals.ActSys.ActorOf(Props.Create<ReceivingActor>(a2), "ReceivingActor");
                 }
                 a1.addMoveListener(t1);
                 a2.addMoveListener(t2);
@@ -290,63 +294,134 @@ namespace Alcatraz
             } else if (Globals.AllPlayers.Count == 3) {
                 Game t1 = new Game();
                 Game t2 = new Game();
+                Game t3 = new Game();
                 Alcatraz a1 = new Alcatraz();
                 Alcatraz a2 = new Alcatraz();
+                Alcatraz a3 = new Alcatraz();
                 t1.setNumPlayer(2);
                 t2.setNumPlayer(2);
-                a1.init(2, 0);
-                a2.init(2, 1);
+                t3.setNumPlayer(2);
+                a1.init(3, 0);
+                a2.init(3, 1);
+                a3.init(3, 2);
                 a1.getPlayer(0).Name = Globals.AllPlayers.ElementAt(0).playerName;
                 a1.getPlayer(1).Name = Globals.AllPlayers.ElementAt(1).playerName;
+                a1.getPlayer(2).Name = Globals.AllPlayers.ElementAt(2).playerName;
                 a2.getPlayer(0).Name = Globals.AllPlayers.ElementAt(0).playerName;
                 a2.getPlayer(1).Name = Globals.AllPlayers.ElementAt(1).playerName;
+                a2.getPlayer(2).Name = Globals.AllPlayers.ElementAt(2).playerName;
+                a3.getPlayer(0).Name = Globals.AllPlayers.ElementAt(0).playerName;
+                a3.getPlayer(1).Name = Globals.AllPlayers.ElementAt(1).playerName;
+                a3.getPlayer(2).Name = Globals.AllPlayers.ElementAt(2).playerName;
                 t1.setOther(0, a2);
+                t1.setOther(1, a3);
                 t2.setOther(0, a1);
+                t2.setOther(1, a3);
+                t3.setOther(0, a1);
+                t3.setOther(1, a2);
                 if (Globals.myPlayerId == 0)
                 {
                     a1.showWindow();
+                    var localReceivingActor = Globals.ActSys.ActorOf(Props.Create<ReceivingActor>(a1), "ReceivingActor");
                 }
                 else if (Globals.myPlayerId == 1)
                 {
                     a2.showWindow();
+                    var localReceivingActor = Globals.ActSys.ActorOf(Props.Create<ReceivingActor>(a2), "ReceivingActor");
+                }
+                else if (Globals.myPlayerId == 2)
+                {
+                    a3.showWindow();
+                    var localReceivingActor = Globals.ActSys.ActorOf(Props.Create<ReceivingActor>(a3), "ReceivingActor");
                 }
                 a1.addMoveListener(t1);
                 a2.addMoveListener(t2);
+                a3.addMoveListener(t3);
                 a1.getWindow().FormClosed += new FormClosedEventHandler(Test_FormClosed);
                 a2.getWindow().FormClosed += new FormClosedEventHandler(Test_FormClosed);
+                a3.getWindow().FormClosed += new FormClosedEventHandler(Test_FormClosed);
                 a1.start();
                 a2.start();
+                a3.start();
             }
             else if (Globals.AllPlayers.Count == 4)
             {
                 Game t1 = new Game();
                 Game t2 = new Game();
+                Game t3 = new Game();
+                Game t4 = new Game();
                 Alcatraz a1 = new Alcatraz();
                 Alcatraz a2 = new Alcatraz();
+                Alcatraz a3 = new Alcatraz();
+                Alcatraz a4 = new Alcatraz();
                 t1.setNumPlayer(2);
                 t2.setNumPlayer(2);
-                a1.init(2, 0);
-                a2.init(2, 1);
+                t3.setNumPlayer(2);
+                t4.setNumPlayer(2);
+                a1.init(3, 0);
+                a2.init(3, 1);
+                a3.init(3, 2);
+                a4.init(3, 2);
                 a1.getPlayer(0).Name = Globals.AllPlayers.ElementAt(0).playerName;
                 a1.getPlayer(1).Name = Globals.AllPlayers.ElementAt(1).playerName;
+                a1.getPlayer(2).Name = Globals.AllPlayers.ElementAt(2).playerName;
+                a1.getPlayer(3).Name = Globals.AllPlayers.ElementAt(3).playerName;
                 a2.getPlayer(0).Name = Globals.AllPlayers.ElementAt(0).playerName;
                 a2.getPlayer(1).Name = Globals.AllPlayers.ElementAt(1).playerName;
+                a2.getPlayer(2).Name = Globals.AllPlayers.ElementAt(2).playerName;
+                a2.getPlayer(3).Name = Globals.AllPlayers.ElementAt(3).playerName;
+                a3.getPlayer(0).Name = Globals.AllPlayers.ElementAt(0).playerName;
+                a3.getPlayer(1).Name = Globals.AllPlayers.ElementAt(1).playerName;
+                a3.getPlayer(2).Name = Globals.AllPlayers.ElementAt(2).playerName;
+                a3.getPlayer(3).Name = Globals.AllPlayers.ElementAt(3).playerName;
+                a4.getPlayer(0).Name = Globals.AllPlayers.ElementAt(0).playerName;
+                a4.getPlayer(1).Name = Globals.AllPlayers.ElementAt(1).playerName;
+                a4.getPlayer(2).Name = Globals.AllPlayers.ElementAt(2).playerName;
+                a4.getPlayer(3).Name = Globals.AllPlayers.ElementAt(3).playerName;
                 t1.setOther(0, a2);
+                t1.setOther(1, a3);
+                t1.setOther(2, a4);
                 t2.setOther(0, a1);
+                t2.setOther(1, a3);
+                t2.setOther(2, a4);
+                t3.setOther(0, a1);
+                t3.setOther(1, a2);
+                t3.setOther(2, a4);
+                t4.setOther(0, a1);
+                t4.setOther(1, a2);
+                t4.setOther(2, a3);
                 if (Globals.myPlayerId == 0)
                 {
                     a1.showWindow();
+                    var localReceivingActor = Globals.ActSys.ActorOf(Props.Create<ReceivingActor>(a1), "ReceivingActor");
                 }
                 else if (Globals.myPlayerId == 1)
                 {
                     a2.showWindow();
+                    var localReceivingActor = Globals.ActSys.ActorOf(Props.Create<ReceivingActor>(a2), "ReceivingActor");
+                }
+                else if (Globals.myPlayerId == 2)
+                {
+                    a3.showWindow();
+                    var localReceivingActor = Globals.ActSys.ActorOf(Props.Create<ReceivingActor>(a3), "ReceivingActor");
+                }
+                else if (Globals.myPlayerId == 3)
+                {
+                    a4.showWindow();
+                    var localReceivingActor = Globals.ActSys.ActorOf(Props.Create<ReceivingActor>(a4), "ReceivingActor");
                 }
                 a1.addMoveListener(t1);
                 a2.addMoveListener(t2);
+                a3.addMoveListener(t3);
+                a4.addMoveListener(t4);
                 a1.getWindow().FormClosed += new FormClosedEventHandler(Test_FormClosed);
                 a2.getWindow().FormClosed += new FormClosedEventHandler(Test_FormClosed);
+                a3.getWindow().FormClosed += new FormClosedEventHandler(Test_FormClosed);
+                a4.getWindow().FormClosed += new FormClosedEventHandler(Test_FormClosed);
                 a1.start();
                 a2.start();
+                a3.start();
+                a4.start();
             }
 
 
@@ -453,7 +528,7 @@ namespace Alcatraz
                 alcatrazList[ii].start();
             }*/
 
-            var localReceivingActor = Globals.ActSys.ActorOf(Props.Create<ReceivingActor>(a1), "ReceivingActor");
+            
 
             Application.Run();
         }
