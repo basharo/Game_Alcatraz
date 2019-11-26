@@ -5,6 +5,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Akka;
 using Akka.Actor;
 using Alcatraz;
 
@@ -23,6 +24,7 @@ namespace final_client_logic_akka
         private static Boolean boolVar = false;
         private static Test t1;
         private static string line;
+        public static ActorSystem mainActorSystem { get; set; }
 
         public Test()
         {
@@ -33,51 +35,47 @@ namespace final_client_logic_akka
         public static void Main(String[] args)
         {
 
+            
+
             Console.WriteLine("Please choose a player name:");
             string playerName = Console.ReadLine();
 
+            while (playerName == "")
+            {
+                Console.WriteLine("Your name cannot be empty. Please choose a player name:");
+                playerName = Console.ReadLine();
+            }
+
+
             try
             {
-                using (var actorSystem = ActorSystem.Create(playerName))
+
+                startActorSystem("alcatraz");
+                var localChatActor = mainActorSystem.ActorOf(Props.Create<GameActor>(), "GameActor");
+
+                //Players players = new Players(new string[10, 10]);
+                //players.players[1, 1] = actorSystemName;
+                string remoteActorAddressClient1 = "akka.tcp://alcatraz@localhost:5555/user/RegisterActor";
+                //string remoteActorAddressClient2 = "akka.tcp://client2@localhost:2222/user/EchoActor";
+                var remoteChatActorClient1 = mainActorSystem.ActorSelection(remoteActorAddressClient1);
+                //var remoteChatActorClient2 = actorSystem.ActorSelection(remoteActorAddressClient2);
+
+                if (remoteChatActorClient1 != null)
                 {
+                        
 
-                    var localChatActor = actorSystem.ActorOf(Props.Create<GameActor>(), "GameActor");
+                    remoteChatActorClient1.Tell(playerName, localChatActor);
+                    //string ip = GetLocalIPAddress();
+                    //string actorAdress = localChatActor.Path.;
+                    //ClientData clientData = new ClientData(temp.Protocol, temp.Host, temp.Port, remoteChatActorClient1.PathString, 0, playerName);
+                    Console.ReadLine();
+                    //remoteChatActorClient1.Tell(new ClientData(), localChatActor);
+                    //remoteChatActorClient2.Tell(players, child);
 
-                    //Players players = new Players(new string[10, 10]);
-                    //players.players[1, 1] = actorSystemName;
-                    string remoteActorAddressClient1 = "akka.tcp://server@localhost:5555/user/RegisterActor";
-                    //string remoteActorAddressClient2 = "akka.tcp://client2@localhost:2222/user/EchoActor";
-                    var remoteChatActorClient1 = actorSystem.ActorSelection(remoteActorAddressClient1);
-                    //var remoteChatActorClient2 = actorSystem.ActorSelection(remoteActorAddressClient2);
-
-                    //string serverActor = "akka.tcp://server@localhost:1111/user/EchoActor";
-
-                    if (remoteChatActorClient1 != null)
-                    {
-                        string line = string.Empty;
-                        while (line != null)
-                        {
-
-                            string clientData
-                            remoteChatActorClient1.Tell(playerName
-                                , localChatActor);
-                            //string ip = GetLocalIPAddress();
-                            //string actorAdress = localChatActor.Path.;
-                            //ClientData clientData = new ClientData(temp.Protocol, temp.Host, temp.Port, remoteChatActorClient1.PathString, 0, playerName);
-
-                            //remoteChatActorClient1.Tell(new ClientData(), localChatActor);
-                            //remoteChatActorClient2.Tell(players, child);
-                            line = Console.ReadLine();
-                            //remoteChatActorClient1.Tell(line, child);
-                            //remoteChatActorClient2.Tell(line, child);
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Could not get remote actor ref");
-                        Console.ReadLine();
-                    }
-                }
+                } else {
+                    Console.WriteLine("Could not get remote actor ref");
+                    Console.ReadLine();
+                }  
             }
             catch (Exception ex)
             {
@@ -190,5 +188,11 @@ namespace final_client_logic_akka
             }
             throw new Exception("No network adapters with an IPv4 address in the system!");
         }
-    }
+
+        public static void startActorSystem(string actorSystemName)
+        {
+            mainActorSystem = ActorSystem.Create(actorSystemName);
+      
+        }
+    }    
 }

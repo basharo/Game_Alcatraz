@@ -9,20 +9,25 @@ namespace Interface
     public class ClientData
     {
 
+        public string protocol { get; set; }
+        public string system { get; set; }
+        public string host { get; set; }
+        public int? port { get; set; }
+        public string actorName { get; set; }
+        public int playerId { get; set; }
         public string playerName { get; set; }
-        public string address { get; set; }
-        public int playerID { get; set; }
 
+        public ClientData() { }
 
-        public ClientData(string playerName, string address, int playerID)
+        public ClientData(string protocol, string system, string host, int? port, string actorName, int playerId, string playerName)
         {
+            this.protocol = protocol;
+            this.system = system;
+            this.host = host;
+            this.port = port;
+            this.actorName = actorName;
+            this.playerId = playerId;
             this.playerName = playerName;
-            this.address = address;
-            this.playerID = playerID;
-        }
-
-        public ClientData()
-        {
         }
     }
 }

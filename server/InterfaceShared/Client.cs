@@ -12,7 +12,7 @@ namespace Interface
     {
        
         public Alcatraz.Alcatraz alcatraz { get; set; }
-        public int playerID { get; set; }
+        
         public ClientData clientData { get; set; }
 
         public Client() { }
@@ -20,7 +20,7 @@ namespace Interface
         public Client(Alcatraz.Alcatraz alcatraz, ClientData clientData)
         {
             this.alcatraz = alcatraz;
-            this.playerID = clientData.playerID;
+           
             this.clientData = clientData;
            
         }

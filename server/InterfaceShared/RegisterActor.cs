@@ -1,5 +1,6 @@
 ﻿using Akka.Actor;
 using Interface;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,14 +14,13 @@ namespace Interface
     {
 
         private ICancelable _helloTask;
-        ClientData[] players;
+        private string path = "C:/temp/";
+        private string fileName = "game.txt";
+        string playerName;
+        List<ClientData> exisitingClients = new List<ClientData>();
 
         public RegisterActor()
         {
-
-            string path = @"c:\temp\";
-            string fileName = "game.txt";
-
         }
 
             /*
@@ -47,10 +47,7 @@ namespace Interface
 
             Receive<string>(text =>
             {
-                if (text == "start")
-                {
-                    return;
-                }
+                
 
                 ClientData clientData = new ClientData();
 
@@ -111,17 +108,59 @@ namespace Interface
         }
 
 
-        void WriteToFIle(string line, string path, string fileName)
-        {
-            if (!File.Exists(path + fileName))
-                File.WriteAllText(path + fileName, line);
-            else
-                Sender.Tell("already registered");
-        }
+        
 
         protected override void OnReceive(object message)
         {
-            Console.WriteLine(message);
+
+           
+                
+            var temp = Sender.Path.Address;
+            string playerName = message.ToString();
+
+            if (!File.Exists(path + fileName))
+            {
+                var myFile = File.Create(path + fileName);
+                myFile.Close();
+            }
+
+            string content = File.ReadAllText(path + fileName);
+            if (content != "")
+            {
+                exisitingClients = JsonConvert.DeserializeObject<List<ClientData>>(content);
+
+                foreach (var item in exisitingClients)
+                {
+                    if(item.playerName == playerName)
+                    {
+                        Sender.Tell(temp.System + " already exists. Please choose another name:");
+                        return;
+                    }
+                }
+            }
+
+            ClientData clientToAdd = new ClientData(temp.Protocol, temp.System, temp.Host, temp.Port, Sender.Path.Name, exisitingClients.Count() + 1, playerName);
+            exisitingClients.Add(clientToAdd);
+
+            this.WriteToFile(JsonConvert.SerializeObject(exisitingClients));
+
+            //players.Add(clientToAdd);
+
+            Sender.Tell(playerName + " was successfully registered on server.");
+
+           
+        }
+
+
+        private void WriteToFile(string line)
+        {
+            if (File.Exists(path + fileName))
+            {
+                File.Delete(path + fileName);
+            }
+                
+            File.WriteAllText(path + fileName, line);
+            
         }
     }
 }

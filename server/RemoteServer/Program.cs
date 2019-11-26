@@ -11,48 +11,44 @@ namespace Server
     
     class Program
     {
-     
+        public static ActorSystem mainActorSystem { get; set; }
+
         static void Main(string[] args)
         {
-            string actorSystemName = "server";
-            Console.Title = actorSystemName;
+            string actorName = "server";
+            Console.Title = actorName;
             
 
             try
             {
-                using (var actorSystem = ActorSystem.Create(actorSystemName))
+
+                startActorSystem("alcatraz");
+                var localChatActor = mainActorSystem.ActorOf(Props.Create<RegisterActor>(), "RegisterActor");
+
+                
+                string line = string.Empty;
+                while (line != null)
                 {
-
-                    var localChatActor = actorSystem.ActorOf(Props.Create<RegisterActor>(), "RegisterActor");
-
-                    //string remoteActorAddress = "akka.tcp://server@localhost:6666/user/RegisterActor";
-                    //var remoteChatActor = actorSystem.ActorSelection(remoteActorAddress);
-
-                    //if (remoteChatActor != null)
-                    //{
-                        string line = string.Empty;
-                        while (line != null)
-                        {
-                            if(line == "gamestart")
-                            {
+                    if(line == "gamestart")
+                    {
                                 
-                                return;
-                            }
-                            line = Console.ReadLine();
-                            //remoteChatActor.Tell(line, localChatActor);
-                        }
-                    //}
-                    //else
-                    //{
-                    //    Console.WriteLine("Could not get remote actor ref");
-                    //    Console.ReadLine();
-                    //}
+                        return;
+                    }
+                    line = Console.ReadLine();
+                       
                 }
+            
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
             }
+        }
+
+        public static void startActorSystem(string actorSystemName)
+        {
+            mainActorSystem = ActorSystem.Create(actorSystemName);
+
         }
     }
 }
