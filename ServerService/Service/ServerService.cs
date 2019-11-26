@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
-using ServerService.Client;
+//using ServerService.Client;
 using ServerService.Configuration;
 using ServerService.Interface;
 using ServerService.Utils;
@@ -20,13 +20,13 @@ namespace ServerService.Service
         private List<ClientHandler> _clients = new List<ClientHandler>();
         private Action<string> _notifier;
         private Thread _acceptingThread;
-        private ClientResponse clientResponse;
+        //private ClientResponse clientResponse;
         private int counter = 0;
 
         public ServerService(ILogger<ServerService> logger)
         {
             Logger = logger;
-            clientResponse = new ClientResponse();
+            //clientResponse = new ClientResponse();
         }
 
         public void InitializeServerService(Action<string> notifier)
@@ -111,54 +111,54 @@ namespace ServerService.Service
             }
         }
 
-        public ClientResponse Register(ClientDemo clientToRegister)
-        {
-            var clientNames = FileOperations.GetFileFullPath(string.Format("clientNames.txt", DateTime.Today.ToShortDateString().Replace("/", string.Empty)));
-            Logger.LogInformation($"File with client names: {clientNames}");
+        //public ClientResponse Register(ClientDemo clientToRegister)
+        //{
+        //    var clientNames = FileOperations.GetFileFullPath(string.Format("clientNames.txt", DateTime.Today.ToShortDateString().Replace("/", string.Empty)));
+        //    Logger.LogInformation($"File with client names: {clientNames}");
 
-            #region Client Unique Name
-            Logger.LogInformation($"Checking if the client name {clientToRegister.UniqueClientName} is unique.");
-            if (!isUniqueName(clientToRegister.UniqueClientName, clientNames))
-            {
-                Logger.LogInformation($"The provided name is not unique. Returning error message!");
-                var errorMessage = $"Sorry! The name \'{clientToRegister.UniqueClientName}\' is already taken. Please specify a different name.";
-                Logger.LogInformation(errorMessage);
-                return new ClientResponse(errorMessage);
-            }
-            else
-            {
-                Logger.LogInformation($"The provided name is unique. Saving to file!");
-                Logger.LogInformation($"{clientToRegister.UniqueClientName} has the following address {clientToRegister.ClientAddress} " +
-                    $"and {clientToRegister.PreferedGroupSize} preferred group size");
+        //    #region Client Unique Name
+        //    Logger.LogInformation($"Checking if the client name {clientToRegister.UniqueClientName} is unique.");
+        //    if (!isUniqueName(clientToRegister.UniqueClientName, clientNames))
+        //    {
+        //        Logger.LogInformation($"The provided name is not unique. Returning error message!");
+        //        var errorMessage = $"Sorry! The name \'{clientToRegister.UniqueClientName}\' is already taken. Please specify a different name.";
+        //        Logger.LogInformation(errorMessage);
+        //        return new ClientResponse(errorMessage);
+        //    }
+        //    else
+        //    {
+        //        Logger.LogInformation($"The provided name is unique. Saving to file!");
+        //        Logger.LogInformation($"{clientToRegister.UniqueClientName} has the following address {clientToRegister.ClientAddress} " +
+        //            $"and {clientToRegister.PreferedGroupSize} preferred group size");
 
-                if(counter == 4)
-                {
-                    counter = 0;
-                }
+        //        if(counter == 4)
+        //        {
+        //            counter = 0;
+        //        }
 
-                Logger.LogInformation($"Providing sequence number for {clientToRegister.UniqueClientName} of {counter}");
-                counter++;
+        //        Logger.LogInformation($"Providing sequence number for {clientToRegister.UniqueClientName} of {counter}");
+        //        counter++;
 
-                using (StreamWriter writter = new StreamWriter(clientNames, true))
-                {
-                    writter.WriteLine(clientToRegister.UniqueClientName);
-                    writter.WriteLine(";");
-                    writter.WriteLine();
-                    writter.WriteLine(clientToRegister.ClientAddress);
-                    writter.WriteLine(";");
-                    writter.WriteLine(clientToRegister.PreferedGroupSize);
-                    writter.WriteLine(";");
-                }
+        //        using (StreamWriter writter = new StreamWriter(clientNames, true))
+        //        {
+        //            writter.WriteLine(clientToRegister.UniqueClientName);
+        //            writter.WriteLine(";");
+        //            writter.WriteLine();
+        //            writter.WriteLine(clientToRegister.ClientAddress);
+        //            writter.WriteLine(";");
+        //            writter.WriteLine(clientToRegister.PreferedGroupSize);
+        //            writter.WriteLine(";");
+        //        }
 
-                return new ClientResponse();
-            }
-            #endregion
+        //        return new ClientResponse();
+        //    }
+        //    #endregion
 
-            #region Client other data
+        //    #region Client other data
 
 
-            #endregion
-        }
+        //    #endregion
+        //}
 
         private bool isUniqueName(string uniqueClientName, string clientNamesFile)
         {
@@ -185,19 +185,19 @@ namespace ServerService.Service
             throw new NotImplementedException();
         }
 
-        public void UpdatePlayerList(ClientDemo[] clients)
-        {
-            throw new NotImplementedException();
-        }
+        //public void UpdatePlayerList(ClientDemo[] clients)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        public void DeletePlayerFromList(ClientDemo clientToRemove)
-        {
-            throw new NotImplementedException();
-        }
+        //public void DeletePlayerFromList(ClientDemo clientToRemove)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        public void Start(ClientDemo[] clients, int gameID)
-        {
-            throw new NotImplementedException();
-        }
+        //public void Start(ClientDemo[] clients, int gameID)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }
