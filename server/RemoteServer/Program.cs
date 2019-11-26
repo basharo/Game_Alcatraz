@@ -15,7 +15,7 @@ namespace Server
         static void Main(string[] args)
         {
             string actorName = "server";
-            Globals.groupSize = 3;
+            Globals.groupSize = 2;
             Console.Title = actorName;
             
 

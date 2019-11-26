@@ -58,6 +58,7 @@ namespace final_client_logic_akka
                 Console.WriteLine(messageString);
             }
 
+
             if (messageString == "start")
             {
                 return;

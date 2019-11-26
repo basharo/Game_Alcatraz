@@ -22,6 +22,7 @@ namespace final_client_logic_akka
         private static Alcatraz.Alcatraz[] other;
         private static ClientData[] data;
         private int numPlayer;
+        private static string playerName;
         private static Boolean boolVar = false;
         private static Test t1;
         private static string line;
@@ -37,9 +38,9 @@ namespace final_client_logic_akka
         {
 
             
-
+            Console.WriteLine("To cancel the registration enter 'delete'");
             Console.WriteLine("Please choose a player name:");
-            string playerName = Console.ReadLine();
+            playerName = Console.ReadLine();
 
             while (playerName == "")
             {
@@ -63,7 +64,7 @@ namespace final_client_logic_akka
                 var localChatActor = mainActorSystem.ActorOf(Props.Create<GameActor>(), "GameActor");
 
                 
-                string remoteActorAddressClient1 = "akka.tcp://alcatraz@localhost:5555/user/RegisterActor";
+                string remoteActorAddressClient1 = "akka.tcp://alcatraz@192.168.43.249:5555/user/RegisterActor";
                 var remoteChatActorClient1 = mainActorSystem.ActorSelection(remoteActorAddressClient1);
 
                 if (remoteChatActorClient1 != null)
@@ -74,8 +75,14 @@ namespace final_client_logic_akka
                     string line = string.Empty;
                         while (line != null) {
                             line = Console.ReadLine();
-                            //remoteChatActorClient1.Tell(line, localChatActor);
+                            
+                            if(line == "delete")
+                        {
+                            remoteChatActorClient1.Tell("delete|" + playerName, localChatActor);
                         }
+
+
+                    }
 
                     } else {
                     Console.WriteLine("Could not get remote actor ref");
