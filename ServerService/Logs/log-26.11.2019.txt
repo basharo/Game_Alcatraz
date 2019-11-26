@@ -1,0 +1,75 @@
+2019-11-26 18:18:16.665 +01:00 [INF] Starting up the  service.
+2019-11-26 18:18:23.058 +01:00 [INF] Initializing Spread connection...
+2019-11-26 18:18:23.068 +01:00 [DBG] Connecting to the Spread Deamon with address: 192.168.43.191 and port 4803
+2019-11-26 18:18:26.059 +01:00 [INF] Server running at: "2019-11-26T18:18:26.0543130+01:00"
+2019-11-26 18:35:55.717 +01:00 [INF] Starting up the  service.
+2019-11-26 18:35:58.169 +01:00 [INF] Initializing Spread connection...
+2019-11-26 18:35:58.174 +01:00 [DBG] Connecting to the Spread Deamon with address: 192.168.43.191 and port 4803
+2019-11-26 18:36:05.409 +01:00 [INF] Server running at: "2019-11-26T18:36:05.4007364+01:00"
+2019-11-26 18:36:54.592 +01:00 [INF] Starting up the  service.
+2019-11-26 18:36:57.310 +01:00 [INF] Initializing Spread connection...
+2019-11-26 18:36:57.314 +01:00 [DBG] Connecting to the Spread Deamon with address: 192.168.43.191 and port 4803
+2019-11-26 18:36:59.216 +01:00 [INF] Server running at: "2019-11-26T18:36:59.2116350+01:00"
+2019-11-26 18:37:52.437 +01:00 [INF] Starting up the  service.
+2019-11-26 18:37:53.411 +01:00 [INF] Initializing Spread connection...
+2019-11-26 18:37:53.415 +01:00 [DBG] Connecting to the Spread Deamon with address: 192.168.43.191 and port 4803
+2019-11-26 18:37:58.550 +01:00 [INF] Server running at: "2019-11-26T18:37:58.5469799+01:00"
+2019-11-26 18:40:52.463 +01:00 [INF] Starting up the  service.
+2019-11-26 18:40:53.241 +01:00 [INF] Initializing Spread connection...
+2019-11-26 18:40:53.246 +01:00 [DBG] Connecting to the Spread Deamon with address: 192.168.43.191 and port 4803
+2019-11-26 18:40:56.016 +01:00 [INF] Server running at: "2019-11-26T18:40:56.0122535+01:00"
+2019-11-26 18:44:22.042 +01:00 [INF] Starting up the  service.
+2019-11-26 18:44:22.752 +01:00 [INF] Initializing Spread connection...
+2019-11-26 18:44:22.757 +01:00 [DBG] Connecting to the Spread Deamon with address: 192.168.43.191 and port 4803
+2019-11-26 18:44:23.009 +01:00 [INF] Server running at: "2019-11-26T18:44:23.0055675+01:00"
+2019-11-26 18:45:33.283 +01:00 [INF] Starting up the  service.
+2019-11-26 18:45:34.279 +01:00 [INF] Initializing Spread connection...
+2019-11-26 18:45:34.284 +01:00 [DBG] Connecting to the Spread Deamon with address: 192.168.43.191 and port 4803
+2019-11-26 18:45:34.575 +01:00 [INF] Server running at: "2019-11-26T18:45:34.5694568+01:00"
+2019-11-26 18:47:08.856 +01:00 [INF] Starting up the  service.
+2019-11-26 18:47:09.942 +01:00 [INF] Initializing Spread connection...
+2019-11-26 18:47:09.946 +01:00 [DBG] Connecting to the Spread Deamon with address: 192.168.43.191 and port 4803
+2019-11-26 18:47:10.203 +01:00 [INF] Server running at: "2019-11-26T18:47:10.1995737+01:00"
+2019-11-26 18:47:45.171 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2019-11-26 18:47:45.171 +01:00 [INF] Hosting environment: Development
+2019-11-26 18:47:45.171 +01:00 [INF] Content root path: C:\Users\ibulica\OneDrive - Capgemini\Desktop\alcatraz_repo\Game_Alcatraz\ServerService
+2019-11-26 18:48:17.707 +01:00 [INF] Starting up the  service.
+2019-11-26 18:48:18.466 +01:00 [INF] Initializing Spread connection...
+2019-11-26 18:48:18.471 +01:00 [DBG] Connecting to the Spread Deamon with address: 192.168.43.191 and port 4803
+2019-11-26 18:48:18.715 +01:00 [INF] Server running at: "2019-11-26T18:48:18.7091925+01:00"
+2019-11-26 18:48:21.913 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2019-11-26 18:48:21.913 +01:00 [INF] Hosting environment: Development
+2019-11-26 18:48:21.913 +01:00 [INF] Content root path: C:\Users\ibulica\OneDrive - Capgemini\Desktop\alcatraz_repo\Game_Alcatraz\ServerService
+2019-11-26 18:52:14.696 +01:00 [INF] Starting up the  service.
+2019-11-26 18:52:15.341 +01:00 [INF] Initializing Spread connection...
+2019-11-26 18:52:15.343 +01:00 [DBG] Connecting to the Spread Deamon with address: 192.168.43.191 and port 4803
+2019-11-26 18:52:15.548 +01:00 [INF] Server running at: "2019-11-26T18:52:15.5447877+01:00"
+2019-11-26 18:53:34.758 +01:00 [INF] Starting up the  service.
+2019-11-26 18:53:35.590 +01:00 [INF] Initializing Spread connection...
+2019-11-26 18:53:35.593 +01:00 [DBG] Connecting to the Spread Deamon with address: 192.168.43.191 and port 4803
+2019-11-26 18:53:35.743 +01:00 [INF] Server running at: "2019-11-26T18:53:35.7393268+01:00"
+2019-11-26 18:58:46.970 +01:00 [INF] Starting up the  service.
+2019-11-26 18:58:47.728 +01:00 [INF] Initializing Spread connection...
+2019-11-26 18:58:47.732 +01:00 [DBG] Connecting to the Spread Deamon with address: 192.168.43.191 and port 4803
+2019-11-26 18:58:47.891 +01:00 [INF] Server running at: "2019-11-26T18:58:47.8873768+01:00"
+2019-11-26 18:58:50.778 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2019-11-26 18:58:50.778 +01:00 [INF] Hosting environment: Development
+2019-11-26 18:58:50.778 +01:00 [INF] Content root path: C:\Users\ibulica\OneDrive - Capgemini\Desktop\alcatraz_repo\Game_Alcatraz\ServerService
+2019-11-26 19:00:22.574 +01:00 [INF] Starting up the  service.
+2019-11-26 19:00:23.658 +01:00 [INF] Initializing Spread connection...
+2019-11-26 19:00:23.664 +01:00 [DBG] Connecting to the Spread Deamon with address: 192.168.43.191 and port 4803
+2019-11-26 19:00:23.918 +01:00 [INF] Server running at: "2019-11-26T19:00:23.9135911+01:00"
+2019-11-26 19:02:06.445 +01:00 [INF] Starting up the  service.
+2019-11-26 19:02:07.320 +01:00 [INF] Initializing Spread connection...
+2019-11-26 19:02:07.325 +01:00 [DBG] Connecting to the Spread Deamon with address: 192.168.43.191 and port 4803
+2019-11-26 19:02:07.513 +01:00 [INF] Server running at: "2019-11-26T19:02:07.5113035+01:00"
+2019-11-26 19:02:20.628 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2019-11-26 19:02:20.628 +01:00 [INF] Hosting environment: Development
+2019-11-26 19:02:20.628 +01:00 [INF] Content root path: C:\Users\ibulica\OneDrive - Capgemini\Desktop\alcatraz_repo\Game_Alcatraz\ServerService
+2019-11-26 19:03:05.756 +01:00 [INF] Starting up the  service.
+2019-11-26 19:03:07.226 +01:00 [INF] Initializing Spread connection...
+2019-11-26 19:03:07.233 +01:00 [DBG] Connecting to the Spread Deamon with address: 192.168.43.191 and port 4803
+2019-11-26 19:03:07.411 +01:00 [INF] Server running at: "2019-11-26T19:03:07.4077528+01:00"
+2019-11-26 19:03:07.520 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2019-11-26 19:03:07.525 +01:00 [INF] Hosting environment: Development
+2019-11-26 19:03:07.526 +01:00 [INF] Content root path: C:\Users\ibulica\OneDrive - Capgemini\Desktop\alcatraz_repo\Game_Alcatraz\ServerService

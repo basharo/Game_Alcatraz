@@ -15,6 +15,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\data\alcatraz\cspread-src\cspread\cspread.csproj" />
+    <Folder Include="Storage\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\other\data\alcatraz\cspread-src\cspread.User\cspread.User.csproj" />
+    <ProjectReference Include="..\..\..\other\data\alcatraz\cspread-src\cspread\cspread.csproj" />
   </ItemGroup>
 </Project>

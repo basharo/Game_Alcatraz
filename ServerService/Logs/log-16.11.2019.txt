@@ -1,7 +1,0 @@
-2019-11-16 12:36:25.253 +01:00 [INF] Starting up the  service.
-2019-11-16 12:36:29.150 +01:00 [INF] Worker running at: "2019-11-16T12:36:29.1354383+01:00"
-2019-11-16 12:36:29.173 +01:00 [INF] Application started. Press Ctrl+C to shut down.
-2019-11-16 12:36:29.173 +01:00 [INF] Hosting environment: null
-2019-11-16 12:36:29.174 +01:00 [INF] Content root path: C:\Users\ibulica\Source\Repos\ServerService\ServerService
-2019-11-16 12:36:30.189 +01:00 [INF] Worker running at: "2019-11-16T12:36:30.1890840+01:00"
-2019-11-16 12:36:31.200 +01:00 [INF] Worker running at: "2019-11-16T12:36:31.1998533+01:00"

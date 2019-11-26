@@ -30,8 +30,11 @@
         "frameworks": {
           "netcoreapp3.0": {
             "projectReferences": {
-              "C:\\Users\\ibulica\\OneDrive - Capgemini\\Desktop\\data\\alcatraz\\cspread-src\\cspread\\cspread.csproj": {
-                "projectPath": "C:\\Users\\ibulica\\OneDrive - Capgemini\\Desktop\\data\\alcatraz\\cspread-src\\cspread\\cspread.csproj"
+              "C:\\Users\\ibulica\\OneDrive - Capgemini\\Desktop\\other\\data\\alcatraz\\cspread-src\\cspread.User\\cspread.User.csproj": {
+                "projectPath": "C:\\Users\\ibulica\\OneDrive - Capgemini\\Desktop\\other\\data\\alcatraz\\cspread-src\\cspread.User\\cspread.User.csproj"
+              },
+              "C:\\Users\\ibulica\\OneDrive - Capgemini\\Desktop\\other\\data\\alcatraz\\cspread-src\\cspread\\cspread.csproj": {
+                "projectPath": "C:\\Users\\ibulica\\OneDrive - Capgemini\\Desktop\\other\\data\\alcatraz\\cspread-src\\cspread\\cspread.csproj"
               }
             }
           }
@@ -89,12 +92,32 @@
         }
       }
     },
-    "C:\\Users\\ibulica\\OneDrive - Capgemini\\Desktop\\data\\alcatraz\\cspread-src\\cspread\\cspread.csproj": {
+    "C:\\Users\\ibulica\\OneDrive - Capgemini\\Desktop\\other\\data\\alcatraz\\cspread-src\\cspread.User\\cspread.User.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\ibulica\\OneDrive - Capgemini\\Desktop\\data\\alcatraz\\cspread-src\\cspread\\cspread.csproj",
+        "projectUniqueName": "C:\\Users\\ibulica\\OneDrive - Capgemini\\Desktop\\other\\data\\alcatraz\\cspread-src\\cspread.User\\cspread.User.csproj",
+        "projectName": "cspread.User",
+        "projectPath": "C:\\Users\\ibulica\\OneDrive - Capgemini\\Desktop\\other\\data\\alcatraz\\cspread-src\\cspread.User\\cspread.User.csproj",
+        "frameworks": {
+          "net20": {
+            "projectReferences": {
+              "C:\\Users\\ibulica\\OneDrive - Capgemini\\Desktop\\other\\data\\alcatraz\\cspread-src\\cspread\\cspread.csproj": {
+                "projectPath": "C:\\Users\\ibulica\\OneDrive - Capgemini\\Desktop\\other\\data\\alcatraz\\cspread-src\\cspread\\cspread.csproj"
+              }
+            }
+          }
+        }
+      },
+      "frameworks": {
+        "net20": {}
+      }
+    },
+    "C:\\Users\\ibulica\\OneDrive - Capgemini\\Desktop\\other\\data\\alcatraz\\cspread-src\\cspread\\cspread.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\ibulica\\OneDrive - Capgemini\\Desktop\\other\\data\\alcatraz\\cspread-src\\cspread\\cspread.csproj",
         "projectName": "cspread",
-        "projectPath": "C:\\Users\\ibulica\\OneDrive - Capgemini\\Desktop\\data\\alcatraz\\cspread-src\\cspread\\cspread.csproj"
+        "projectPath": "C:\\Users\\ibulica\\OneDrive - Capgemini\\Desktop\\other\\data\\alcatraz\\cspread-src\\cspread\\cspread.csproj"
       },
       "frameworks": {
         "net20": {}
