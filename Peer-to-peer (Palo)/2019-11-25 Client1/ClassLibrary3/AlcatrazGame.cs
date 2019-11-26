@@ -21,8 +21,6 @@ namespace Alcatraz
     {
         private Alcatraz[] other = new Alcatraz[4];
         private int numPlayer = 2;
-        private static string playerName;
-
         class Move
         {
             public int playerId;
@@ -31,6 +29,11 @@ namespace Alcatraz
             public int row;
             public int col;
         }
+
+
+        //++++++++++++++++++++++++++++++++
+        //+++++ ANBINDUNG ZUM SERVER +++++
+        //++++++++++++++++++++++++++++++++
         /*
         public class GameActor : UntypedActor
         {
@@ -120,7 +123,9 @@ namespace Alcatraz
         [STAThread]
         static void Main()
         {
-            //start
+            //++++++++++++++++++++++++++++++++
+            //+++++ ANBINDUNG ZUM SERVER +++++
+            //++++++++++++++++++++++++++++++++
             /*
             Console.WriteLine("To cancel the registration enter 'delete'");
             Console.WriteLine("Please choose a player name:");
@@ -131,11 +136,8 @@ namespace Alcatraz
                 Console.WriteLine("Your name cannot be empty. Please choose a player name:");
                 playerName = Console.ReadLine();
             }
-
-
             try
             {
-
                 //startActorSystem("alcatraz");
 
                 // Setup an actor that will handle deadletter type messages
@@ -146,8 +148,7 @@ namespace Alcatraz
                 Globals.ActSys.EventStream.Subscribe(deadletterWatchActorRef, typeof(DeadLetter));
 
                 var localChatActor = Globals.ActSys.ActorOf(Props.Create<GameActor>(), "GameActor");
-
-                
+         
                 string remoteActorAddressClient1 = "akka.tcp://alcatraz@192.168.43.249:5555/user/RegisterActor";
                 var remoteChatActorClient1 = Globals.ActSys.ActorSelection(remoteActorAddressClient1);
 
@@ -164,8 +165,6 @@ namespace Alcatraz
                         {
                             remoteChatActorClient1.Tell("delete|" + playerName, localChatActor);
                         }
-
-
                     }
 
                     } else {
@@ -178,7 +177,7 @@ namespace Alcatraz
                 Console.WriteLine(ex);
             }
             */
-            //end
+            //ANBINDUNG ZUM SERRVER - end
 
             Globals.myName = "Franz";
 
@@ -186,10 +185,6 @@ namespace Alcatraz
                 {""protocol"":""akka.tcp"",""system"":""alcatraz"",""host"":""localhost"",""port"":1111,""actorName"":""ReceivingActor"",""playerId"":0,""playerName"":""Franz""},
                 {""protocol"":""akka.tcp"",""system"":""alcatraz"",""host"":""localhost"",""port"":2222,""actorName"":""ReceivingActor"",""playerId"":1,""playerName"":""Bashar""}
             ]";
-
-
-
-
 
             Globals.AllPlayers = JsonConvert.DeserializeObject<List<ClientData>>(testJSON);
             foreach (var item in Globals.AllPlayers)
@@ -199,65 +194,8 @@ namespace Alcatraz
                     Globals.myPlayerId = item.playerId;
                     break;
                 }
-                    
-
                 Globals.remoteActorAddresses.Add(item.ToString());
             }
-
-
-
-            //JArray ClientDataArray = JArray.Parse(testJSON);
-
-            //Console.WriteLine(ClientDataArray.Count);
-            //Console.WriteLine(ClientDataArray[0]["protocol"]);
-
-
-
-
-            /*for (int count = 0; count< ClientDataArray.Count; count++)
-            {
-                string protocol =
-
-                //akka.tcp://Client2@localhost:5249/user/ReceivingActor
-
-                Globals.remoteActorAddresses[count] = ClientDataArray[count]["protocol"].ToString() + "://ActorSystem@" +
-                                                ClientDataArray[count]["host"] + ":" +
-                                                ClientDataArray[count]["port"] + "/user/" +
-                                                ClientDataArray[count]["actorName"];
-                if (ClientDataArray[count]["playerName"].ToString() == Globals.myName)
-                {
-                    Globals.myPlayerId = ClientDataArray[count]["playerId"].ToString();
-                }
-            }
-            var localSendingActor = Globals.ActSys.ActorOf(Props.Create<SendingActor>(), "SendingActor");
-
-            string remoteActorAddress = ConfigurationManager.AppSettings["remoteActorAddress"];
-            var remoteChatActor = Globals.ActSys.ActorSelection(remoteActorAddress);
-
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-
-            //PM: statische init für zwei Spieler - MUSS DYNAMISIERT WERDEN!!!
-
-            int numberOfPlayers = ClientDataArray.Count;
-            
-
-
-           /* myId
-
-            numberOf Players
-
-                   string testJSON = @"[
-                {""protocol"":""akka.tcp"",""system"":""alcatraz"",""host"":""localhost"",""port"":1111,""actorName"":""ReceivingActor"",""playerId"":1,""playerName"":""Franz""},
-                {""protocol"":""akka.tcp"",""system"":""alcatraz"",""host"":""localhost"",""port"":2222,""actorName"":""ReceivingActor"",""playerId"":2,""playerName"":""Bashar""}
-            ]";
-
-            int numberofPlayers = testJSON.Replace.Split(':').Length / 15;
-            var player1 = testJSON.Split(':')[14];
-            */
-
-
-            Globals.myPlayerId = 2;
 
             if (Globals.AllPlayers.Count == 2)
             {
@@ -424,112 +362,6 @@ namespace Alcatraz
                 a4.start();
             }
 
-
-
-           /* for (int gameInstanceNo = 0; gameInstanceNo < Globals.AllPlayers.Count; gameInstanceNo++)
-            {
-                Game Game = new Game();
-                Alcatraz Alcatraz = new Alcatraz();
-                Game.setNumPlayer(Globals.AllPlayers.Count);
-                Alcatraz.init(Globals.AllPlayers.Count, gameInstanceNo);
-
-                for (int playerNameNo = 0; playerNameNo < Globals.AllPlayers.Count; playerNameNo++)
-                {
-                    Alcatraz.getPlayer(playerNameNo).Name = Globals.AllPlayers.ElementAt(playerNameNo).playerName;
-                }
-
-            }*/
-
-            /*Game t1 = new Game();
-            Game t2 = new Game();
-            Alcatraz a1 = new Alcatraz();
-            Alcatraz a2 = new Alcatraz();
-            t1.setNumPlayer(2);
-            t2.setNumPlayer(2);
-            a1.init(2, 0);
-            a2.init(2, 1);
-            a1.getPlayer(0).Name = "Player 1";
-            a1.getPlayer(1).Name = "Player 2";
-            a2.getPlayer(0).Name = "Player 1";
-            a2.getPlayer(1).Name = "Player 2";
-            t1.setOther(0, a2);
-            t2.setOther(0, a1);
-            a1.showWindow();
-            a1.addMoveListener(t1);
-            //a2.showWindow();
-            a2.addMoveListener(t2);
-            a1.getWindow().FormClosed += new FormClosedEventHandler(Test_FormClosed);
-            a2.getWindow().FormClosed += new FormClosedEventHandler(Test_FormClosed);
-            a1.start();
-            a2.start();*/
-            
-
-
-
-
-
-
-
-
-            //PM: Dynamisierung ist leider nicht richtig gewesen:
-            
-            /*Test t1 = new Test();
-            Alcatraz a1 = new Alcatraz();
-            int players = 2;
-          
-            List<Test> testList = new List<Test>();
-            List<Alcatraz> alcatrazList = new List<Alcatraz>();
-
-            for (int i = 0; i < players; i++)
-            {
-
-                t1 = new Test();
-                a1 = new Alcatraz();
-   
-                t1.setNumPlayer(players);
-                //i is in this case the playersID
-                a1.init(players, i);
-                Console.WriteLine("a1.init("+players+" , "+i);
-
-                for (int j = 1; j < players + 1; j++)
-                {
-                    int help = j - 1;
-                    a1.getPlayer(help).Name = "Player " + j;
-
-                    Console.WriteLine("getPlayer("+help+").Name = Player "+j);
-                }
-                
-                alcatrazList.Add(a1);
-                testList.Add(t1);
-            }
-            int counterForEachTest = 0;
-            foreach (Test testListItem in testList)
-            {
-                int counterForEachAlcatraz = 0;
-                int iterator = 0;
-                foreach(Alcatraz alcatrazItem in alcatrazList)
-                {
-                    if (counterForEachTest != counterForEachAlcatraz)
-                    {
-                        testListItem.setOther(iterator, alcatrazItem);
-                        Console.WriteLine("t" + counterForEachTest + ".setOther( " + iterator + "," + counterForEachAlcatraz);
-                        iterator++;
-                    }
-                    counterForEachAlcatraz++;
-                }
-                counterForEachTest++;
-            }
-            for (int ii = 0; ii < players; ii++)
-            {
-                alcatrazList[0].showWindow();
-                //alcatrazList[ii].showWindow();
-                alcatrazList[ii].addMoveListener(testList[0]);
-                alcatrazList[ii].getWindow().FormClosed += new FormClosedEventHandler(Test_FormClosed);
-                alcatrazList[ii].start();
-            }*/
-
-            
-
             Application.Run();
         }
 
@@ -567,10 +399,14 @@ namespace Alcatraz
             //Console.WriteLine(Globals.remoteActorAddresses[0]);
 
             //string remoteActorAddress = ConfigurationManager.AppSettings["remoteActorAddress"];
-            //var remoteChatActor = Globals.ActSys.ActorSelection(Globals.remoteActorAddresses[0]);
+
+
+            var remoteChatActor = Globals.ActSys.ActorSelection(Globals.remoteActorAddresses[0]);
 
             string lastMoveJson = JsonConvert.SerializeObject(lastMove);
-            //remoteChatActor.Tell(lastMoveJson);
+
+
+            remoteChatActor.Tell(lastMoveJson);
 
 
             //forea
