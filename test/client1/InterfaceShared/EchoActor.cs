@@ -20,14 +20,15 @@ namespace GameInterface
                 Sender.Tell(hello);
             });
 
-            Receive<Msg>(msg => {
+            Receive<string>(msg => {
                 // echo message back to sender
                 Sender.Tell(msg);
+                Console.Write(msg);
             });
 
             Receive<Players>(player => {
                 // echo message back to sender
-                Sender.Tell(player.printPlayerCounter());
+                Sender.Tell(player.printPlayerCounter(), Self);
             });
 
         }

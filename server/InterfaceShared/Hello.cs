@@ -1,12 +1,12 @@
-﻿namespace GameInterface
+﻿namespace Interface
 {
     public class Hello
     {
+        public string Message { get; private set; }
+
         public Hello(string message)
         {
             Message = message;
         }
-
-        public string Message { get; private set; }
     }
 }

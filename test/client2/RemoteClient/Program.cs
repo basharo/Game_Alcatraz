@@ -191,22 +191,22 @@ namespace ClientPlayer
                 using (var actorSystem = ActorSystem.Create(actorSystemName))
                 {
                     var localChatActor = actorSystem.ActorOf(Props.Create<EchoActor>(), "EchoActor");
-                    var child = actorSystem.ActorOf(Props.Create<EchoActor>(), "EchoActorClient2Child");
+                    //var child = actorSystem.ActorOf(Props.Create<EchoActor>(), "EchoActorClient2Child");
                     string remoteActorAddressClient1 = "akka.tcp://client1@localhost:1111/user/EchoActor";
-                    string remoteActorAddressClient2 = "akka.tcp://client3@localhost:3333/user/EchoActor";
+                    //string remoteActorAddressClient2 = "akka.tcp://client3@localhost:3333/user/EchoActor";
                     Players players = new Players(new string[10, 10]);
                     players.players[1,1] = actorSystemName;
 
                     var remoteChatActorClient1 = actorSystem.ActorSelection(remoteActorAddressClient1);
-                    var remoteChatActorClient2 = actorSystem.ActorSelection(remoteActorAddressClient2);
-                    if (remoteChatActorClient1 != null && remoteChatActorClient2 != null)
+                    //var remoteChatActorClient2 = actorSystem.ActorSelection(remoteActorAddressClient2);
+                    if (remoteChatActorClient1 != null /*&& remoteChatActorClient2 != null*/)
                     {
                         string line = string.Empty;
                         while (line != null)
                         {
                             line = Console.ReadLine();
-                            remoteChatActorClient1.Tell(players, child);
-                            remoteChatActorClient2.Tell(players, child);
+                            remoteChatActorClient1.Tell(players, localChatActor);
+                            //remoteChatActorClient2.Tell(players, child);
 
                             //remoteChatActorClient1.Tell(line, child);
                             //remoteChatActorClient2.Tell(line, child);

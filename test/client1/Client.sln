@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.902
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{E4246EA2-16C0-4549-B2A1-64B270068D23}"
 	ProjectSection(SolutionItems) = preProject
@@ -13,6 +13,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "RemoteClient\Client.csproj", "{8D5A8566-F787-4100-AB79-83C5D56F104A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Interface", "InterfaceShared\Interface.csproj", "{CF7C6CB6-E764-4D7B-B694-754AAD0B3BCE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibrary3", "..\..\Alcatraz_game_logic\Game_logic\ClassLibrary3\ClassLibrary3.csproj", "{34794E74-069C-4913-9676-D61D7F50466E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -28,8 +30,15 @@ Global
 		{CF7C6CB6-E764-4D7B-B694-754AAD0B3BCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CF7C6CB6-E764-4D7B-B694-754AAD0B3BCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CF7C6CB6-E764-4D7B-B694-754AAD0B3BCE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34794E74-069C-4913-9676-D61D7F50466E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34794E74-069C-4913-9676-D61D7F50466E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34794E74-069C-4913-9676-D61D7F50466E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34794E74-069C-4913-9676-D61D7F50466E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {337EB4DD-56D6-48F1-8B1B-A9CDAD5E3257}
 	EndGlobalSection
 EndGlobal

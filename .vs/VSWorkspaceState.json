@@ -1,0 +1,13 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\server",
+    "\\test\\client1",
+    "\\test\\client1\\InterfaceShared",
+    "\\test\\client2",
+    "\\test\\client2\\InterfaceShared",
+    "\\test\\client2\\RemoteClient"
+  ],
+  "SelectedNode": "\\server\\Server.sln",
+  "PreviewInSolutionExplorer": false
+}
