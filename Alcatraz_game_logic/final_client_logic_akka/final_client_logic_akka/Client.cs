@@ -5,21 +5,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Alcatraz
+namespace final_client_logic_akka
 {
     public class Client
     {
 
-        public Alcatraz alcatraz { get; set; }
-        public int playerID { get; set; }
+        public Alcatraz.Alcatraz alcatraz { get; set; }
         public ClientData clientData { get; set; }
 
         public Client() { }
 
-        public Client(Alcatraz alcatraz, ClientData clientData)
+        public Client(Alcatraz.Alcatraz alcatraz, ClientData clientData)
         {
             this.alcatraz = alcatraz;
-            this.playerID = clientData.playerID;
             this.clientData = clientData;
 
         }

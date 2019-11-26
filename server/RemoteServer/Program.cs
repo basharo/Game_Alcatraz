@@ -4,17 +4,19 @@ using Akka.Configuration;
 using Alcatraz;
 using System.Configuration;
 using Newtonsoft.Json;
+using Interface;
 
 namespace Server
 {
     
     class Program
     {
-            
+     
         static void Main(string[] args)
         {
             string actorSystemName = "server";
             Console.Title = actorSystemName;
+            
 
             try
             {
@@ -31,6 +33,11 @@ namespace Server
                         string line = string.Empty;
                         while (line != null)
                         {
+                            if(line == "gamestart")
+                            {
+                                
+                                return;
+                            }
                             line = Console.ReadLine();
                             //remoteChatActor.Tell(line, localChatActor);
                         }

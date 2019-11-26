@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Alcatraz
+namespace final_client_logic_akka
 {
     public class Move
     {
