@@ -8,6 +8,7 @@ using Akka;
 using Akka.Remote;
 using Akka.Actor;
 using System.Configuration;
+using Newtonsoft.Json;
 
 namespace Alcatraz
 {
@@ -17,11 +18,27 @@ namespace Alcatraz
         private Alcatraz[] other = new Alcatraz[4];
         private int numPlayer = 2;
 
+        class Move
+        {
+            public int playerId;
+            public int prisonerId;
+            public int rowOrCol;
+            public int row;
+            public int col;
+        }
+
+
         class ReceivingActor : UntypedActor
         {
+            Alcatraz myGame;
+            public ReceivingActor(Alcatraz localAlcatraz)
+            {
+                myGame = localAlcatraz;
+            }
             protected override void OnReceive(object message)
             {
-                //siehe working code bei Client2!
+                Move receivedMove = JsonConvert.DeserializeObject<Move>(message.ToString());
+                myGame.doMove(myGame.getPlayer(receivedMove.playerId), myGame.getPrisoner(receivedMove.prisonerId), receivedMove.rowOrCol, receivedMove.row, receivedMove.col);
             }
         }
 
@@ -51,17 +68,42 @@ namespace Alcatraz
         static void Main()
         {
 
-            //string actorSystemName = ConfigurationManager.AppSettings["actorSystemName"];
-            //var actorSystem = ActorSystem.Create(actorSystemName);
-            //var localReceivingActor = actorSystem.ActorOf(Props.Create<ReceivingActor>(), "ReceivingActor");
-            //var localSendingActor = actorSystem.ActorOf(Props.Create<SendingActor>(), "SendingActor");
+            var localSendingActor = Globals.ActSys.ActorOf(Props.Create<SendingActor>(), "SendingActor");
 
-            //string remoteActorAddress = ConfigurationManager.AppSettings["remoteActorAddress"];
-            //var remoteChatActor = actorSystem.ActorSelection(remoteActorAddress);
+            string remoteActorAddress = ConfigurationManager.AppSettings["remoteActorAddress"];
+            var remoteChatActor = Globals.ActSys.ActorSelection(remoteActorAddress);
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
+            //PM: statische init für zwei Spieler - MUSS DYNAMISIERT WERDEN!!!
             Test t1 = new Test();
+            Test t2 = new Test();
+            Alcatraz a1 = new Alcatraz();
+            Alcatraz a2 = new Alcatraz();
+            t1.setNumPlayer(2);
+            t2.setNumPlayer(2);
+            a1.init(2, 0);
+            a2.init(2, 1);
+            a1.getPlayer(0).Name = "Player 1";
+            a1.getPlayer(1).Name = "Player 2";
+            a2.getPlayer(0).Name = "Player 1";
+            a2.getPlayer(1).Name = "Player 2";
+            t1.setOther(0, a2);
+            t2.setOther(0, a1);
+            a1.showWindow();
+            a1.addMoveListener(t1);
+            //a2.showWindow();
+            a2.addMoveListener(t2);
+            a1.getWindow().FormClosed += new FormClosedEventHandler(Test_FormClosed);
+            a2.getWindow().FormClosed += new FormClosedEventHandler(Test_FormClosed);
+            a1.start();
+            a2.start();
+            
+
+            //PM: Dynamisierung ist leider nicht richtig gewesen:
+            
+            /*Test t1 = new Test();
             Alcatraz a1 = new Alcatraz();
             int players = 2;
           
@@ -114,7 +156,10 @@ namespace Alcatraz
                 alcatrazList[ii].addMoveListener(testList[0]);
                 alcatrazList[ii].getWindow().FormClosed += new FormClosedEventHandler(Test_FormClosed);
                 alcatrazList[ii].start();
-            }
+            }*/
+
+            var localReceivingActor = Globals.ActSys.ActorOf(Props.Create<ReceivingActor>(a1), "ReceivingActor");
+
             Application.Run();
         }
 
@@ -140,14 +185,22 @@ namespace Alcatraz
 
         public void doMove(Player player, Prisoner prisoner, int rowOrCol, int row, int col)
         {
-            //Console.WriteLine("moving " + prisoner + " to " + (rowOrCol == Alcatraz.ROW ? "row" : "col") + " " + (rowOrCol == Alcatraz.ROW ? row : col));
-            //Console.WriteLine(player + ", "+ prisoner + ", "+ rowOrCol+ ", " +row+ ", "+  col);
+            
 
-            //string actorSystemName = ConfigurationManager.AppSettings["actorSystemName"];
-            //var actorSystem = ActorSystem.Create(actorSystemName);
+            Move lastMove = new Move();
+            lastMove.playerId = player.Id;
+            lastMove.prisonerId = prisoner.Id;
+            lastMove.rowOrCol = rowOrCol;
+            lastMove.row = row;
+            lastMove.col = col;
+
+
+
             string remoteActorAddress = ConfigurationManager.AppSettings["remoteActorAddress"];
             var remoteChatActor = Globals.ActSys.ActorSelection(remoteActorAddress);
-            remoteChatActor.Tell("irgendwas");
+
+            string lastMoveJson = JsonConvert.SerializeObject(lastMove);
+            remoteChatActor.Tell(lastMoveJson);
 
             for (int i = 0; i < getNumPlayer()-1; i++)
             {
