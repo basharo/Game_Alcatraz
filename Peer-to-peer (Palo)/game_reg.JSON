@@ -1,0 +1,20 @@
+[
+	{
+		"protocol": "akka.tcp",
+		"system": "alcatraz",
+		"host": "localhost",
+		"port": 1111,
+		"actorName": "GameActor",
+		"playerId": 1,
+		"playerName": "Franz"
+	},
+	{
+		"protocol": "akka.tcp",
+		"system": "alcatraz",
+		"host": "localhost",
+		"port": 2222,
+		"actorName": "GameActor",
+		"playerId": 2,
+		"playerName": "Bashar"
+	}
+]
