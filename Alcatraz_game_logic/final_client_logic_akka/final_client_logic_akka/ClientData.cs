@@ -4,25 +4,37 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Alcatraz
+namespace final_client_logic_akka
 {
     public class ClientData
     {
 
-        public string address { get; set; }
-        public int playerID { get; set; }
-        public string uniqueName { get; set; }
+        public string protocol { get; set; }
+        public string system { get; set; }
+        public string host { get; set; }
         public int? port { get; set; }
-        public string urlAddition { get; set; }
+        public string pathString { get; set; }
+        public int playerId { get; set; }
+        public string playerName { get; set; }
 
-        public ClientData(string address, int? port, string urlAddition, int playerID, string uniqueName)
+        public ClientData () { }
+
+        public ClientData(string protocol, string system, string host, int? port, string pathString, int playerId, string playerName)
         {
-            this.address = address;
+            this.protocol = protocol;
+            this.system = system;
+            this.host = host;
             this.port = port;
-            this.uniqueName = uniqueName;
-            this.urlAddition = urlAddition;
-            this.playerID = playerID;
+            this.pathString = pathString;
+            this.playerId = playerId;
+            this.playerName = playerName;
+
+            //akka.tcp://server@localhost:5555/user/RegisterActor
         }
 
+        public override string ToString()
+        {
+            return $"{protocol}://{system}@{host}:{port}{pathString},{playerName};";
+        }
     }
 }

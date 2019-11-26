@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Akka;
 using Akka.Actor;
+using Akka.Event;
 using Alcatraz;
-using Newtonsoft.Json;
 
-namespace Alcatraz
+namespace final_client_logic_akka
 
 {
     public class Test : MoveListener
@@ -15,13 +18,14 @@ namespace Alcatraz
         private static Client clientItem;
         private static Client[] clientItems;
         private static ClientClass clientClass;
-        private static Alcatraz clientAlcatraz = new Alcatraz();
-        private static Alcatraz[] other;
+        private static Alcatraz.Alcatraz clientAlcatraz = new Alcatraz.Alcatraz();
+        private static Alcatraz.Alcatraz[] other;
         private static ClientData[] data;
         private int numPlayer;
         private static Boolean boolVar = false;
         private static Test t1;
         private static string line;
+        public static ActorSystem mainActorSystem { get; set; }
 
         public Test()
         {
@@ -32,59 +36,58 @@ namespace Alcatraz
         public static void Main(String[] args)
         {
 
+            
+
             Console.WriteLine("Please choose a player name:");
             string playerName = Console.ReadLine();
 
+            while (playerName == "")
+            {
+                Console.WriteLine("Your name cannot be empty. Please choose a player name:");
+                playerName = Console.ReadLine();
+            }
+
+
             try
             {
-                using (var actorSystem = ActorSystem.Create(playerName))
+
+                startActorSystem("alcatraz");
+
+                // Setup an actor that will handle deadletter type messages
+                var deadletterWatchMonitorProps = Props.Create(() => new DeadletterMonitor());
+                var deadletterWatchActorRef = mainActorSystem.ActorOf(deadletterWatchMonitorProps, "DeadLetterMonitoringActor");
+
+                // subscribe to the event stream for messages of type "DeadLetter"
+                mainActorSystem.EventStream.Subscribe(deadletterWatchActorRef, typeof(DeadLetter));
+
+                var localChatActor = mainActorSystem.ActorOf(Props.Create<GameActor>(), "GameActor");
+
+                
+                string remoteActorAddressClient1 = "akka.tcp://alcatraz@localhost:5555/user/RegisterActor";
+                var remoteChatActorClient1 = mainActorSystem.ActorSelection(remoteActorAddressClient1);
+
+                if (remoteChatActorClient1 != null)
                 {
-
-                    clientAlcatraz = new Alcatraz();
-                    clientAlcatraz.init(2, 1);
-                    clientItem = new Client(clientAlcatraz, new ClientData("", 1111, "", 0, ""));
-
-
-                    var localChatActor = actorSystem.ActorOf(Props.Create<GameActor>(), "GameActor");
-
-                    //Players players = new Players(new string[10, 10]);
-                    //players.players[1, 1] = actorSystemName;
-                    string remoteActorAddressClient1 = "akka.tcp://server@localhost:5555/user/RegisterActor";
-                    //string remoteActorAddressClient2 = "akka.tcp://client2@localhost:2222/user/EchoActor";
-                    var remoteChatActorClient1 = actorSystem.ActorSelection(remoteActorAddressClient1);
-                    //var remoteChatActorClient2 = actorSystem.ActorSelection(remoteActorAddressClient2);
-
-                    //string serverActor = "akka.tcp://server@localhost:1111/user/EchoActor";
-
-                    if (remoteChatActorClient1 != null)
-                    {
-                        string line = string.Empty;
-                        while (line != null)
-                        {
-
-                            //remoteChatActorClient1.Tell("test", localChatActor);
-                            remoteChatActorClient1.Tell(new Client(), localChatActor);
-                            //remoteChatActorClient2.Tell(players, child);
+                        
+                    remoteChatActorClient1.Tell(playerName, localChatActor);
+                    
+                    string line = string.Empty;
+                        while (line != null) {
                             line = Console.ReadLine();
-                            //remoteChatActorClient1.Tell(line, child);
-                            //remoteChatActorClient2.Tell(line, child);
+                            //remoteChatActorClient1.Tell(line, localChatActor);
                         }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Could not get remote actor ref");
-                        Console.ReadLine();
-                    }
-                }
+
+                    } else {
+                    Console.WriteLine("Could not get remote actor ref");
+                    Console.ReadLine();
+                }  
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
             }
 
-            data = new ClientData[1];
-            data[0] = new ClientData("akka.tcp://" + playerName + "@localhost:", 1111, "/user/GameActor", 1, playerName);
-            other = new Alcatraz[data.Length+1];
+            
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -118,7 +121,7 @@ namespace Alcatraz
         }
         
 
-        public void setOther(int i, Alcatraz t)
+        public void setOther(int i, Alcatraz.Alcatraz t)
         {
             other[i] = t;
         }
@@ -151,7 +154,7 @@ namespace Alcatraz
 
         public void doMove(Player player, Prisoner prisoner, int rowOrCol, int row, int col)
         {
-            Console.WriteLine("moving " + prisoner + " to " + (rowOrCol == Alcatraz.ROW ? "row" : "col") + " " + (rowOrCol == Alcatraz.ROW ? row : col));
+            Console.WriteLine("moving " + prisoner + " to " + (rowOrCol == Alcatraz.Alcatraz.ROW ? "row" : "col") + " " + (rowOrCol == Alcatraz.Alcatraz.ROW ? row : col));
             Console.WriteLine("ID" + player.Id);
             ActorSelection[] remoteActors = ClientClass.getRemoteChatActorClient();
 
@@ -176,9 +179,23 @@ namespace Alcatraz
             Console.WriteLine("Player " + player.Id + " wins.");
         }
 
-    /*    public static void main(String[] args)
+        public static string GetLocalIPAddress()
         {
-            Console.WriteLine("main main main");
-        }*/
-    }
+            var host = Dns.GetHostEntry(Dns.GetHostName());
+            foreach (var ip in host.AddressList)
+            {
+                if (ip.AddressFamily == AddressFamily.InterNetwork)
+                {
+                    return ip.ToString();
+                }
+            }
+            throw new Exception("No network adapters with an IPv4 address in the system!");
+        }
+
+        public static void startActorSystem(string actorSystemName)
+        {
+            mainActorSystem = ActorSystem.Create(actorSystemName);
+      
+        }
+    }    
 }

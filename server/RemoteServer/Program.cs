@@ -4,48 +4,51 @@ using Akka.Configuration;
 using Alcatraz;
 using System.Configuration;
 using Newtonsoft.Json;
+using Interface;
 
 namespace Server
 {
     
-    class Program
+    public class Program
     {
-            
+
         static void Main(string[] args)
         {
-            string actorSystemName = "server";
-            Console.Title = actorSystemName;
+            string actorName = "server";
+            Globals.groupSize = 3;
+            Console.Title = actorName;
+            
 
             try
             {
-                using (var actorSystem = ActorSystem.Create(actorSystemName))
+
+                startActorSystem("alcatraz");
+                var localChatActor = Globals.mainActorSystem.ActorOf(Props.Create<RegisterActor>(), "RegisterActor");
+
+                
+                string line = string.Empty;
+                while (line != null)
                 {
-
-                    var localChatActor = actorSystem.ActorOf(Props.Create<RegisterActor>(), "RegisterActor");
-
-                    //string remoteActorAddress = "akka.tcp://server@localhost:6666/user/RegisterActor";
-                    //var remoteChatActor = actorSystem.ActorSelection(remoteActorAddress);
-
-                    //if (remoteChatActor != null)
-                    //{
-                        string line = string.Empty;
-                        while (line != null)
-                        {
-                            line = Console.ReadLine();
-                            //remoteChatActor.Tell(line, localChatActor);
-                        }
-                    //}
-                    //else
-                    //{
-                    //    Console.WriteLine("Could not get remote actor ref");
-                    //    Console.ReadLine();
-                    //}
+                    if(line == "gamestart")
+                    {
+                                
+                        return;
+                    }
+                    line = Console.ReadLine();
+                       
                 }
+            
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
             }
+        }
+
+        public static void startActorSystem(string actorSystemName)
+        {
+            Globals.mainActorSystem = ActorSystem.Create(actorSystemName);
+
         }
     }
 }

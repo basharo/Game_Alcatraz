@@ -2,12 +2,12 @@
 using Akka.Actor;
 using Akka.Event;
 
-namespace Alcatraz
+namespace final_client_logic_akka
 {
     /// <summary>
     /// Actor that just replies the message that it received earlier
     /// </summary>
-    public class GameActor : ReceiveActor
+    public class GameActor : UntypedActor
     {
         private readonly ILoggingAdapter log = Context.GetLogger();
         private Client[] clientArr = new Client[1];
@@ -15,33 +15,55 @@ namespace Alcatraz
 
         public GameActor()
         {
-            Receive<Move>(player => {
-                // echo message back to sender
-                Sender.Tell("ss");
-            });
-            Receive<Client[]>(client => {
-                Console.WriteLine("received message from" + client[0].playerID);
+            //Receive<Move>(player =>
+            //{
+            //    echo message back to sender
+            //    Sender.Tell("ss");
+            //});
+            //Receive<Client[]>(client =>
+            //{
+            //    Console.WriteLine("received message from" + client[0].playerID);
 
-                clientArr[iterator] = client[0];
-                iterator++;
-                Sender.Tell("ss");
+            //    clientArr[iterator] = client[0];
+            //    iterator++;
+            //    Sender.Tell("ss");
 
-                if (iterator == clientArr.Length-1)
-                {
-                    Test.receiveClients(clientArr);                  
-                }
-                else
-                    Console.WriteLine("Waiting for others");
+            //    if (iterator == clientArr.Length - 1)
+            //    {
+            //        Test.receiveClients(clientArr);
+            //    }
+            //    else
+            //        Console.WriteLine("Waiting for others");
 
-               
-            });
 
+            //});
+
+        }
+
+        protected override void OnReceive(object message)
+        {
+            var messageString = message.ToString();
+
+            if (messageString.Contains("exists"))
+            {
+                Console.WriteLine(message.ToString());
+                string playerName = Console.ReadLine();
+
+                Sender.Tell(playerName, Self);
+                
+            }
+
+            if(messageString.Contains("successfully registered"))
+            {
+                Console.WriteLine(messageString);
+            }
+
+            if (messageString == "start")
+            {
+                return;
+            }
         }
     }
 
 
-    public class Msg1
-    {
-        public string Content { get; set; }
-    }
 }

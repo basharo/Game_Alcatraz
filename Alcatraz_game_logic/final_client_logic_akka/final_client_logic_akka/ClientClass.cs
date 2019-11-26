@@ -4,9 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Alcatraz;
 
 
-namespace Alcatraz
+namespace final_client_logic_akka
 {
     class ClientClass
     {
@@ -14,7 +15,7 @@ namespace Alcatraz
         private IActorRef localChatActor;
         private IActorRef child;
         private ActorSystem actorSystem;
-        Alcatraz clientAlcatraz = new Alcatraz();
+        Alcatraz.Alcatraz clientAlcatraz = new Alcatraz.Alcatraz();
         private string actorSystemName;
         private static ActorSelection[] remoteChatActorClient;
         private int playerNumber;
@@ -33,8 +34,8 @@ namespace Alcatraz
             for (int i = 0; i < data.Length; i++)
             {
                 actorSystem = ActorSystem.Create(uniqueName);
-                string remoteActorAddressClient1 = data[i].address + data[i].port + data[i].urlAddition;
-                remoteChatActorClient[iterator] = actorSystem.ActorSelection(remoteActorAddressClient1);
+                //string remoteActorAddressClient1 = data[i].address + data[i].port + data[i].urlAddition;
+                //remoteChatActorClient[iterator] = actorSystem.ActorSelection(remoteActorAddressClient1);
                 iterator++;
             }
 
