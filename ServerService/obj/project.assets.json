@@ -1422,6 +1422,18 @@
         "runtime": {
           "bin/placeholder/cspread.dll": {}
         }
+      },
+      "cspread.User/1.0.0": {
+        "type": "project",
+        "dependencies": {
+          "cspread": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/cspread.User.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/cspread.User.dll": {}
+        }
       }
     }
   },
@@ -4767,8 +4779,13 @@
     },
     "cspread/1.0.0": {
       "type": "project",
-      "path": "../../../data/alcatraz/cspread-src/cspread/cspread.csproj",
-      "msbuildProject": "../../../data/alcatraz/cspread-src/cspread/cspread.csproj"
+      "path": "../../../other/data/alcatraz/cspread-src/cspread/cspread.csproj",
+      "msbuildProject": "../../../other/data/alcatraz/cspread-src/cspread/cspread.csproj"
+    },
+    "cspread.User/1.0.0": {
+      "type": "project",
+      "path": "../../../other/data/alcatraz/cspread-src/cspread.User/cspread.User.csproj",
+      "msbuildProject": "../../../other/data/alcatraz/cspread-src/cspread.User/cspread.User.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -4779,7 +4796,8 @@
       "Serilog.AspNetCore >= 3.2.0",
       "Serilog.Sinks.File >= 4.1.0",
       "System.Runtime >= 4.3.1",
-      "cspread >= 1.0.0"
+      "cspread >= 1.0.0",
+      "cspread.User >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -4812,8 +4830,11 @@
       "frameworks": {
         "netcoreapp3.0": {
           "projectReferences": {
-            "C:\\Users\\ibulica\\OneDrive - Capgemini\\Desktop\\data\\alcatraz\\cspread-src\\cspread\\cspread.csproj": {
-              "projectPath": "C:\\Users\\ibulica\\OneDrive - Capgemini\\Desktop\\data\\alcatraz\\cspread-src\\cspread\\cspread.csproj"
+            "C:\\Users\\ibulica\\OneDrive - Capgemini\\Desktop\\other\\data\\alcatraz\\cspread-src\\cspread.User\\cspread.User.csproj": {
+              "projectPath": "C:\\Users\\ibulica\\OneDrive - Capgemini\\Desktop\\other\\data\\alcatraz\\cspread-src\\cspread.User\\cspread.User.csproj"
+            },
+            "C:\\Users\\ibulica\\OneDrive - Capgemini\\Desktop\\other\\data\\alcatraz\\cspread-src\\cspread\\cspread.csproj": {
+              "projectPath": "C:\\Users\\ibulica\\OneDrive - Capgemini\\Desktop\\other\\data\\alcatraz\\cspread-src\\cspread\\cspread.csproj"
             }
           }
         }
