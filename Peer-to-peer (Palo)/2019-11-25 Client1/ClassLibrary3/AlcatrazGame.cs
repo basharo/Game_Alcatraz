@@ -105,7 +105,7 @@ namespace Alcatraz
             //public static string[] remoteActorAddresses;
             public static List<ClientData> AllPlayers;
             public static List<string> remoteActorAddresses;
-            public static string myPlayerId;
+            public static int myPlayerId;
             public static string myName;
             static Globals()
             {
@@ -183,8 +183,8 @@ namespace Alcatraz
             Globals.myName = "Franz";
 
             string testJSON = @"[
-                {""protocol"":""akka.tcp"",""system"":""alcatraz"",""host"":""localhost"",""port"":1111,""actorName"":""ReceivingActor"",""playerId"":1,""playerName"":""Franz""},
-                {""protocol"":""akka.tcp"",""system"":""alcatraz"",""host"":""localhost"",""port"":2222,""actorName"":""ReceivingActor"",""playerId"":2,""playerName"":""Bashar""}
+                {""protocol"":""akka.tcp"",""system"":""alcatraz"",""host"":""localhost"",""port"":1111,""actorName"":""ReceivingActor"",""playerId"":0,""playerName"":""Franz""},
+                {""protocol"":""akka.tcp"",""system"":""alcatraz"",""host"":""localhost"",""port"":2222,""actorName"":""ReceivingActor"",""playerId"":1,""playerName"":""Bashar""}
             ]";
 
 
@@ -195,7 +195,11 @@ namespace Alcatraz
             foreach (var item in Globals.AllPlayers)
             {
                 if (item.playerName == Globals.myName)
+                {
+                    Globals.myPlayerId = item.playerId;
                     break;
+                }
+                    
 
                 Globals.remoteActorAddresses.Add(item.ToString());
             }
@@ -207,7 +211,7 @@ namespace Alcatraz
             //Console.WriteLine(ClientDataArray.Count);
             //Console.WriteLine(ClientDataArray[0]["protocol"]);
 
-            
+
 
 
             /*for (int count = 0; count< ClientDataArray.Count; count++)
@@ -253,9 +257,115 @@ namespace Alcatraz
             */
 
 
+            if (Globals.AllPlayers.Count == 2)
+            {
+                Game t1 = new Game();
+                Game t2 = new Game();
+                Alcatraz a1 = new Alcatraz();
+                Alcatraz a2 = new Alcatraz();
+                t1.setNumPlayer(2);
+                t2.setNumPlayer(2);
+                a1.init(2, 0);
+                a2.init(2, 1);
+                a1.getPlayer(0).Name = Globals.AllPlayers.ElementAt(0).playerName;
+                a1.getPlayer(1).Name = Globals.AllPlayers.ElementAt(1).playerName;
+                a2.getPlayer(0).Name = Globals.AllPlayers.ElementAt(0).playerName;
+                a2.getPlayer(1).Name = Globals.AllPlayers.ElementAt(1).playerName;
+                t1.setOther(0, a2);
+                t2.setOther(0, a1);
+                if (Globals.myPlayerId == 0)
+                {
+                    a1.showWindow();
+                }
+                else if (Globals.myPlayerId == 1)
+                {
+                    a2.showWindow();
+                }
+                a1.addMoveListener(t1);
+                a2.addMoveListener(t2);
+                a1.getWindow().FormClosed += new FormClosedEventHandler(Test_FormClosed);
+                a2.getWindow().FormClosed += new FormClosedEventHandler(Test_FormClosed);
+                a1.start();
+                a2.start();
+            } else if (Globals.AllPlayers.Count == 3) {
+                Game t1 = new Game();
+                Game t2 = new Game();
+                Alcatraz a1 = new Alcatraz();
+                Alcatraz a2 = new Alcatraz();
+                t1.setNumPlayer(2);
+                t2.setNumPlayer(2);
+                a1.init(2, 0);
+                a2.init(2, 1);
+                a1.getPlayer(0).Name = Globals.AllPlayers.ElementAt(0).playerName;
+                a1.getPlayer(1).Name = Globals.AllPlayers.ElementAt(1).playerName;
+                a2.getPlayer(0).Name = Globals.AllPlayers.ElementAt(0).playerName;
+                a2.getPlayer(1).Name = Globals.AllPlayers.ElementAt(1).playerName;
+                t1.setOther(0, a2);
+                t2.setOther(0, a1);
+                if (Globals.myPlayerId == 0)
+                {
+                    a1.showWindow();
+                }
+                else if (Globals.myPlayerId == 1)
+                {
+                    a2.showWindow();
+                }
+                a1.addMoveListener(t1);
+                a2.addMoveListener(t2);
+                a1.getWindow().FormClosed += new FormClosedEventHandler(Test_FormClosed);
+                a2.getWindow().FormClosed += new FormClosedEventHandler(Test_FormClosed);
+                a1.start();
+                a2.start();
+            }
+            else if (Globals.AllPlayers.Count == 4)
+            {
+                Game t1 = new Game();
+                Game t2 = new Game();
+                Alcatraz a1 = new Alcatraz();
+                Alcatraz a2 = new Alcatraz();
+                t1.setNumPlayer(2);
+                t2.setNumPlayer(2);
+                a1.init(2, 0);
+                a2.init(2, 1);
+                a1.getPlayer(0).Name = Globals.AllPlayers.ElementAt(0).playerName;
+                a1.getPlayer(1).Name = Globals.AllPlayers.ElementAt(1).playerName;
+                a2.getPlayer(0).Name = Globals.AllPlayers.ElementAt(0).playerName;
+                a2.getPlayer(1).Name = Globals.AllPlayers.ElementAt(1).playerName;
+                t1.setOther(0, a2);
+                t2.setOther(0, a1);
+                if (Globals.myPlayerId == 0)
+                {
+                    a1.showWindow();
+                }
+                else if (Globals.myPlayerId == 1)
+                {
+                    a2.showWindow();
+                }
+                a1.addMoveListener(t1);
+                a2.addMoveListener(t2);
+                a1.getWindow().FormClosed += new FormClosedEventHandler(Test_FormClosed);
+                a2.getWindow().FormClosed += new FormClosedEventHandler(Test_FormClosed);
+                a1.start();
+                a2.start();
+            }
 
 
-            Game t1 = new Game();
+
+           /* for (int gameInstanceNo = 0; gameInstanceNo < Globals.AllPlayers.Count; gameInstanceNo++)
+            {
+                Game Game = new Game();
+                Alcatraz Alcatraz = new Alcatraz();
+                Game.setNumPlayer(Globals.AllPlayers.Count);
+                Alcatraz.init(Globals.AllPlayers.Count, gameInstanceNo);
+
+                for (int playerNameNo = 0; playerNameNo < Globals.AllPlayers.Count; playerNameNo++)
+                {
+                    Alcatraz.getPlayer(playerNameNo).Name = Globals.AllPlayers.ElementAt(playerNameNo).playerName;
+                }
+
+            }*/
+
+            /*Game t1 = new Game();
             Game t2 = new Game();
             Alcatraz a1 = new Alcatraz();
             Alcatraz a2 = new Alcatraz();
@@ -276,7 +386,7 @@ namespace Alcatraz
             a1.getWindow().FormClosed += new FormClosedEventHandler(Test_FormClosed);
             a2.getWindow().FormClosed += new FormClosedEventHandler(Test_FormClosed);
             a1.start();
-            a2.start();
+            a2.start();*/
             
 
 
@@ -379,13 +489,13 @@ namespace Alcatraz
             lastMove.row = row;
             lastMove.col = col;
 
-            Console.WriteLine(Globals.remoteActorAddresses[0]);
+            //Console.WriteLine(Globals.remoteActorAddresses[0]);
 
             //string remoteActorAddress = ConfigurationManager.AppSettings["remoteActorAddress"];
-            var remoteChatActor = Globals.ActSys.ActorSelection(Globals.remoteActorAddresses[0]);
+            //var remoteChatActor = Globals.ActSys.ActorSelection(Globals.remoteActorAddresses[0]);
 
             string lastMoveJson = JsonConvert.SerializeObject(lastMove);
-            remoteChatActor.Tell(lastMoveJson);
+            //remoteChatActor.Tell(lastMoveJson);
 
 
             //forea
