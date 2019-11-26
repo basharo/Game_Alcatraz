@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Akka.Actor;
 using Alcatraz;
-using Newtonsoft.Json;
 
-namespace Alcatraz
+namespace final_client_logic_akka
 
 {
     public class Test : MoveListener
@@ -15,8 +16,8 @@ namespace Alcatraz
         private static Client clientItem;
         private static Client[] clientItems;
         private static ClientClass clientClass;
-        private static Alcatraz clientAlcatraz = new Alcatraz();
-        private static Alcatraz[] other;
+        private static Alcatraz.Alcatraz clientAlcatraz = new Alcatraz.Alcatraz();
+        private static Alcatraz.Alcatraz[] other;
         private static ClientData[] data;
         private int numPlayer;
         private static Boolean boolVar = false;
@@ -40,11 +41,6 @@ namespace Alcatraz
                 using (var actorSystem = ActorSystem.Create(playerName))
                 {
 
-                    clientAlcatraz = new Alcatraz();
-                    clientAlcatraz.init(2, 1);
-                    clientItem = new Client(clientAlcatraz, new ClientData("", 1111, "", 0, ""));
-
-
                     var localChatActor = actorSystem.ActorOf(Props.Create<GameActor>(), "GameActor");
 
                     //Players players = new Players(new string[10, 10]);
@@ -62,8 +58,14 @@ namespace Alcatraz
                         while (line != null)
                         {
 
-                            //remoteChatActorClient1.Tell("test", localChatActor);
-                            remoteChatActorClient1.Tell(new Client(), localChatActor);
+                            string clientData
+                            remoteChatActorClient1.Tell(playerName
+                                , localChatActor);
+                            //string ip = GetLocalIPAddress();
+                            //string actorAdress = localChatActor.Path.;
+                            //ClientData clientData = new ClientData(temp.Protocol, temp.Host, temp.Port, remoteChatActorClient1.PathString, 0, playerName);
+
+                            //remoteChatActorClient1.Tell(new ClientData(), localChatActor);
                             //remoteChatActorClient2.Tell(players, child);
                             line = Console.ReadLine();
                             //remoteChatActorClient1.Tell(line, child);
@@ -83,8 +85,8 @@ namespace Alcatraz
             }
 
             data = new ClientData[1];
-            data[0] = new ClientData("akka.tcp://" + playerName + "@localhost:", 1111, "/user/GameActor", 1, playerName);
-            other = new Alcatraz[data.Length+1];
+            //data[0] = new ClientData("akka.tcp://" + playerName + "@localhost:", 1111, "/user/GameActor", 1, playerName);
+            other = new Alcatraz.Alcatraz[data.Length+1];
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -118,7 +120,7 @@ namespace Alcatraz
         }
         
 
-        public void setOther(int i, Alcatraz t)
+        public void setOther(int i, Alcatraz.Alcatraz t)
         {
             other[i] = t;
         }
@@ -151,7 +153,7 @@ namespace Alcatraz
 
         public void doMove(Player player, Prisoner prisoner, int rowOrCol, int row, int col)
         {
-            Console.WriteLine("moving " + prisoner + " to " + (rowOrCol == Alcatraz.ROW ? "row" : "col") + " " + (rowOrCol == Alcatraz.ROW ? row : col));
+            Console.WriteLine("moving " + prisoner + " to " + (rowOrCol == Alcatraz.Alcatraz.ROW ? "row" : "col") + " " + (rowOrCol == Alcatraz.Alcatraz.ROW ? row : col));
             Console.WriteLine("ID" + player.Id);
             ActorSelection[] remoteActors = ClientClass.getRemoteChatActorClient();
 
@@ -176,9 +178,17 @@ namespace Alcatraz
             Console.WriteLine("Player " + player.Id + " wins.");
         }
 
-    /*    public static void main(String[] args)
+        public static string GetLocalIPAddress()
         {
-            Console.WriteLine("main main main");
-        }*/
+            var host = Dns.GetHostEntry(Dns.GetHostName());
+            foreach (var ip in host.AddressList)
+            {
+                if (ip.AddressFamily == AddressFamily.InterNetwork)
+                {
+                    return ip.ToString();
+                }
+            }
+            throw new Exception("No network adapters with an IPv4 address in the system!");
+        }
     }
 }

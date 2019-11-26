@@ -1940,7 +1940,7 @@
             If you receive a reference to an actor, that actor is guaranteed to have existed at some point
             in the past. However, an actor can always be terminated in the future.
             
-            If you want to be notified about an actor terminating, call <see cref="!:IActorContext.Watch"/>
+            If you want to be notified about an actor terminating, call <see cref="M:Akka.Actor.ICanWatch.Watch(Akka.Actor.IActorRef)">IActorContext.Watch</see>
             on this actor and you'll receive a <see cref="T:Akka.Actor.Terminated"/> message when the actor dies or if it
             is already dead.
             </summary>
@@ -2085,7 +2085,7 @@
         </member>
         <member name="P:Akka.Actor.IInternalActorRef.IsTerminated">
             <summary>
-            Obsolete. Use <see cref="!:Akka.Actor.UntypedActor.Context.Watch(IActorRef)"/> or <see cref="M:Akka.Actor.ReceiveActor.Receive``1(System.Action{``0},System.Predicate{``0})">Receive&lt;<see cref="T:Akka.Actor.Terminated"/>&gt;</see>
+            Obsolete. Use <see cref="T:Akka.Dispatch.SysMsg.Watch"/> or <see cref="M:Akka.Actor.ReceiveActor.Receive``1(System.Action{``0},System.Predicate{``0})">Receive&lt;<see cref="T:Akka.Actor.Terminated"/>&gt;</see>
             </summary>
         </member>
         <member name="M:Akka.Actor.IInternalActorRef.GetChild(System.Collections.Generic.IEnumerable{System.String})">
@@ -2369,6 +2369,47 @@
         </member>
         <member name="M:Akka.Actor.VirtualPathContainer.Enumerable`1.GetEnumerator">
             <inheritdoc/>
+        </member>
+        <member name="T:Akka.Actor.FunctionRef">
+            <summary>
+            INTERNAL API
+            
+            This kind of ActorRef passes all received messages to the given function for
+            performing a non-blocking side-effect. The intended use is to transform the
+            message before sending to the real target actor. Such references can be created
+            by calling <see cref="M:Akka.Actor.ActorCell.AddFunctionRef(System.Action{Akka.Actor.IActorRef,System.Object},System.String)"/> and must be deregistered when no longer
+            needed by calling <see cref="M:Akka.Actor.ActorCell.RemoveFunctionRef(Akka.Actor.FunctionRef)"/>. FunctionRefs do not count
+            towards the live children of an actor, they do not receive the Terminate command
+            and do not prevent the parent from terminating. FunctionRef is properly
+            registered for remote lookup and ActorSelection.
+            
+            When using the <see cref="M:Akka.Actor.ICanWatch.Watch(Akka.Actor.IActorRef)"/> feature you must ensure that upon reception of the
+            Terminated message the watched actorRef is <see cref="M:Akka.Actor.ICanWatch.Unwatch(Akka.Actor.IActorRef)"/>ed.
+            </summary>
+        </member>
+        <member name="M:Akka.Actor.FunctionRef.Watch(Akka.Actor.IActorRef)">
+            <summary>
+            Have this FunctionRef watch the given Actor. This method must not be
+            called concurrently from different threads, it should only be called by
+            its parent Actor.
+            
+            Upon receiving the Terminated message, <see cref="M:Akka.Actor.FunctionRef.Unwatch(Akka.Actor.IActorRef)"/> must be called from a
+            safe context (i.e. normally from the parent Actor).
+            </summary>
+        </member>
+        <member name="M:Akka.Actor.FunctionRef.Unwatch(Akka.Actor.IActorRef)">
+            <summary>
+            Have this FunctionRef unwatch the given Actor. This method must not be
+            called concurrently from different threads, it should only be called by
+            its parent Actor.
+            </summary>
+        </member>
+        <member name="M:Akka.Actor.FunctionRef.IsWatching(Akka.Actor.IActorRef)">
+            <summary>
+            Query whether this FunctionRef is currently watching the given Actor. This
+            method must not be called concurrently from different threads, it should
+            only be called by its parent Actor.
+            </summary>
         </member>
         <member name="T:Akka.Actor.ActorRefExtensions">
             <summary>
@@ -4439,7 +4480,7 @@
         </member>
         <member name="T:Akka.Actor.Internal.ActorSystemImpl">
             <summary>
-            TBD
+            INTERNAL API
             <remarks>Note! Part of internal API. Breaking changes may occur without notice. Use at own risk.</remarks>
             </summary>
         </member>
@@ -7295,7 +7336,7 @@
             </summary>
         </member>
         <member name="M:Akka.Actor.PromiseActorRef.TellInternal(System.Object,Akka.Actor.IActorRef)">
-            <inheritdoc cref="!:InternalActorRefBase.TellInternal"/>
+            <inheritdoc cref="M:Akka.Actor.ActorRefBase.TellInternal(System.Object,Akka.Actor.IActorRef)">InternalActorRefBase.TellInternal</inheritdoc>
         </member>
         <member name="M:Akka.Actor.PromiseActorRef.SendSystemMessage(Akka.Dispatch.SysMsg.ISystemMessage)">
             <inheritdoc cref="M:Akka.Actor.InternalActorRefBase.SendSystemMessage(Akka.Dispatch.SysMsg.ISystemMessage)"/>
@@ -16229,6 +16270,15 @@
             <param name="logClass">The type of logger used to log the event.</param>
             <param name="message">The message that is being logged.</param>
         </member>
+        <member name="M:Akka.Event.Debug.#ctor(System.Exception,System.String,System.Type,System.Object)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Akka.Event.Debug" /> class.
+            </summary>
+            <param name="cause">The exception that generated the log event.</param>
+            <param name="logSource">The source that generated the log event.</param>
+            <param name="logClass">The type of logger used to log the event.</param>
+            <param name="message">The message that is being logged.</param>
+        </member>
         <member name="M:Akka.Event.Debug.LogLevel">
             <summary>
             Retrieves the <see cref="T:Akka.Event.LogLevel" /> used to classify this event.
@@ -16282,22 +16332,11 @@
             <param name="logClass">The type of logger used to log the event.</param>
             <param name="message">The message that is being logged.</param>
         </member>
-        <member name="P:Akka.Event.Error.Cause">
-            <summary>
-            The exception that caused the log event.
-            </summary>
-        </member>
         <member name="M:Akka.Event.Error.LogLevel">
             <summary>
             Retrieves the <see cref="T:Akka.Event.LogLevel" /> used to classify this event.
             </summary>
             <returns>The <see cref="T:Akka.Event.LogLevel" /> used to classify this event.</returns>
-        </member>
-        <member name="M:Akka.Event.Error.ToString">
-            <summary>
-            Returns a <see cref="T:System.String" /> that represents this instance.
-            </summary>
-            <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
         </member>
         <member name="T:Akka.Event.EventBus`3">
             <summary>
@@ -16613,6 +16652,14 @@
             <param name="format">The message that is being logged.</param>
             <param name="args">An optional list of items used to format the message.</param>
         </member>
+        <member name="M:Akka.Event.ILoggingAdapter.Debug(System.Exception,System.String,System.Object[])">
+            <summary>
+            Logs a <see cref="F:Akka.Event.LogLevel.DebugLevel"/> message and associated exception.
+            </summary>
+            <param name="cause">The exception associated with this message.</param>
+            <param name="format">The message that is being logged.</param>
+            <param name="args">An optional list of items used to format the message.</param>
+        </member>
         <member name="M:Akka.Event.ILoggingAdapter.Info(System.String,System.Object[])">
             <summary>
             Logs a <see cref="F:Akka.Event.LogLevel.InfoLevel"/> message.
@@ -16620,10 +16667,26 @@
             <param name="format">The message that is being logged.</param>
             <param name="args">An optional list of items used to format the message.</param>
         </member>
+        <member name="M:Akka.Event.ILoggingAdapter.Info(System.Exception,System.String,System.Object[])">
+            <summary>
+            Logs a <see cref="F:Akka.Event.LogLevel.InfoLevel"/> message and associated exception.
+            </summary>
+            <param name="cause">The exception associated with this message.</param>
+            <param name="format">The message that is being logged.</param>
+            <param name="args">An optional list of items used to format the message.</param>
+        </member>
         <member name="M:Akka.Event.ILoggingAdapter.Warning(System.String,System.Object[])">
             <summary>
             Logs a <see cref="F:Akka.Event.LogLevel.WarningLevel"/> message.
             </summary>
+            <param name="format">The message that is being logged.</param>
+            <param name="args">An optional list of items used to format the message.</param>
+        </member>
+        <member name="M:Akka.Event.ILoggingAdapter.Warning(System.Exception,System.String,System.Object[])">
+            <summary>
+            Logs a <see cref="F:Akka.Event.LogLevel.WarningLevel"/> message and associated exception.
+            </summary>
+            <param name="cause">The exception associated with this message.</param>
             <param name="format">The message that is being logged.</param>
             <param name="args">An optional list of items used to format the message.</param>
         </member>
@@ -16647,6 +16710,15 @@
             Logs a message with a specified level.
             </summary>
             <param name="logLevel">The level used to log the message.</param>
+            <param name="format">The message that is being logged.</param>
+            <param name="args">An optional list of items used to format the message.</param>
+        </member>
+        <member name="M:Akka.Event.ILoggingAdapter.Log(Akka.Event.LogLevel,System.Exception,System.String,System.Object[])">
+            <summary>
+            Logs a message with a specified level.
+            </summary>
+            <param name="logLevel">The level used to log the message.</param>
+            <param name="cause">The exception that caused this log message.</param>
             <param name="format">The message that is being logged.</param>
             <param name="args">An optional list of items used to format the message.</param>
         </member>
@@ -16696,10 +16768,26 @@
             <param name="format">The message that is being logged.</param>
             <param name="args">An optional list of items used to format the message.</param>
         </member>
+        <member name="M:Akka.Event.NoLogger.Debug(System.Exception,System.String,System.Object[])">
+            <summary>
+            Logs a <see cref="F:Akka.Event.LogLevel.ErrorLevel" /> message and associated exception.
+            </summary>
+            <param name="cause">The exception associated with this message.</param>
+            <param name="format">The message that is being logged.</param>
+            <param name="args">An optional list of items used to format the message.</param>
+        </member>
         <member name="M:Akka.Event.NoLogger.Info(System.String,System.Object[])">
             <summary>
             Logs a <see cref="F:Akka.Event.LogLevel.InfoLevel" /> message.
             </summary>
+            <param name="format">The message that is being logged.</param>
+            <param name="args">An optional list of items used to format the message.</param>
+        </member>
+        <member name="M:Akka.Event.NoLogger.Info(System.Exception,System.String,System.Object[])">
+            <summary>
+            Logs a <see cref="F:Akka.Event.LogLevel.InfoLevel" /> message and associated exception.
+            </summary>
+            <param name="cause">The exception associated with this message.</param>
             <param name="format">The message that is being logged.</param>
             <param name="args">An optional list of items used to format the message.</param>
         </member>
@@ -16714,6 +16802,14 @@
             <summary>
             Logs a <see cref="F:Akka.Event.LogLevel.WarningLevel" /> message.
             </summary>
+            <param name="format">The message that is being logged.</param>
+            <param name="args">An optional list of items used to format the message.</param>
+        </member>
+        <member name="M:Akka.Event.NoLogger.Warning(System.Exception,System.String,System.Object[])">
+            <summary>
+            Logs a <see cref="F:Akka.Event.LogLevel.WarningLevel" /> message and associated exception.
+            </summary>
+            <param name="cause">The exception associated with this message.</param>
             <param name="format">The message that is being logged.</param>
             <param name="args">An optional list of items used to format the message.</param>
         </member>
@@ -16740,6 +16836,15 @@
             <param name="format">The message that is being logged.</param>
             <param name="args">An optional list of items used to format the message.</param>
         </member>
+        <member name="M:Akka.Event.NoLogger.Log(Akka.Event.LogLevel,System.Exception,System.String,System.Object[])">
+            <summary>
+            Logs a message with a specified level.
+            </summary>
+            <param name="logLevel">The level used to log the message.</param>
+            <param name="cause">The exception that caused this log message.</param>
+            <param name="format">The message that is being logged.</param>
+            <param name="args">An optional list of items used to format the message.</param>
+        </member>
         <member name="T:Akka.Event.ILogMessageFormatter">
             <summary>
             This interface describes the methods used to format log messages.
@@ -16762,6 +16867,15 @@
             <summary>
             Initializes a new instance of the <see cref="T:Akka.Event.Info" /> class.
             </summary>
+            <param name="logSource">The source that generated the log event.</param>
+            <param name="logClass">The type of logger used to log the event.</param>
+            <param name="message">The message that is being logged.</param>
+        </member>
+        <member name="M:Akka.Event.Info.#ctor(System.Exception,System.String,System.Type,System.Object)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Akka.Event.Info" /> class.
+            </summary>
+            <param name="cause">The exception that generated the log event.</param>
             <param name="logSource">The source that generated the log event.</param>
             <param name="logClass">The type of logger used to log the event.</param>
             <param name="message">The message that is being logged.</param>
@@ -16805,6 +16919,11 @@
         <member name="M:Akka.Event.LogEvent.#ctor">
             <summary>
             Initializes a new instance of the <see cref="T:Akka.Event.LogEvent" /> class.
+            </summary>
+        </member>
+        <member name="P:Akka.Event.LogEvent.Cause">
+            <summary>
+            The exception that caused the log event. Can be <c>null</c>
             </summary>
         </member>
         <member name="P:Akka.Event.LogEvent.Timestamp">
@@ -16890,10 +17009,32 @@
             <see cref="T:Akka.Event.LogEvent"/> when the string representation was supplied directly.
             </summary>
         </member>
+        <member name="T:Akka.Event.LogSource">
+             <summary>
+             This object holds predefined formatting rules for log sources.
+            
+             In case an <see cref="T:Akka.Actor.ActorSystem"/> is provided, the following apply:
+             * <see cref="T:Akka.Actor.ActorBase"/> and <see cref="T:Akka.Actor.IActorRef"/> will be represented by their absolute path.
+             * providing a <see cref="T:System.String"/> as source will append "(ActorSystem address)" and use the result.
+             * providing a <see cref="P:Akka.Event.LogSource.Type"/> will extract its simple name,  append "(ActorSystem address)", and use the result.
+             </summary>
+        </member>
         <member name="T:Akka.Event.Logging">
             <summary>
             This class provides the functionality for creating logger instances and helpers for converting to/from <see cref="T:Akka.Event.LogLevel"/> values.
             </summary>
+        </member>
+        <member name="M:Akka.Event.Logging.SimpleName(System.Object)">
+            <summary>
+            Returns a "safe" LogSource name for the provided object's type.
+            </summary>
+            <returns>The simple name of the given object's Type.</returns>
+        </member>
+        <member name="M:Akka.Event.Logging.SimpleName(System.Type)">
+            <summary>
+            Returns a "safe" LogSource for the provided type.
+            </summary>
+            <returns>A usable simple LogSource name.</returns>
         </member>
         <member name="F:Akka.Event.Logging.StandardOutLogger">
             <summary>
@@ -17002,16 +17143,37 @@
             </summary>
             <param name="message">The message related to the log event.</param>
         </member>
+        <member name="M:Akka.Event.LoggingAdapterBase.NotifyWarning(System.Exception,System.Object)">
+            <summary>
+            Notifies all subscribers that an <see cref="F:Akka.Event.LogLevel.WarningLevel" /> log event occurred.
+            </summary>
+            <param name="cause">The exception that caused the log event.</param>
+            <param name="message">The message related to the log event.</param>
+        </member>
         <member name="M:Akka.Event.LoggingAdapterBase.NotifyInfo(System.Object)">
             <summary>
             Notifies all subscribers that an <see cref="F:Akka.Event.LogLevel.InfoLevel" /> log event occurred.
             </summary>
             <param name="message">The message related to the log event.</param>
         </member>
+        <member name="M:Akka.Event.LoggingAdapterBase.NotifyInfo(System.Exception,System.Object)">
+            <summary>
+            Notifies all subscribers that an <see cref="F:Akka.Event.LogLevel.InfoLevel" /> log event occurred.
+            </summary>
+            <param name="cause">The exception that caused the log event.</param>
+            <param name="message">The message related to the log event.</param>
+        </member>
         <member name="M:Akka.Event.LoggingAdapterBase.NotifyDebug(System.Object)">
             <summary>
             Notifies all subscribers that an <see cref="F:Akka.Event.LogLevel.DebugLevel" /> log event occurred.
             </summary>
+            <param name="message">The message related to the log event.</param>
+        </member>
+        <member name="M:Akka.Event.LoggingAdapterBase.NotifyDebug(System.Exception,System.Object)">
+            <summary>
+            Notifies all subscribers that an <see cref="F:Akka.Event.LogLevel.DebugLevel" /> log event occurred.
+            </summary>
+            <param name="cause">The exception that caused the log event.</param>
             <param name="message">The message related to the log event.</param>
         </member>
         <member name="M:Akka.Event.LoggingAdapterBase.#ctor(Akka.Event.ILogMessageFormatter)">
@@ -17037,10 +17199,27 @@
             <param name="message">The message related to the log event.</param>
             <exception cref="T:System.NotSupportedException">This exception is thrown when the given <paramref name="logLevel"/> is unknown.</exception>
         </member>
+        <member name="M:Akka.Event.LoggingAdapterBase.NotifyLog(Akka.Event.LogLevel,System.Exception,System.Object)">
+            <summary>
+            Notifies all subscribers that a log event occurred for a particular level.
+            </summary>
+            <param name="logLevel">The log level associated with the log event.</param>
+            <param name="cause">The exception that caused the log event.</param>
+            <param name="message">The message related to the log event.</param>
+            <exception cref="T:System.NotSupportedException">This exception is thrown when the given <paramref name="logLevel"/> is unknown.</exception>
+        </member>
         <member name="M:Akka.Event.LoggingAdapterBase.Debug(System.String,System.Object[])">
             <summary>
             Logs a <see cref="F:Akka.Event.LogLevel.DebugLevel" /> message.
             </summary>
+            <param name="format">The message that is being logged.</param>
+            <param name="args">An optional list of items used to format the message.</param>
+        </member>
+        <member name="M:Akka.Event.LoggingAdapterBase.Debug(System.Exception,System.String,System.Object[])">
+            <summary>
+            Logs a <see cref="F:Akka.Event.LogLevel.DebugLevel" /> message.
+            </summary>
+            <param name="cause">The exception associated with this message.</param>
             <param name="format">The message that is being logged.</param>
             <param name="args">An optional list of items used to format the message.</param>
         </member>
@@ -17051,10 +17230,26 @@
             <param name="format">N/A</param>
             <param name="args">N/A</param>
         </member>
+        <member name="M:Akka.Event.LoggingAdapterBase.Info(System.Exception,System.String,System.Object[])">
+            <summary>
+            Logs a <see cref="F:Akka.Event.LogLevel.InfoLevel" /> message.
+            </summary>
+            <param name="cause">The exception associated with this message.</param>
+            <param name="format">The message that is being logged.</param>
+            <param name="args">An optional list of items used to format the message.</param>
+        </member>
         <member name="M:Akka.Event.LoggingAdapterBase.Warning(System.String,System.Object[])">
             <summary>
             Logs a <see cref="F:Akka.Event.LogLevel.WarningLevel" /> message.
             </summary>
+            <param name="format">The message that is being logged.</param>
+            <param name="args">An optional list of items used to format the message.</param>
+        </member>
+        <member name="M:Akka.Event.LoggingAdapterBase.Warning(System.Exception,System.String,System.Object[])">
+            <summary>
+            Logs a <see cref="F:Akka.Event.LogLevel.WarningLevel" /> message.
+            </summary>
+            <param name="cause">The exception associated with this message.</param>
             <param name="format">The message that is being logged.</param>
             <param name="args">An optional list of items used to format the message.</param>
         </member>
@@ -17085,6 +17280,15 @@
             Logs a message with a specified level.
             </summary>
             <param name="logLevel">The level used to log the message.</param>
+            <param name="format">The message that is being logged.</param>
+            <param name="args">An optional list of items used to format the message.</param>
+        </member>
+        <member name="M:Akka.Event.LoggingAdapterBase.Log(Akka.Event.LogLevel,System.Exception,System.String,System.Object[])">
+            <summary>
+            Logs a message with a specified level.
+            </summary>
+            <param name="logLevel">The level used to log the message.</param>
+            <param name="cause">The exception associated with this message.</param>
             <param name="format">The message that is being logged.</param>
             <param name="args">An optional list of items used to format the message.</param>
         </member>
@@ -17375,6 +17579,15 @@
             <summary>
             Initializes a new instance of the <see cref="T:Akka.Event.Warning" /> class.
             </summary>
+            <param name="logSource">The source that generated the log event.</param>
+            <param name="logClass">The type of logger used to log the event.</param>
+            <param name="message">The message that is being logged.</param>
+        </member>
+        <member name="M:Akka.Event.Warning.#ctor(System.Exception,System.String,System.Type,System.Object)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Akka.Event.Warning" /> class.
+            </summary>
+            <param name="cause">The exception that caused the log event.</param>
             <param name="logSource">The source that generated the log event.</param>
             <param name="logClass">The type of logger used to log the event.</param>
             <param name="message">The message that is being logged.</param>
@@ -18222,7 +18435,7 @@
         <member name="T:Akka.IO.Tcp.NoAck">
             <summary>
             Each <see cref="T:Akka.IO.Tcp.WriteCommand" /> can optionally request a positive acknowledgment to be sent
-            to the commanding actor. If such notification is not desired the <see cref="!:WriteCommand#ack" />
+            to the commanding actor. If such notification is not desired the <see cref="P:Akka.IO.Tcp.Write.Ack" />
             must be set to an instance of this class. The token contained within can be used
             to recognize which write failed when receiving a <see cref="T:Akka.IO.Tcp.CommandFailed" /> message.
             </summary>
@@ -18302,8 +18515,8 @@
             <summary>
             Write data to the TCP connection. If no ack is needed use the special
             `NoAck` object. The connection actor will reply with a <see cref="T:Akka.IO.Tcp.CommandFailed" />
-            message if the write could not be enqueued. If <see cref="!:WriteCommand#wantsAck" />
-            returns true, the connection actor will reply with the supplied <see cref="!:WriteCommand#ack" />
+            message if the write could not be enqueued. If <see cref="P:Akka.IO.Tcp.SimpleWriteCommand.WantsAck">Write.WantsAck</see>
+            returns true, the connection actor will reply with the supplied <see cref="P:Akka.IO.Tcp.Write.Ack" />
             token once the write has been successfully enqueued to the O/S kernel.
             <b>Note that this does not in any way guarantee that the data will be
             or have been sent!</b> Unfortunately there is no way to determine whether
@@ -18343,7 +18556,7 @@
         <member name="T:Akka.IO.Tcp.CompoundWrite">
             <summary>
             A write command which aggregates two other write commands. Using this construct
-            you can chain a number of <see cref="T:Akka.IO.Tcp.Write" /> and/or <see cref="!:Akka.IO.Tcp.WriteFile" /> commands together in a way
+            you can chain a number of <see cref="T:Akka.IO.Tcp.Write" /> commands together in a way
             that allows them to be handled as a single write which gets written out to the
             network as quickly as possible.
             If the sub commands contain `ack` requests they will be honored as soon as the
@@ -20281,7 +20494,8 @@
         <member name="T:Akka.Pattern.BackoffOnRestartSupervisor">
             <summary>
             Back-off supervisor that stops and starts a child actor when the child actor restarts. 
-            This back-off supervisor is created by using <see cref="M:Akka.Pattern.BackoffSupervisor.Props(Akka.Actor.Props,System.String,System.TimeSpan,System.TimeSpan,System.Double)"/> with <see cref="M:Akka.Pattern.Backoff.OnFailure(Akka.Actor.Props,System.String,System.TimeSpan,System.TimeSpan,System.Double)"/>
+            This back-off supervisor is created by using <see cref="M:Akka.Pattern.BackoffSupervisor.Props(Akka.Actor.Props,System.String,System.TimeSpan,System.TimeSpan,System.Double)">BackoffSupervisor.Props</see>
+            with <see cref="M:Akka.Pattern.Backoff.OnFailure(Akka.Actor.Props,System.String,System.TimeSpan,System.TimeSpan,System.Double)">Backoff.OnFailure</see>
             </summary>
         </member>
         <member name="T:Akka.Pattern.Backoff">
@@ -22809,7 +23023,9 @@
         </member>
         <member name="T:Akka.Routing.NoRoutee">
             <summary>
-            TBD
+            INTERNAL API
+            
+            Used to describe instance where no routee is available.
             </summary>
         </member>
         <member name="M:Akka.Routing.NoRoutee.Send(System.Object,Akka.Actor.IActorRef)">
@@ -22821,35 +23037,35 @@
         </member>
         <member name="T:Akka.Routing.Routee">
             <summary>
-            TBD
+            Generic base class for routees.
             </summary>
         </member>
         <member name="F:Akka.Routing.Routee.NoRoutee">
             <summary>
-            TBD
+            Singleton instance for special case "no routee," for when no
+            matching routees are found.
             </summary>
         </member>
         <member name="M:Akka.Routing.Routee.Send(System.Object,Akka.Actor.IActorRef)">
             <summary>
-            TBD
+            Send a message to the routee.
             </summary>
-            <param name="message">TBD</param>
-            <param name="sender">TBD</param>
+            <param name="message">The message to send.</param>
+            <param name="sender">The sender, if any.</param>
         </member>
         <member name="M:Akka.Routing.Routee.Ask(System.Object,System.Nullable{System.TimeSpan})">
             <summary>
-            TBD
+            Ask a routee for a reply message in response to an input.
             </summary>
-            <param name="message">TBD</param>
-            <param name="timeout">TBD</param>
-            <returns>TBD</returns>
+            <param name="message">The message to send.</param>
+            <param name="timeout">Optional timeout parameter. If the parameter is provided
+            and the operation times out, will throw an AskTimeoutException.</param>
+            <returns>A Task containing the response object.</returns>
         </member>
         <member name="M:Akka.Routing.Routee.FromActorRef(Akka.Actor.IActorRef)">
             <summary>
-            TBD
+            Helper method to create a new Routee instance from an IActorRef.
             </summary>
-            <param name="actorRef">TBD</param>
-            <returns>TBD</returns>
         </member>
         <member name="T:Akka.Routing.ActorRefRoutee">
             <summary>
@@ -25147,6 +25363,14 @@
             <param name="value">TBD</param>
             <returns>TBD</returns>
         </member>
+        <member name="M:Akka.Util.Base64Encoding.Base64Encode(System.Int64,System.Text.StringBuilder)">
+            <summary>
+            TBD
+            </summary>
+            <param name="value">TBD</param>
+            <param name="sb">TBD</param>
+            <returns>TBD</returns>
+        </member>
         <member name="M:Akka.Util.Base64Encoding.Base64Encode(System.String)">
             <summary>
             TBD
@@ -25513,6 +25737,11 @@
         <member name="P:Akka.Util.Left`1.IsRight">
             <summary>
             TBD
+            </summary>
+        </member>
+        <member name="M:Akka.Util.Extensions.ObjectExtensions.AsOption``1(``0)">
+            <summary>
+            Wraps object to the <see cref="T:Akka.Util.Option`1"/> monade
             </summary>
         </member>
         <member name="T:Akka.Util.FastLazy`1">
@@ -26407,10 +26636,10 @@
             <param name="updater">TBD</param>
             <returns>The updated value.</returns>
         </member>
-        <member name="M:Akka.Util.Internal.InterlockedSpin.ConditionallySwap``2(``0@,System.Func{``0,System.Tuple{System.Boolean,``0,``1}})">
+        <member name="M:Akka.Util.Internal.InterlockedSpin.ConditionallySwap``2(``0@,System.Func{``0,System.ValueTuple{System.Boolean,``0,``1}})">
             <summary>INTERNAL!
             Atomically updates the int <paramref name="reference"/> by calling <paramref name="updateIfTrue"/> to get the new value.
-            <paramref name="updateIfTrue"/> returns a Tuple&lt;should update, the new int value, the return value&gt;
+            <paramref name="updateIfTrue"/> returns a ValueTuple&lt;should update, the new int value, the return value&gt;
             If the first item in the tuple is true, the value is updated, and the third value of the tuple is returned.
             Note that <paramref name="updateIfTrue"/> may be called many times so it should be idempotent.
             <remarks>Note! Part of internal API. Breaking changes may occur without notice. Use at own risk.</remarks>
@@ -26812,6 +27041,54 @@
             This exception is thrown if there aren't enough bits in the given <paramref name="arr"/> to make a byte.
             </exception>
             <returns>TBD</returns>
+        </member>
+        <member name="T:Akka.Util.Option`1">
+            <summary>
+            Allows tracking of whether a value has be initialized (even with the default value) for both
+            reference and value types.
+            Useful where distinguishing between null (or zero, or false) and uninitialized is significant.
+            </summary>
+            <typeparam name="T">TBD</typeparam>
+        </member>
+        <member name="F:Akka.Util.Option`1.None">
+            <summary>
+            TBD
+            </summary>
+        </member>
+        <member name="M:Akka.Util.Option`1.#ctor(`0)">
+            <summary>
+            TBD
+            </summary>
+            <param name="value">TBD</param>
+        </member>
+        <member name="P:Akka.Util.Option`1.HasValue">
+            <summary>
+            TBD
+            </summary>
+        </member>
+        <member name="P:Akka.Util.Option`1.Value">
+            <summary>
+            TBD
+            </summary>
+        </member>
+        <member name="M:Akka.Util.Option`1.op_Implicit(`0)~Akka.Util.Option{`0}">
+            <summary>
+            Performs an implicit conversion from <typeparamref name="T"/> to <see cref="T:Akka.Util.Option`1"/>.
+            </summary>
+            <param name="value">The object to convert</param>
+            <returns>The result of the conversion.</returns>
+        </member>
+        <member name="M:Akka.Util.Option`1.Equals(Akka.Util.Option{`0})">
+            <inheritdoc/>
+        </member>
+        <member name="M:Akka.Util.Option`1.Equals(System.Object)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Akka.Util.Option`1.GetHashCode">
+            <inheritdoc/>
+        </member>
+        <member name="M:Akka.Util.Option`1.ToString">
+            <inheritdoc/>
         </member>
         <member name="T:Akka.Util.Reflection.ExpressionExtensions">
             <summary>

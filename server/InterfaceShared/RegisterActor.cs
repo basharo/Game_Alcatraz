@@ -1,4 +1,5 @@
 ﻿using Akka.Actor;
+using Interface;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -6,38 +7,34 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Alcatraz
+namespace Interface
 {
-    public class RegisterActor : ReceiveActor
+    public class RegisterActor : UntypedActor
     {
 
         private ICancelable _helloTask;
+        ClientData[] players;
+
         public RegisterActor()
         {
 
             string path = @"c:\temp\";
             string fileName = "game.txt";
 
+        }
 
+            /*
             Receive<Hello>(hello =>
             {
                 Console.WriteLine("[{0}]: {1}", Sender, hello.Message);
                 Sender.Tell(hello);
             });
 
-            Receive<Client>(client =>
+            Receive<ClientData>(client =>
             {
-                Console.WriteLine("[{0}]: {1}", Sender, client.clientData.playerID + "--" + client.clientData.address + "--" /*+ client.port*/);
-                if (!File.Exists(path + fileName))
-                    File.WriteAllText(path + fileName, "name:" + client.clientData.uniqueName + "ip:" + client.clientData.address + "port:" + client.clientData.port);
-                else
-                    Sender.Tell("already registered");
 
-                Sender.Tell("already registered", ActorRefs.NoSender);
-                //Sender.Tell("already registered", Self);
-                this.Self.Tell("already registered");
-                //Self.Tell("Self send");
-                Sender.Tell("Server" + client.clientData.uniqueName);
+
+                Console.WriteLine(client);
 
             });
 
@@ -50,9 +47,57 @@ namespace Alcatraz
 
             Receive<string>(text =>
             {
-                Console.WriteLine(text);
+                if (text == "start")
+                {
+                    return;
+                }
+
+                ClientData clientData = new ClientData();
+
+                string[] slice = text.Split(';');
+                int n = 0;
+
+                foreach (string item in slice)
+                {
+                    if (item.Contains("akka.tcp"))
+                    {
+                        return;
+                    }
+                    string[] element = item.Split(',');
+
+                    clientData.address = element[0];
+                    clientData.playerID = 1;
+                    clientData.playerName = element[1];
+
+                    players[0] = clientData;
+
+                    if (n % 2 == 0 && n != 0)
+                    {
+                        WriteToFIle("\n", "C:\temp", "game.txt");
+                    }
+
+                }
+
+                n++;
             });
+      
         }
+        */
+
+                
+                
+
+                //Sender.Tell("already registered", ActorRefs.NoSender);
+                //Sender.Tell("already registered", Self);
+                //this.Self.Tell("already registered");
+                //Self.Tell("Self send");
+                //Sender.Tell("Server" + client.clientData.uniqueName);
+
+                //    Console.WriteLine(text);
+                //    Sender.Tell("");
+                //    Console.ReadLine();
+                //});
+            
 
         protected override void PreStart()
         {
@@ -65,5 +110,18 @@ namespace Alcatraz
             _helloTask.Cancel();
         }
 
+
+        void WriteToFIle(string line, string path, string fileName)
+        {
+            if (!File.Exists(path + fileName))
+                File.WriteAllText(path + fileName, line);
+            else
+                Sender.Tell("already registered");
+        }
+
+        protected override void OnReceive(object message)
+        {
+            Console.WriteLine(message);
+        }
     }
 }

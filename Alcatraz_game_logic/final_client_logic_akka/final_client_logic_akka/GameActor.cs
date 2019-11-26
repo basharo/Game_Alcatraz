@@ -2,7 +2,7 @@
 using Akka.Actor;
 using Akka.Event;
 
-namespace Alcatraz
+namespace final_client_logic_akka
 {
     /// <summary>
     /// Actor that just replies the message that it received earlier
@@ -20,7 +20,7 @@ namespace Alcatraz
                 Sender.Tell("ss");
             });
             Receive<Client[]>(client => {
-                Console.WriteLine("received message from" + client[0].playerID);
+                //Console.WriteLine("received message from" + client[0].playerID);
 
                 clientArr[iterator] = client[0];
                 iterator++;

@@ -4,24 +4,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Alcatraz
+namespace Interface
 {
     public class ClientData
     {
+
+        public string playerName { get; set; }
         public string address { get; set; }
         public int playerID { get; set; }
-        public string uniqueName { get; set; }
-        public int? port { get; set; }
-        public string urlAddition { get; set; }
 
-        public ClientData(string address, int? port, string urlAddition, int playerID, string uniqueName)
+
+        public ClientData(string playerName, string address, int playerID)
         {
+            this.playerName = playerName;
             this.address = address;
-            this.port = port;
-            this.uniqueName = uniqueName;
-            this.urlAddition = urlAddition;
             this.playerID = playerID;
         }
 
+        public ClientData()
+        {
+        }
     }
 }
