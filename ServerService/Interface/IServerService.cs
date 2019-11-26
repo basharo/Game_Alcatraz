@@ -6,7 +6,7 @@ namespace ServerService.Interface
 {
     public interface IServerService
     {
-        string Register(ClientDemo clientToRegister);
+        ClientResponse Register(ClientDemo clientToRegister);
 
         string SetPrimaryServer(string ipAddress, int port);
 

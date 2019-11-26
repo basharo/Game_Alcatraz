@@ -112,11 +112,31 @@ namespace Interface
 
         protected override void OnReceive(object message)
         {
+            string messageString = message.ToString();
+            if (messageString.StartsWith("delete")){
+                string playerNameToDelete = messageString.Split('|')[1];
 
-           
+                string fileContent = File.ReadAllText(path + fileName);
+                exisitingClients = JsonConvert.DeserializeObject<List<ClientData>>(fileContent);
+                var item = exisitingClients.SingleOrDefault(x => x.playerName == playerNameToDelete);
+                if(item != null)
+                    exisitingClients.Remove(item);
+
+                WriteToFile(JsonConvert.SerializeObject(exisitingClients));
+                string clientAdress = $"{item.protocol}://{item.system}@{item.host}:{item.port}/user/{item.actorName}";
+                var remoteChatActorClient = Globals.mainActorSystem.ActorSelection(clientAdress);
+
+                if (remoteChatActorClient != null)
+                {
+                    remoteChatActorClient.Tell(item.playerName + " was successfully deleted." , Self);
+                }
+
+                return;
+
+            }
                 
             var temp = Sender.Path.Address;
-            string playerName = message.ToString();
+            string playerName = messageString;
 
             if (!File.Exists(path + fileName))
             {
@@ -129,28 +149,12 @@ namespace Interface
             {
                 exisitingClients = JsonConvert.DeserializeObject<List<ClientData>>(content);
 
-                if (exisitingClients.Count >= Globals.groupSize)
+                foreach (var item in exisitingClients)
                 {
-                    foreach (var item in exisitingClients)
+                    if (item.playerName == playerName)
                     {
-                        string clientAdress = $"{item.protocol}://{item.system}@{item.host}:{item.port}/user/{item.actorName}";
-                        var remoteChatActorClient = Globals.mainActorSystem.ActorSelection(clientAdress);
-
-                        if (remoteChatActorClient != null)
-                        {
-                            remoteChatActorClient.Tell(content, Self);
-                        }
-                    }
-                }
-                else
-                {
-                    foreach (var item in exisitingClients)
-                    {
-                        if (item.playerName == playerName)
-                        {
-                            Sender.Tell(playerName + " already exists. Please choose another name:");
-                            return;
-                        }
+                        Sender.Tell(playerName + " already exists. Please choose another name:");
+                        return;
                     }
                 }
             }
@@ -162,7 +166,21 @@ namespace Interface
 
             Sender.Tell(playerName + " was successfully registered on server.");
 
-            
+            if (exisitingClients.Count == Globals.groupSize)
+            {
+                foreach (var item in exisitingClients)
+                {
+                    string clientAdress = $"{item.protocol}://{item.system}@{item.host}:{item.port}/user/{item.actorName}";
+                    var remoteChatActorClient = Globals.mainActorSystem.ActorSelection(clientAdress);
+
+                    if (remoteChatActorClient != null)
+                    {
+                        remoteChatActorClient.Tell(content, Self);
+                    }
+                }
+            }
+
+
         }
 
 

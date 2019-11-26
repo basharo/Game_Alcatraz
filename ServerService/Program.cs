@@ -4,6 +4,7 @@ using Microsoft.Extensions.Hosting;
 using Serilog;
 using ServerService.Configuration;
 using ServerService.Interface;
+using ServerService.Service;
 
 namespace ServerService
 {
@@ -45,6 +46,7 @@ namespace ServerService
                 })
                 .ConfigureServices((hostContext, services) =>
                 {
+                    services.AddTransient<ISpreadService, SpreadService>();
                     services.AddTransient<IServerService, Service.ServerService>();
                     services.AddHostedService<Worker>();
                 })
