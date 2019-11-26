@@ -112,8 +112,8 @@ namespace Alcatraz
             public static string myName;
             static Globals()
             {
-                string actorSystemName = ConfigurationManager.AppSettings["actorSystemName"];
-                ActSys = ActorSystem.Create(actorSystemName);
+                //string actorSystemName = ConfigurationManager.AppSettings["actorSystemName"];
+                ActSys = ActorSystem.Create("alcatraz");
             }
         }
         public Game()
@@ -182,8 +182,8 @@ namespace Alcatraz
             Globals.myName = "Franz";
 
             string testJSON = @"[
-                {""protocol"":""akka.tcp"",""system"":""alcatraz"",""host"":""localhost"",""port"":1111,""actorName"":""ReceivingActor"",""playerId"":0,""playerName"":""Franz""},
-                {""protocol"":""akka.tcp"",""system"":""alcatraz"",""host"":""localhost"",""port"":2222,""actorName"":""ReceivingActor"",""playerId"":1,""playerName"":""Bashar""}
+                {""protocol"":""akka.tcp"",""system"":""alcatraz"",""host"":""localhost"",""port"":5248,""actorName"":""ReceivingActor"",""playerId"":0,""playerName"":""Franz""},
+                {""protocol"":""akka.tcp"",""system"":""alcatraz"",""host"":""localhost"",""port"":5249,""actorName"":""ReceivingActor"",""playerId"":1,""playerName"":""Bashar""}
             ]";
 
             Globals.AllPlayers = JsonConvert.DeserializeObject<List<ClientData>>(testJSON);
@@ -396,21 +396,12 @@ namespace Alcatraz
             lastMove.row = row;
             lastMove.col = col;
 
-            //Console.WriteLine(Globals.remoteActorAddresses[0]);
-
-            //string remoteActorAddress = ConfigurationManager.AppSettings["remoteActorAddress"];
-
-
-            var remoteChatActor = Globals.ActSys.ActorSelection(Globals.remoteActorAddresses[0]);
-
             string lastMoveJson = JsonConvert.SerializeObject(lastMove);
+            foreach (var item in Globals.remoteActorAddresses)
+            {
+                Globals.ActSys.ActorSelection(item).Tell(lastMoveJson);
+            }
 
-
-            remoteChatActor.Tell(lastMoveJson);
-
-
-            //forea
-            //remoteChatActor.Tell();
 
             for (int i = 0; i < getNumPlayer()-1; i++)
             {
