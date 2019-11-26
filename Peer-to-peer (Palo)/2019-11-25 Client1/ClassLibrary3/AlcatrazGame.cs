@@ -52,8 +52,6 @@ namespace Alcatraz
         public static class Globals
         {
             public static ActorSystem ActSys { get; set; }
-
-
             static Globals()
             {
                 string actorSystemName = ConfigurationManager.AppSettings["actorSystemName"];
