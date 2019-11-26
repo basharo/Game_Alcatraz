@@ -192,9 +192,12 @@ namespace Alcatraz
                 if (item.playerName == Globals.myName)
                 {
                     Globals.myPlayerId = item.playerId;
-                    break;
+                    
+                } else
+                {
+                    Globals.remoteActorAddresses.Add(item.ToString());
                 }
-                Globals.remoteActorAddresses.Add(item.ToString());
+                
             }
 
             if (Globals.AllPlayers.Count == 2)
