@@ -42,7 +42,9 @@ namespace final_client_logic_akka
 
         protected override void OnReceive(object message)
         {
-            if (message.ToString().Contains("exists"))
+            var messageString = message.ToString();
+
+            if (messageString.Contains("exists"))
             {
                 Console.WriteLine(message.ToString());
                 string playerName = Console.ReadLine();
@@ -51,7 +53,12 @@ namespace final_client_logic_akka
                 
             }
 
-            if (message.ToString() == "start")
+            if(messageString.Contains("successfully registered"))
+            {
+                Console.WriteLine(messageString);
+            }
+
+            if (messageString == "start")
             {
                 return;
             }

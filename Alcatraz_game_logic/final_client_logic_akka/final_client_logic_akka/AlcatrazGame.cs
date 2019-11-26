@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Akka;
 using Akka.Actor;
+using Akka.Event;
 using Alcatraz;
 
 namespace final_client_logic_akka
@@ -51,28 +52,32 @@ namespace final_client_logic_akka
             {
 
                 startActorSystem("alcatraz");
+
+                // Setup an actor that will handle deadletter type messages
+                var deadletterWatchMonitorProps = Props.Create(() => new DeadletterMonitor());
+                var deadletterWatchActorRef = mainActorSystem.ActorOf(deadletterWatchMonitorProps, "DeadLetterMonitoringActor");
+
+                // subscribe to the event stream for messages of type "DeadLetter"
+                mainActorSystem.EventStream.Subscribe(deadletterWatchActorRef, typeof(DeadLetter));
+
                 var localChatActor = mainActorSystem.ActorOf(Props.Create<GameActor>(), "GameActor");
 
-                //Players players = new Players(new string[10, 10]);
-                //players.players[1, 1] = actorSystemName;
+                
                 string remoteActorAddressClient1 = "akka.tcp://alcatraz@localhost:5555/user/RegisterActor";
-                //string remoteActorAddressClient2 = "akka.tcp://client2@localhost:2222/user/EchoActor";
                 var remoteChatActorClient1 = mainActorSystem.ActorSelection(remoteActorAddressClient1);
-                //var remoteChatActorClient2 = actorSystem.ActorSelection(remoteActorAddressClient2);
 
                 if (remoteChatActorClient1 != null)
                 {
                         
-
                     remoteChatActorClient1.Tell(playerName, localChatActor);
-                    //string ip = GetLocalIPAddress();
-                    //string actorAdress = localChatActor.Path.;
-                    //ClientData clientData = new ClientData(temp.Protocol, temp.Host, temp.Port, remoteChatActorClient1.PathString, 0, playerName);
-                    Console.ReadLine();
-                    //remoteChatActorClient1.Tell(new ClientData(), localChatActor);
-                    //remoteChatActorClient2.Tell(players, child);
+                    
+                    string line = string.Empty;
+                        while (line != null) {
+                            line = Console.ReadLine();
+                            //remoteChatActorClient1.Tell(line, localChatActor);
+                        }
 
-                } else {
+                    } else {
                     Console.WriteLine("Could not get remote actor ref");
                     Console.ReadLine();
                 }  
@@ -82,9 +87,7 @@ namespace final_client_logic_akka
                 Console.WriteLine(ex);
             }
 
-            data = new ClientData[1];
-            //data[0] = new ClientData("akka.tcp://" + playerName + "@localhost:", 1111, "/user/GameActor", 1, playerName);
-            other = new Alcatraz.Alcatraz[data.Length+1];
+            
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

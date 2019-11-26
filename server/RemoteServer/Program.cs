@@ -9,13 +9,13 @@ using Interface;
 namespace Server
 {
     
-    class Program
+    public class Program
     {
-        public static ActorSystem mainActorSystem { get; set; }
 
         static void Main(string[] args)
         {
             string actorName = "server";
+            Globals.groupSize = 3;
             Console.Title = actorName;
             
 
@@ -23,7 +23,7 @@ namespace Server
             {
 
                 startActorSystem("alcatraz");
-                var localChatActor = mainActorSystem.ActorOf(Props.Create<RegisterActor>(), "RegisterActor");
+                var localChatActor = Globals.mainActorSystem.ActorOf(Props.Create<RegisterActor>(), "RegisterActor");
 
                 
                 string line = string.Empty;
@@ -47,7 +47,7 @@ namespace Server
 
         public static void startActorSystem(string actorSystemName)
         {
-            mainActorSystem = ActorSystem.Create(actorSystemName);
+            Globals.mainActorSystem = ActorSystem.Create(actorSystemName);
 
         }
     }

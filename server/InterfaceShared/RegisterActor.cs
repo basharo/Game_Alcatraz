@@ -129,26 +129,40 @@ namespace Interface
             {
                 exisitingClients = JsonConvert.DeserializeObject<List<ClientData>>(content);
 
-                foreach (var item in exisitingClients)
+                if (exisitingClients.Count >= Globals.groupSize)
                 {
-                    if(item.playerName == playerName)
+                    foreach (var item in exisitingClients)
                     {
-                        Sender.Tell(temp.System + " already exists. Please choose another name:");
-                        return;
+                        string clientAdress = $"{item.protocol}://{item.system}@{item.host}:{item.port}/user/{item.actorName}";
+                        var remoteChatActorClient = Globals.mainActorSystem.ActorSelection(clientAdress);
+
+                        if (remoteChatActorClient != null)
+                        {
+                            remoteChatActorClient.Tell(content, Self);
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (var item in exisitingClients)
+                    {
+                        if (item.playerName == playerName)
+                        {
+                            Sender.Tell(playerName + " already exists. Please choose another name:");
+                            return;
+                        }
                     }
                 }
             }
 
-            ClientData clientToAdd = new ClientData(temp.Protocol, temp.System, temp.Host, temp.Port, Sender.Path.Name, exisitingClients.Count() + 1, playerName);
+            ClientData clientToAdd = new ClientData(temp.Protocol, temp.System, temp.Host, temp.Port, Sender.Path.Name, exisitingClients.Count + 1, playerName);
             exisitingClients.Add(clientToAdd);
 
             this.WriteToFile(JsonConvert.SerializeObject(exisitingClients));
 
-            //players.Add(clientToAdd);
-
             Sender.Tell(playerName + " was successfully registered on server.");
 
-           
+            
         }
 
 
