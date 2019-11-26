@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Akka.Actor;
 using Akka.Event;
+using Newtonsoft.Json;
 
 namespace final_client_logic_akka
 {
@@ -53,6 +56,11 @@ namespace final_client_logic_akka
                 
             }
 
+            if (messageString.Contains("deleted"))
+            {
+                Console.WriteLine(messageString);
+            }
+
             if(messageString.Contains("successfully registered"))
             {
                 Console.WriteLine(messageString);
@@ -62,6 +70,16 @@ namespace final_client_logic_akka
             if (messageString == "start")
             {
                 return;
+            }
+
+            if (messageString.StartsWith("["))
+            {
+                List<ClientData> exisitingClients = JsonConvert.DeserializeObject<List<ClientData>>(messageString);
+
+                Test.allPlayers = exisitingClients;
+
+                
+
             }
         }
     }

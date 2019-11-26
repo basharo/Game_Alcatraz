@@ -9,14 +9,19 @@ using Akka.Remote;
 using Akka.Actor;
 using System.Configuration;
 using Newtonsoft.Json;
+using Akka.Event;
+using Newtonsoft.Json.Linq;
+using Interface;
+using System.Linq;
 
 namespace Alcatraz
 {
 
-    public class Test : MoveListener
+    public class Game : MoveListener
     {
         private Alcatraz[] other = new Alcatraz[4];
         private int numPlayer = 2;
+        private static string playerName;
 
         class Move
         {
@@ -26,6 +31,51 @@ namespace Alcatraz
             public int row;
             public int col;
         }
+        /*
+        public class GameActor : UntypedActor
+        {
+            public GameActor()
+            {
+
+
+            }
+
+            protected override void OnReceive(object message)
+            {
+                var messageString = message.ToString();
+
+                if (messageString.Contains("exists"))
+                {
+                    Console.WriteLine(message.ToString());
+                    string playerName = Console.ReadLine();
+
+                    Sender.Tell(playerName, Self);
+
+                }
+
+                if (messageString.Contains("successfully registered"))
+                {
+                    Console.WriteLine(messageString);
+                }
+
+
+                if (messageString == "start")
+                {
+                    return;
+                }
+            }
+        }
+        public class DeadletterMonitor : ReceiveActor
+        {
+            public DeadletterMonitor()
+            {
+                Receive<DeadLetter>(dl => HandleDeadletter(dl));
+            }
+            private void HandleDeadletter(DeadLetter dl)
+            {
+                Console.WriteLine($"DeadLetter captured: {dl.Message}, sender: {dl.Sender}, recipient: {dl.Recipient}");
+            }
+        }*/
 
 
         class ReceivingActor : UntypedActor
@@ -52,22 +102,129 @@ namespace Alcatraz
         public static class Globals
         {
             public static ActorSystem ActSys { get; set; }
-
-
+            //public static string[] remoteActorAddresses;
+            public static List<ClientData> AllPlayers;
+            public static List<string> remoteActorAddresses;
+            public static string myPlayerId;
+            public static string myName;
             static Globals()
             {
                 string actorSystemName = ConfigurationManager.AppSettings["actorSystemName"];
                 ActSys = ActorSystem.Create(actorSystemName);
             }
         }
-        public Test()
+        public Game()
         {
         }
 
         [STAThread]
         static void Main()
         {
+            //start
+            /*
+            Console.WriteLine("To cancel the registration enter 'delete'");
+            Console.WriteLine("Please choose a player name:");
+            playerName = Console.ReadLine();
 
+            while (playerName == "")
+            {
+                Console.WriteLine("Your name cannot be empty. Please choose a player name:");
+                playerName = Console.ReadLine();
+            }
+
+
+            try
+            {
+
+                //startActorSystem("alcatraz");
+
+                // Setup an actor that will handle deadletter type messages
+                var deadletterWatchMonitorProps = Props.Create(() => new DeadletterMonitor());
+                var deadletterWatchActorRef = Globals.ActSys.ActorOf(deadletterWatchMonitorProps, "DeadLetterMonitoringActor");
+
+                // subscribe to the event stream for messages of type "DeadLetter"
+                Globals.ActSys.EventStream.Subscribe(deadletterWatchActorRef, typeof(DeadLetter));
+
+                var localChatActor = Globals.ActSys.ActorOf(Props.Create<GameActor>(), "GameActor");
+
+                
+                string remoteActorAddressClient1 = "akka.tcp://alcatraz@192.168.43.249:5555/user/RegisterActor";
+                var remoteChatActorClient1 = Globals.ActSys.ActorSelection(remoteActorAddressClient1);
+
+                if (remoteChatActorClient1 != null)
+                {
+                        
+                    remoteChatActorClient1.Tell(playerName, localChatActor);
+                    
+                    string line = string.Empty;
+                        while (line != null) {
+                            line = Console.ReadLine();
+                            
+                            if(line == "delete")
+                        {
+                            remoteChatActorClient1.Tell("delete|" + playerName, localChatActor);
+                        }
+
+
+                    }
+
+                    } else {
+                    Console.WriteLine("Could not get remote actor ref");
+                    Console.ReadLine();
+                }  
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+            */
+            //end
+
+            Globals.myName = "Franz";
+
+            string testJSON = @"[
+                {""protocol"":""akka.tcp"",""system"":""alcatraz"",""host"":""localhost"",""port"":1111,""actorName"":""ReceivingActor"",""playerId"":1,""playerName"":""Franz""},
+                {""protocol"":""akka.tcp"",""system"":""alcatraz"",""host"":""localhost"",""port"":2222,""actorName"":""ReceivingActor"",""playerId"":2,""playerName"":""Bashar""}
+            ]";
+
+
+
+
+
+            Globals.AllPlayers = JsonConvert.DeserializeObject<List<ClientData>>(testJSON);
+            foreach (var item in Globals.AllPlayers)
+            {
+                if (item.playerName == Globals.myName)
+                    break;
+
+                Globals.remoteActorAddresses.Add(item.ToString());
+            }
+
+
+
+            //JArray ClientDataArray = JArray.Parse(testJSON);
+
+            //Console.WriteLine(ClientDataArray.Count);
+            //Console.WriteLine(ClientDataArray[0]["protocol"]);
+
+            
+
+
+            /*for (int count = 0; count< ClientDataArray.Count; count++)
+            {
+                string protocol =
+
+                //akka.tcp://Client2@localhost:5249/user/ReceivingActor
+
+                Globals.remoteActorAddresses[count] = ClientDataArray[count]["protocol"].ToString() + "://ActorSystem@" +
+                                                ClientDataArray[count]["host"] + ":" +
+                                                ClientDataArray[count]["port"] + "/user/" +
+                                                ClientDataArray[count]["actorName"];
+                if (ClientDataArray[count]["playerName"].ToString() == Globals.myName)
+                {
+                    Globals.myPlayerId = ClientDataArray[count]["playerId"].ToString();
+                }
+            }
             var localSendingActor = Globals.ActSys.ActorOf(Props.Create<SendingActor>(), "SendingActor");
 
             string remoteActorAddress = ConfigurationManager.AppSettings["remoteActorAddress"];
@@ -77,8 +234,29 @@ namespace Alcatraz
             Application.SetCompatibleTextRenderingDefault(false);
 
             //PM: statische init für zwei Spieler - MUSS DYNAMISIERT WERDEN!!!
-            Test t1 = new Test();
-            Test t2 = new Test();
+
+            int numberOfPlayers = ClientDataArray.Count;
+            
+
+
+           /* myId
+
+            numberOf Players
+
+                   string testJSON = @"[
+                {""protocol"":""akka.tcp"",""system"":""alcatraz"",""host"":""localhost"",""port"":1111,""actorName"":""ReceivingActor"",""playerId"":1,""playerName"":""Franz""},
+                {""protocol"":""akka.tcp"",""system"":""alcatraz"",""host"":""localhost"",""port"":2222,""actorName"":""ReceivingActor"",""playerId"":2,""playerName"":""Bashar""}
+            ]";
+
+            int numberofPlayers = testJSON.Replace.Split(':').Length / 15;
+            var player1 = testJSON.Split(':')[14];
+            */
+
+
+
+
+            Game t1 = new Game();
+            Game t2 = new Game();
             Alcatraz a1 = new Alcatraz();
             Alcatraz a2 = new Alcatraz();
             t1.setNumPlayer(2);
@@ -100,6 +278,13 @@ namespace Alcatraz
             a1.start();
             a2.start();
             
+
+
+
+
+
+
+
 
             //PM: Dynamisierung ist leider nicht richtig gewesen:
             
@@ -194,13 +379,17 @@ namespace Alcatraz
             lastMove.row = row;
             lastMove.col = col;
 
+            Console.WriteLine(Globals.remoteActorAddresses[0]);
 
-
-            string remoteActorAddress = ConfigurationManager.AppSettings["remoteActorAddress"];
-            var remoteChatActor = Globals.ActSys.ActorSelection(remoteActorAddress);
+            //string remoteActorAddress = ConfigurationManager.AppSettings["remoteActorAddress"];
+            var remoteChatActor = Globals.ActSys.ActorSelection(Globals.remoteActorAddresses[0]);
 
             string lastMoveJson = JsonConvert.SerializeObject(lastMove);
             remoteChatActor.Tell(lastMoveJson);
+
+
+            //forea
+            //remoteChatActor.Tell();
 
             for (int i = 0; i < getNumPlayer()-1; i++)
             {
