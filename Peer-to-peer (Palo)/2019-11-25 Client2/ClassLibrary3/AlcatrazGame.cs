@@ -38,18 +38,30 @@ namespace Alcatraz
             }
         }
 
+        public static class Globals
+        {
+            public static ActorSystem ActSys { get; set; }
+
+
+            static Globals()
+            {
+                string actorSystemName = ConfigurationManager.AppSettings["actorSystemName"];
+                ActSys = ActorSystem.Create(actorSystemName);
+            }
+        }
+
 
         [STAThread]
         static void Main()
         {
 
-            string actorSystemName = ConfigurationManager.AppSettings["actorSystemName"];
-            var actorSystem = ActorSystem.Create(actorSystemName);
+            //string actorSystemName = ConfigurationManager.AppSettings["actorSystemName"];
+            //var actorSystem = ActorSystem.Create(actorSystemName);
        
-            var localSendingActor = actorSystem.ActorOf(Props.Create<SendingActor>(), "SendingActor");
+            var localSendingActor = Globals.ActSys.ActorOf(Props.Create<SendingActor>(), "SendingActor");
 
             string remoteActorAddress = ConfigurationManager.AppSettings["remoteActorAddress"];
-            var remoteChatActor = actorSystem.ActorSelection(remoteActorAddress);
+            var remoteChatActor = Globals.ActSys.ActorSelection(remoteActorAddress);
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -108,7 +120,7 @@ namespace Alcatraz
                 alcatrazList[ii].start();
             }
 
-            var localReceivingActor = actorSystem.ActorOf(Props.Create<ReceivingActor>(a1), "ReceivingActor");
+            var localReceivingActor = Globals.ActSys.ActorOf(Props.Create<ReceivingActor>(a1), "ReceivingActor");
 
             Application.Run();
         }

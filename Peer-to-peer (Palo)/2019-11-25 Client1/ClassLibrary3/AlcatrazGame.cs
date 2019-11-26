@@ -32,7 +32,17 @@ namespace Alcatraz
             }
         }
 
+        public static class Globals
+        {
+            public static ActorSystem ActSys { get; set; }
 
+
+            static Globals()
+            {
+                string actorSystemName = ConfigurationManager.AppSettings["actorSystemName"];
+                ActSys = ActorSystem.Create(actorSystemName);
+            }
+        }
         public Test()
         {
         }
@@ -133,10 +143,10 @@ namespace Alcatraz
             //Console.WriteLine("moving " + prisoner + " to " + (rowOrCol == Alcatraz.ROW ? "row" : "col") + " " + (rowOrCol == Alcatraz.ROW ? row : col));
             //Console.WriteLine(player + ", "+ prisoner + ", "+ rowOrCol+ ", " +row+ ", "+  col);
 
-            string actorSystemName = ConfigurationManager.AppSettings["actorSystemName"];
-            var actorSystem = ActorSystem.Create(actorSystemName);
+            //string actorSystemName = ConfigurationManager.AppSettings["actorSystemName"];
+            //var actorSystem = ActorSystem.Create(actorSystemName);
             string remoteActorAddress = ConfigurationManager.AppSettings["remoteActorAddress"];
-            var remoteChatActor = actorSystem.ActorSelection(remoteActorAddress);
+            var remoteChatActor = Globals.ActSys.ActorSelection(remoteActorAddress);
             remoteChatActor.Tell("irgendwas");
 
             for (int i = 0; i < getNumPlayer()-1; i++)
