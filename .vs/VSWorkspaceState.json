@@ -1,9 +1,11 @@
 {
   "ExpandedNodes": [
     "",
+    "\\Alcatraz_game_logic",
+    "\\Alcatraz_game_logic\\final_client_logic_akka",
+    "\\Alcatraz_game_logic\\final_client_logic_akka\\final_client_logic_akka",
     "\\Peer-to-peer (Palo)",
-    "\\Peer-to-peer (Palo)\\2019-11-25 Client1",
-    "\\server"
+    "\\Peer-to-peer (Palo)\\2019-11-25 Client1"
   ],
   "SelectedNode": "\\Peer-to-peer (Palo)\\2019-11-25 Client1\\Client1.sln",
   "PreviewInSolutionExplorer": false
