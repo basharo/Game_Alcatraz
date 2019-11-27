@@ -5,8 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Akka.Actor;
+using Akka.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using ServerService.Configuration;
 using ServerService.Interface;
 using ServerService.Utils;
@@ -25,6 +28,10 @@ namespace ServerService
         private InformClientOfChange _delegate;
         private bool isDisconnected = false;
         private bool isInitState = false;
+        private static IActorRef localChatActor;
+        private string path = "C:/temp/";
+        private string fileName = "game.txt";
+        List<ClientData> exisitingClients = new List<ClientData>();
 
         public Worker(ILogger<Worker> logger, IServerService serverService, ISpreadService spreadService)
         {
@@ -49,6 +56,32 @@ namespace ServerService
             {
                 Console.WriteLine("Cannot connect to the deamon ....");
             }
+
+            string actorName = "server";
+            Globals.groupSize = 2;
+            Console.Title = actorName;
+
+            try
+            {
+
+                startActorSystem("alcatraz");
+                localChatActor = Globals.mainActorSystem.ActorOf(Props.Create<RegisterActor>(_spreadService), "RegisterActor");
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
+
+
+        public void startActorSystem(string actorSystemName)
+        {
+
+            var config = File.ReadAllText($"{Path.GetDirectoryName(Directory.GetFiles(Directory.GetCurrentDirectory(), "AkkaConfig.txt", SearchOption.AllDirectories).FirstOrDefault())}/AkkaConfig.txt");
+            var conf = ConfigurationFactory.ParseString(config);
+            Globals.mainActorSystem = ActorSystem.Create(actorSystemName, conf);
+
         }
 
         private void _spreadConnection_OnRegularMessage(SpreadMessage msg)
@@ -71,7 +104,7 @@ namespace ServerService
             {
                 var deserializedMessage = msg.ParseRegularSpreadMessage();
                 //save to File
-                _spreadService.SendACK();
+                //_spreadService.SendACK();
             }
         }
 
@@ -99,6 +132,7 @@ namespace ServerService
                 Sender = info.Disconnected;
                 Console.WriteLine($"{Sender} has disconnected ...");
                 isDisconnected = true;
+                _delegate = new InformClientOfChange(NotifyClient);
                 _delegate.Invoke(ServerOptions.IPAddress, ServerOptions.Port);
             }
             if (info.IsCausedByLeave)
@@ -106,6 +140,7 @@ namespace ServerService
                 Sender = info.Left;
                 Console.WriteLine($"{Sender} has left ...");
                 isDisconnected = true;
+                _delegate = new InformClientOfChange(NotifyClient);
                 _delegate.Invoke(ServerOptions.IPAddress, ServerOptions.Port);
             }
             if (info.IsCausedByJoin)
@@ -137,6 +172,7 @@ namespace ServerService
                     //receive full state
                 }
 
+                _delegate = new InformClientOfChange(NotifyClient);
                 _delegate.Invoke(ServerOptions.IPAddress, ServerOptions.Port);
             }
         }
@@ -228,9 +264,9 @@ namespace ServerService
             //}
             #endregion
 
-
             if (isDisconnected)
             {
+                _delegate = new InformClientOfChange(NotifyClient);
                 _delegate = NotifyClient;
             }
 
@@ -239,7 +275,32 @@ namespace ServerService
 
         private string NotifyClient(string ipAddress, int port)
         {
-            throw new NotImplementedException();
+
+            string remoteActorAddressClient1 = "akka.tcp://alcatraz@localhost:5555/user/RegisterActor";
+            var remoteChatActorClient1 = Globals.mainActorSystem.ActorSelection(remoteActorAddressClient1);
+
+
+            if (remoteChatActorClient1 != null)
+            {
+
+                remoteChatActorClient1.Tell(ipAddress + port, localChatActor);
+            }
+
+            string content = File.ReadAllText(path + fileName);
+            exisitingClients = JsonConvert.DeserializeObject<List<ClientData>>(content);
+
+            foreach (var item in exisitingClients)
+            {
+                string clientAdress = $"{item.protocol}://{item.system}@{item.host}:{item.port}/user/{item.actorName}";
+                var remoteChatActorClient = Globals.mainActorSystem.ActorSelection(clientAdress);
+
+                if (remoteChatActorClient != null)
+                {
+                    remoteChatActorClient.Tell(content, localChatActor);
+                }
+            }
+
+            return "success";
         }
 
         private void DisplayMessage(SpreadMessage msg)

@@ -1,0 +1,16 @@
+﻿akka
+{
+	actor
+	{
+		provider = "Akka.Remote.RemoteActorRefProvider, Akka.Remote"
+	}
+
+	remote 
+	{
+		helios.tcp
+		{
+			port = 5555
+			hostname = localhost
+		}
+	}
+}

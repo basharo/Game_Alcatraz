@@ -1,0 +1,119 @@
+2019-11-27 14:54:08.568 +01:00 [INF] Starting up the  service.
+2019-11-27 14:54:36.520 +01:00 [INF] Starting up the  service.
+2019-11-27 14:54:58.591 +01:00 [INF] Starting up the  service.
+2019-11-27 14:55:03.260 +01:00 [INF] Initializing Spread connection...
+2019-11-27 14:55:03.267 +01:00 [DBG] Connecting to the Spread Deamon with address: 127.0.0.1 and port 4803
+2019-11-27 14:55:05.270 +01:00 [ERR] There was an error connecting to the daemon.
+2019-11-27 14:55:05.271 +01:00 [ERR] Socket(): System.Net.Internals.SocketExceptionFactory+ExtendedSocketException (10061): No connection could be made because the target machine actively refused it. 127.0.0.1:4803
+   at System.Net.Sockets.Socket.DoConnect(EndPoint endPointSnapshot, SocketAddress socketAddress)
+   at System.Net.Sockets.Socket.Connect(EndPoint remoteEP)
+   at System.Net.Sockets.Socket.Connect(IPAddress address, Int32 port)
+   at System.Net.Sockets.TcpClient.Connect(String hostname, Int32 port)
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Net.Sockets.TcpClient.Connect(String hostname, Int32 port)
+   at System.Net.Sockets.TcpClient..ctor(String hostname, Int32 port)
+   at spread.SpreadConnection.Connect(String address, Int32 port, String user, Boolean priority, Boolean groupMembership) : 
+2019-11-27 14:55:05.293 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2019-11-27 14:55:05.300 +01:00 [INF] Hosting environment: Development
+2019-11-27 14:55:05.302 +01:00 [INF] Content root path: C:\Users\fgruber\Source\Repos\Game_Alcatraz\ServerService
+2019-11-27 14:55:10.635 +01:00 [INF] Application is shutting down...
+2019-11-27 14:58:53.116 +01:00 [INF] Starting up the  service.
+2019-11-27 14:58:55.016 +01:00 [INF] Initializing Spread connection...
+2019-11-27 14:58:55.020 +01:00 [DBG] Connecting to the Spread Deamon with address: 127.0.0.1 and port 4803
+2019-11-27 14:58:56.425 +01:00 [ERR] There was an error connecting to the daemon.
+2019-11-27 14:58:56.425 +01:00 [ERR] Socket(): System.Net.Internals.SocketExceptionFactory+ExtendedSocketException (10061): No connection could be made because the target machine actively refused it. 127.0.0.1:4803
+   at System.Net.Sockets.Socket.DoConnect(EndPoint endPointSnapshot, SocketAddress socketAddress)
+   at System.Net.Sockets.Socket.Connect(EndPoint remoteEP)
+   at System.Net.Sockets.Socket.Connect(IPAddress address, Int32 port)
+   at System.Net.Sockets.TcpClient.Connect(String hostname, Int32 port)
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Net.Sockets.TcpClient.Connect(String hostname, Int32 port)
+   at System.Net.Sockets.TcpClient..ctor(String hostname, Int32 port)
+   at spread.SpreadConnection.Connect(String address, Int32 port, String user, Boolean priority, Boolean groupMembership) : 
+2019-11-27 14:58:56.437 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2019-11-27 14:58:56.441 +01:00 [INF] Hosting environment: Development
+2019-11-27 14:58:56.444 +01:00 [INF] Content root path: C:\Users\fgruber\Source\Repos\Game_Alcatraz\ServerService
+2019-11-27 14:59:09.260 +01:00 [INF] Application is shutting down...
+2019-11-27 15:03:09.698 +01:00 [INF] Starting up the  service.
+2019-11-27 15:03:11.145 +01:00 [INF] Initializing Spread connection...
+2019-11-27 15:03:11.165 +01:00 [DBG] Connecting to the Spread Deamon with address: 127.0.0.1 and port 4803
+2019-11-27 15:03:12.621 +01:00 [ERR] There was an error connecting to the daemon.
+2019-11-27 15:03:12.621 +01:00 [ERR] Socket(): System.Net.Internals.SocketExceptionFactory+ExtendedSocketException (10061): No connection could be made because the target machine actively refused it. 127.0.0.1:4803
+   at System.Net.Sockets.Socket.DoConnect(EndPoint endPointSnapshot, SocketAddress socketAddress)
+   at System.Net.Sockets.Socket.Connect(EndPoint remoteEP)
+   at System.Net.Sockets.Socket.Connect(IPAddress address, Int32 port)
+   at System.Net.Sockets.TcpClient.Connect(String hostname, Int32 port)
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Net.Sockets.TcpClient.Connect(String hostname, Int32 port)
+   at System.Net.Sockets.TcpClient..ctor(String hostname, Int32 port)
+   at spread.SpreadConnection.Connect(String address, Int32 port, String user, Boolean priority, Boolean groupMembership) : 
+2019-11-27 15:03:12.628 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2019-11-27 15:03:12.632 +01:00 [INF] Hosting environment: Development
+2019-11-27 15:03:12.634 +01:00 [INF] Content root path: C:\Users\fgruber\Source\Repos\Game_Alcatraz\ServerService
+2019-11-27 15:08:51.645 +01:00 [INF] Starting up the  service.
+2019-11-27 15:10:43.405 +01:00 [INF] Starting up the  service.
+2019-11-27 15:10:44.434 +01:00 [INF] Initializing Spread connection...
+2019-11-27 15:10:44.461 +01:00 [DBG] Connecting to the Spread Deamon with address: 127.0.0.1 and port 4803
+2019-11-27 15:10:46.333 +01:00 [ERR] There was an error connecting to the daemon.
+2019-11-27 15:10:46.333 +01:00 [ERR] Socket(): System.Net.Internals.SocketExceptionFactory+ExtendedSocketException (10061): No connection could be made because the target machine actively refused it. 127.0.0.1:4803
+   at System.Net.Sockets.Socket.DoConnect(EndPoint endPointSnapshot, SocketAddress socketAddress)
+   at System.Net.Sockets.Socket.Connect(EndPoint remoteEP)
+   at System.Net.Sockets.Socket.Connect(IPAddress address, Int32 port)
+   at System.Net.Sockets.TcpClient.Connect(String hostname, Int32 port)
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Net.Sockets.TcpClient.Connect(String hostname, Int32 port)
+   at System.Net.Sockets.TcpClient..ctor(String hostname, Int32 port)
+   at spread.SpreadConnection.Connect(String address, Int32 port, String user, Boolean priority, Boolean groupMembership) : 
+2019-11-27 15:10:46.341 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2019-11-27 15:10:46.345 +01:00 [INF] Hosting environment: Development
+2019-11-27 15:10:46.346 +01:00 [INF] Content root path: C:\Users\fgruber\Source\Repos\Game_Alcatraz\ServerService
+2019-11-27 15:11:42.091 +01:00 [INF] Application is shutting down...
+2019-11-27 15:12:01.799 +01:00 [INF] Starting up the  service.
+2019-11-27 15:12:04.391 +01:00 [INF] Initializing Spread connection...
+2019-11-27 15:12:04.398 +01:00 [DBG] Connecting to the Spread Deamon with address: 127.0.0.1 and port 4803
+2019-11-27 15:12:06.422 +01:00 [ERR] There was an error connecting to the daemon.
+2019-11-27 15:12:06.422 +01:00 [ERR] Socket(): System.Net.Internals.SocketExceptionFactory+ExtendedSocketException (10061): No connection could be made because the target machine actively refused it. 127.0.0.1:4803
+   at System.Net.Sockets.Socket.DoConnect(EndPoint endPointSnapshot, SocketAddress socketAddress)
+   at System.Net.Sockets.Socket.Connect(EndPoint remoteEP)
+   at System.Net.Sockets.Socket.Connect(IPAddress address, Int32 port)
+   at System.Net.Sockets.TcpClient.Connect(String hostname, Int32 port)
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Net.Sockets.TcpClient.Connect(String hostname, Int32 port)
+   at System.Net.Sockets.TcpClient..ctor(String hostname, Int32 port)
+   at spread.SpreadConnection.Connect(String address, Int32 port, String user, Boolean priority, Boolean groupMembership) : 
+2019-11-27 15:12:06.486 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2019-11-27 15:12:06.490 +01:00 [INF] Hosting environment: Development
+2019-11-27 15:12:06.492 +01:00 [INF] Content root path: C:\Users\fgruber\Source\Repos\Game_Alcatraz\ServerService
+2019-11-27 15:19:42.646 +01:00 [INF] Starting up the  service.
+2019-11-27 15:19:44.555 +01:00 [INF] Initializing Spread connection...
+2019-11-27 15:19:44.559 +01:00 [DBG] Connecting to the Spread Deamon with address: 127.0.0.1 and port 4803
+2019-11-27 15:19:46.412 +01:00 [ERR] There was an error connecting to the daemon.
+2019-11-27 15:19:46.413 +01:00 [ERR] Socket(): System.Net.Internals.SocketExceptionFactory+ExtendedSocketException (10061): No connection could be made because the target machine actively refused it. 127.0.0.1:4803
+   at System.Net.Sockets.Socket.DoConnect(EndPoint endPointSnapshot, SocketAddress socketAddress)
+   at System.Net.Sockets.Socket.Connect(EndPoint remoteEP)
+   at System.Net.Sockets.Socket.Connect(IPAddress address, Int32 port)
+   at System.Net.Sockets.TcpClient.Connect(String hostname, Int32 port)
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Net.Sockets.TcpClient.Connect(String hostname, Int32 port)
+   at System.Net.Sockets.TcpClient..ctor(String hostname, Int32 port)
+   at spread.SpreadConnection.Connect(String address, Int32 port, String user, Boolean priority, Boolean groupMembership) : 
+2019-11-27 15:19:46.451 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2019-11-27 15:19:46.460 +01:00 [INF] Hosting environment: Development
+2019-11-27 15:19:46.465 +01:00 [INF] Content root path: C:\Users\fgruber\Source\Repos\Game_Alcatraz\ServerService
+2019-11-27 15:19:59.913 +01:00 [INF] Application is shutting down...
+2019-11-27 15:24:17.419 +01:00 [INF] Starting up the  service.
+2019-11-27 15:24:18.804 +01:00 [INF] Initializing Spread connection...
+2019-11-27 15:24:18.808 +01:00 [DBG] Connecting to the Spread Deamon with address: 127.0.0.1 and port 4803
+2019-11-27 15:24:20.909 +01:00 [ERR] There was an error connecting to the daemon.
+2019-11-27 15:24:20.910 +01:00 [ERR] Socket(): System.Net.Internals.SocketExceptionFactory+ExtendedSocketException (10061): No connection could be made because the target machine actively refused it. 127.0.0.1:4803
+   at System.Net.Sockets.Socket.DoConnect(EndPoint endPointSnapshot, SocketAddress socketAddress)
+   at System.Net.Sockets.Socket.Connect(EndPoint remoteEP)
+   at System.Net.Sockets.Socket.Connect(IPAddress address, Int32 port)
+   at System.Net.Sockets.TcpClient.Connect(String hostname, Int32 port)
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Net.Sockets.TcpClient.Connect(String hostname, Int32 port)
+   at System.Net.Sockets.TcpClient..ctor(String hostname, Int32 port)
+   at spread.SpreadConnection.Connect(String address, Int32 port, String user, Boolean priority, Boolean groupMembership) : 
+2019-11-27 15:24:22.450 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2019-11-27 15:24:22.456 +01:00 [INF] Hosting environment: Development
+2019-11-27 15:24:29.034 +01:00 [INF] Content root path: C:\Users\fgruber\Source\Repos\Game_Alcatraz\ServerService

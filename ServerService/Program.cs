@@ -1,10 +1,15 @@
 using System;
+using System.IO;
+using System.Linq;
+using Akka.Actor;
+using Akka.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using ServerService.Configuration;
 using ServerService.Interface;
 using ServerService.Service;
+using ServerService.Utils;
 
 namespace ServerService
 {
@@ -12,8 +17,12 @@ namespace ServerService
     {
         private static ConfigurationManager ConfigurationManager { get; set; }
 
+
         public static void Main(string[] args)
         {
+
+            
+
             try
             {
                 ConfigurationManager = new ConfigurationManager();
@@ -36,6 +45,8 @@ namespace ServerService
                 Log.CloseAndFlush();
             }
         }
+
+       
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
