@@ -199,7 +199,7 @@ namespace Alcatraz
                 {""protocol"":""akka.tcp"",""system"":""alcatraz"",""host"":""localhost"",""port"":5248,""actorName"":""ReceivingActor"",""playerId"":0,""playerName"":""Franz""},
                 {""protocol"":""akka.tcp"",""system"":""alcatraz"",""host"":""localhost"",""port"":5249,""actorName"":""ReceivingActor"",""playerId"":1,""playerName"":""Bashar""},
                 {""protocol"":""akka.tcp"",""system"":""alcatraz"",""host"":""localhost"",""port"":5250,""actorName"":""ReceivingActor"",""playerId"":2,""playerName"":""Indrit""},
-                {""protocol"":""akka.tcp"",""system"":""alcatraz"",""host"":""localhost"",""port"":5251,""actorName"":""ReceivingActor"",""playerId"":2,""playerName"":""Palo""}
+                {""protocol"":""akka.tcp"",""system"":""alcatraz"",""host"":""localhost"",""port"":5251,""actorName"":""ReceivingActor"",""playerId"":3,""playerName"":""Palo""}
             ]";
 
 
@@ -207,7 +207,7 @@ namespace Alcatraz
 
 
 
-            Globals.AllPlayers = JsonConvert.DeserializeObject<List<ClientData>>(testJSON4);
+            Globals.AllPlayers = JsonConvert.DeserializeObject<List<ClientData>>(testJSON3);
             foreach (var item in Globals.AllPlayers)
             {
                 if (item.playerName == Globals.myName)
