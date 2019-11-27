@@ -26,19 +26,23 @@ namespace Alcatraz
             });
             Receive<Client>(client => {
                 Console.WriteLine("received message from" + client.getPlayerID());
+                Context.Watch(Sender);
+                //clientArr[iterator] = client;
+                //iterator++;
+                //Sender.Tell("ss");
 
-                clientArr[iterator] = client;
-                iterator++;
-                Sender.Tell("ss");
+                //if (iterator == clientArr.Length-1)
+                //{
+                //    Test.receiveClients(clientArr);                  
+                //}
+                //else
+                //    Console.WriteLine("Waiting for others");
 
-                if (iterator == clientArr.Length-1)
-                {
-                    Test.receiveClients(clientArr);                  
-                }
-                else
-                    Console.WriteLine("Waiting for others");
 
-               
+            });
+            Receive<Terminated>(t =>
+            {
+
             });
 
         }

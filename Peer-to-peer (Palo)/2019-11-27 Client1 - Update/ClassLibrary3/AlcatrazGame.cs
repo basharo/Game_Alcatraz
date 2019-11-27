@@ -147,7 +147,7 @@ namespace Alcatraz
         public Game()
         {
         }
-        public static void startgame()
+        public static bool startgame()
         {
             
             int gamesize = 0;
@@ -181,16 +181,16 @@ namespace Alcatraz
             try
             {
                 //startActorSystem("alcatraz");
-
+                string unique = DateTime.Now.ToString().Replace("\\", "").Replace("/", "").Replace(":", "").Replace(" ", "");
                 // Setup an actor that will handle deadletter type messages
                 var deadletterWatchMonitorProps = Props.Create(() => new DeadletterMonitor());
                 
-                var deadletterWatchActorRef =   Globals.ActSys.ActorOf(deadletterWatchMonitorProps, "DeadLetterMonitoringActor");
+                var deadletterWatchActorRef =   Globals.ActSys.ActorOf(deadletterWatchMonitorProps, "DeadLetterMonitoringActor"+ unique);
 
                 // subscribe to the event stream for messages of type "DeadLetter"
                 Globals.ActSys.EventStream.Subscribe(deadletterWatchActorRef, typeof(DeadLetter));
 
-                var localChatActor = Globals.ActSys.ActorOf(Props.Create<RegisterActor>(), "RegisterActor");
+                var localChatActor = Globals.ActSys.ActorOf(Props.Create<RegisterActor>(), "RegisterActor"+ unique);
 
                 string remoteActorAddressClient1 = "akka.tcp://alcatraz@localhost:5555/user/RegisterActor";
                 var remoteChatActorClient1 = Globals.ActSys.ActorSelection(remoteActorAddressClient1);
@@ -222,11 +222,13 @@ namespace Alcatraz
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex);
+                    return false;
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
+                return false;
             }
 
             //ANBINDUNG ZUM SERRVER - end
@@ -442,6 +444,7 @@ namespace Alcatraz
             }
 
             Application.Run();
+            return true;
         }
         [STAThread]
         static void Main()

@@ -25,21 +25,48 @@ namespace Alcatraz
             });
             Receive<Client>(client => {
                 Console.WriteLine("received message from" + client.getPlayerID());
+                Context.Watch(Sender);
+                //clientArr[iterator] = client;
+                //iterator++;
+                //Sender.Tell("ss");
 
-                clientArr[iterator] = client;
-                iterator++;
-                Sender.Tell("ss");
-
-                if (iterator == clientArr.Length-1)
-                {
-                    Test.receiveClients(clientArr);                  
-                }
-                else
-                    Console.WriteLine("Waiting for others");
+                //if (iterator == clientArr.Length-1)
+                //{
+                //    Test.receiveClients(clientArr);                  
+                //}
+                //else
+                //    Console.WriteLine("Waiting for others");
 
                
             });
 
+
+            Receive<Terminated>(t =>
+            {
+
+            });
+
+        }
+        public sealed class Terminated : IAutoReceivedMessage, IPossiblyHarmful
+        {
+            public Terminated(IActorRef actorRef, bool existenceConfirmed, bool addressTerminated)
+            {
+                ActorRef = actorRef;
+                ExistenceConfirmed = existenceConfirmed;
+                AddressTerminated = addressTerminated;
+            }
+
+            public IActorRef ActorRef { get; private set; }
+
+
+            public bool AddressTerminated { get; private set; }
+
+            public bool ExistenceConfirmed { get; private set; }
+
+            public override string ToString()
+            {
+                return "<Terminated>: " + ActorRef + " - ExistenceConfirmed=" + ExistenceConfirmed;
+            }
         }
     }
 
