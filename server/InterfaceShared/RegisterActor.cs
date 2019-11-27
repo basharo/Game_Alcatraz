@@ -97,6 +97,7 @@ namespace Interface
 
             if (exisitingClients.Count == Globals.groupSize)
             {
+                string allPlayerContent = File.ReadAllText(path + fileName);
                 foreach (var item in exisitingClients)
                 {
                     string clientAdress = $"{item.protocol}://{item.system}@{item.host}:{item.port}/user/{item.actorName}";
@@ -104,7 +105,7 @@ namespace Interface
 
                     if (remoteChatActorClient != null)
                     {
-                        remoteChatActorClient.Tell(content, Self);
+                        remoteChatActorClient.Tell(allPlayerContent, Self);
                     }
                 }
             }
