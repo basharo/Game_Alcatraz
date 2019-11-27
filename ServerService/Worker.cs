@@ -31,7 +31,7 @@ namespace ServerService
         private static IActorRef localChatActor;
         private string path = "C:/temp/";
         private string fileName = "game.txt";
-        List<ClientData> exisitingClients = new List<ClientData>();
+        List<ClientData> exisitingClients;
 
         public Worker(ILogger<Worker> logger, IServerService serverService, ISpreadService spreadService)
         {
@@ -39,6 +39,7 @@ namespace ServerService
             _configurationManager = new ConfigurationManager();
             _logger = logger;
             _spreadService = spreadService;
+            exisitingClients = new List<ClientData>();
 
             var connected = _spreadService.ConnectToSpread();
             if (connected)
@@ -64,7 +65,7 @@ namespace ServerService
             try
             {
 
-                startActorSystem("alcatraz");
+                
                 localChatActor = Globals.mainActorSystem.ActorOf(Props.Create<RegisterActor>(_spreadService), "RegisterActor");
 
             }
@@ -75,14 +76,7 @@ namespace ServerService
         }
 
 
-        public void startActorSystem(string actorSystemName)
-        {
-
-            var config = File.ReadAllText($"{Path.GetDirectoryName(Directory.GetFiles(Directory.GetCurrentDirectory(), "AkkaConfig.txt", SearchOption.AllDirectories).FirstOrDefault())}/AkkaConfig.txt");
-            var conf = ConfigurationFactory.ParseString(config);
-            Globals.mainActorSystem = ActorSystem.Create(actorSystemName, conf);
-
-        }
+       
 
         private void _spreadConnection_OnRegularMessage(SpreadMessage msg)
         {
@@ -276,18 +270,18 @@ namespace ServerService
         private string NotifyClient(string ipAddress, int port)
         {
 
-            string remoteActorAddressClient1 = "akka.tcp://alcatraz@localhost:5555/user/RegisterActor";
-            var remoteChatActorClient1 = Globals.mainActorSystem.ActorSelection(remoteActorAddressClient1);
-
-
-            if (remoteChatActorClient1 != null)
+            if (!File.Exists(path + fileName))
             {
-
-                remoteChatActorClient1.Tell(ipAddress + port, localChatActor);
+                var myFile = File.Create(path + fileName);
+                myFile.Close();
             }
-
             string content = File.ReadAllText(path + fileName);
             exisitingClients = JsonConvert.DeserializeObject<List<ClientData>>(content);
+
+            if(exisitingClients == null)
+            {
+                exisitingClients = new List<ClientData>();
+            }
 
             foreach (var item in exisitingClients)
             {
@@ -296,7 +290,7 @@ namespace ServerService
 
                 if (remoteChatActorClient != null)
                 {
-                    remoteChatActorClient.Tell(content, localChatActor);
+                    remoteChatActorClient.Tell(ipAddress + port, localChatActor);
                 }
             }
 

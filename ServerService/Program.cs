@@ -21,7 +21,7 @@ namespace ServerService
         public static void Main(string[] args)
         {
 
-            
+            startActorSystem("alcatraz");
 
             try
             {
@@ -46,7 +46,14 @@ namespace ServerService
             }
         }
 
-       
+        public static void startActorSystem(string actorSystemName)
+        {
+
+            var config = File.ReadAllText($"{Path.GetDirectoryName(Directory.GetFiles(Directory.GetCurrentDirectory(), "AkkaConfig.txt", SearchOption.AllDirectories).FirstOrDefault())}/AkkaConfig.txt");
+            var conf = ConfigurationFactory.ParseString(config);
+            Globals.mainActorSystem = ActorSystem.Create(actorSystemName, conf);
+
+        }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
