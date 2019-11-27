@@ -21,6 +21,7 @@ namespace Alcatraz
     {
         private Alcatraz[] other = new Alcatraz[4];
         private int numPlayer = Globals.AllPlayers.Count;
+       
         class Move
         {
             public int playerId;
@@ -110,22 +111,13 @@ namespace Alcatraz
             public static List<string> remoteActorAddresses;
             public static int myPlayerId;
             public static string myName;
-
-
             static Globals()
             {
                 //string actorSystemName = ConfigurationManager.AppSettings["actorSystemName"];
                 ActSys = ActorSystem.Create("alcatraz");
                 remoteActorAddresses = new List<string>();
-                //string akkaAddress;
             }
         }
-        /*public class akkaAddress
-        {
-            public string address;
-        }*/
-
-
         public Game()
         {
         }
@@ -189,7 +181,7 @@ namespace Alcatraz
             */
             //ANBINDUNG ZUM SERRVER - end
 
-            Globals.myName = "Franz";
+            Globals.myName = "Palo";
 
             string testJSON = @"[
                 {""protocol"":""akka.tcp"",""system"":""alcatraz"",""host"":""localhost"",""port"":5248,""actorName"":""ReceivingActor"",""playerId"":0,""playerName"":""Franz""},
@@ -210,15 +202,9 @@ namespace Alcatraz
                 {""protocol"":""akka.tcp"",""system"":""alcatraz"",""host"":""localhost"",""port"":5251,""actorName"":""ReceivingActor"",""playerId"":2,""playerName"":""Palo""}
             ]";
 
-            //Console.WriteLine(Globals.remoteActorAddresses.ElementAt(0));
-
             Globals.AllPlayers = JsonConvert.DeserializeObject<List<ClientData>>(testJSON4);
             foreach (var item in Globals.AllPlayers)
             {
-                //Console.WriteLine(item.ToString());
-
-                //Globals.remoteActorAddresses.Add(item.ToString());
-
                 if (item.playerName == Globals.myName)
                 {
                     Globals.myPlayerId = item.playerId;
@@ -263,7 +249,9 @@ namespace Alcatraz
                 a2.getWindow().FormClosed += new FormClosedEventHandler(Test_FormClosed);
                 a1.start();
                 a2.start();
-            } else if (Globals.AllPlayers.Count == 3) {
+            }
+            else if (Globals.AllPlayers.Count == 3)
+            {
                 Game t1 = new Game();
                 Game t2 = new Game();
                 Game t3 = new Game();
@@ -421,7 +409,7 @@ namespace Alcatraz
 
         public void doMove(Player player, Prisoner prisoner, int rowOrCol, int row, int col)
         {
-            
+
 
             Move lastMove = new Move();
             lastMove.playerId = player.Id;
@@ -431,15 +419,13 @@ namespace Alcatraz
             lastMove.col = col;
 
             string lastMoveJson = JsonConvert.SerializeObject(lastMove);
-
-            //string currentAddress;
             foreach (var item in Globals.remoteActorAddresses)
             {
                 Globals.ActSys.ActorSelection(item).Tell(lastMoveJson);
             }
 
 
-            for (int i = 0; i < getNumPlayer()-1; i++)
+            for (int i = 0; i < getNumPlayer() - 1; i++)
             {
                 other[i].doMove(other[i].getPlayer(player.Id), other[i].getPrisoner(prisoner.Id), rowOrCol, row, col);
                 Console.WriteLine("Player " + other[i].getPlayer(player.Id) + "Prisoner " + prisoner + rowOrCol + row + "col" + col);
@@ -450,7 +436,7 @@ namespace Alcatraz
         {
             Console.WriteLine("Undoing move");
         }
-            
+
         public void gameWon(Player player)
         {
             Console.WriteLine("Player " + player.Id + " wins.");

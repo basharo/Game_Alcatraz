@@ -20,7 +20,8 @@ namespace Alcatraz
     public class Game : MoveListener
     {
         private Alcatraz[] other = new Alcatraz[4];
-        private int numPlayer = 2;
+        private int numPlayer = Globals.AllPlayers.Count;
+       
         class Move
         {
             public int playerId;
@@ -114,6 +115,7 @@ namespace Alcatraz
             {
                 //string actorSystemName = ConfigurationManager.AppSettings["actorSystemName"];
                 ActSys = ActorSystem.Create("alcatraz");
+                remoteActorAddresses = new List<string>();
             }
         }
         public Game()
@@ -186,18 +188,38 @@ namespace Alcatraz
                 {""protocol"":""akka.tcp"",""system"":""alcatraz"",""host"":""localhost"",""port"":5249,""actorName"":""ReceivingActor"",""playerId"":1,""playerName"":""Bashar""}
             ]";
 
-            Globals.AllPlayers = JsonConvert.DeserializeObject<List<ClientData>>(testJSON);
+
+            string testJSON3 = @"[
+                {""protocol"":""akka.tcp"",""system"":""alcatraz"",""host"":""localhost"",""port"":5248,""actorName"":""ReceivingActor"",""playerId"":0,""playerName"":""Franz""},
+                {""protocol"":""akka.tcp"",""system"":""alcatraz"",""host"":""localhost"",""port"":5249,""actorName"":""ReceivingActor"",""playerId"":1,""playerName"":""Bashar""},
+                {""protocol"":""akka.tcp"",""system"":""alcatraz"",""host"":""localhost"",""port"":5250,""actorName"":""ReceivingActor"",""playerId"":2,""playerName"":""Indrit""}
+            ]";
+
+            string testJSON4 = @"[
+                {""protocol"":""akka.tcp"",""system"":""alcatraz"",""host"":""localhost"",""port"":5248,""actorName"":""ReceivingActor"",""playerId"":0,""playerName"":""Franz""},
+                {""protocol"":""akka.tcp"",""system"":""alcatraz"",""host"":""localhost"",""port"":5249,""actorName"":""ReceivingActor"",""playerId"":1,""playerName"":""Bashar""},
+                {""protocol"":""akka.tcp"",""system"":""alcatraz"",""host"":""localhost"",""port"":5250,""actorName"":""ReceivingActor"",""playerId"":2,""playerName"":""Indrit""},
+                {""protocol"":""akka.tcp"",""system"":""alcatraz"",""host"":""localhost"",""port"":5251,""actorName"":""ReceivingActor"",""playerId"":2,""playerName"":""Palo""}
+            ]";
+
+
+
+
+
+
+            Globals.AllPlayers = JsonConvert.DeserializeObject<List<ClientData>>(testJSON4);
             foreach (var item in Globals.AllPlayers)
             {
                 if (item.playerName == Globals.myName)
                 {
                     Globals.myPlayerId = item.playerId;
-                    
-                } else
+                    //break;
+                }
+                else
                 {
+                    //Console.WriteLine(item.ToString());
                     Globals.remoteActorAddresses.Add(item.ToString());
                 }
-                
             }
 
             if (Globals.AllPlayers.Count == 2)
@@ -206,8 +228,8 @@ namespace Alcatraz
                 Game t2 = new Game();
                 Alcatraz a1 = new Alcatraz();
                 Alcatraz a2 = new Alcatraz();
-                t1.setNumPlayer(2);
-                t2.setNumPlayer(2);
+                t1.setNumPlayer(Globals.AllPlayers.Count);
+                t2.setNumPlayer(Globals.AllPlayers.Count);
                 a1.init(2, 0);
                 a2.init(2, 1);
                 a1.getPlayer(0).Name = Globals.AllPlayers.ElementAt(0).playerName;
@@ -241,9 +263,9 @@ namespace Alcatraz
                 Alcatraz a1 = new Alcatraz();
                 Alcatraz a2 = new Alcatraz();
                 Alcatraz a3 = new Alcatraz();
-                t1.setNumPlayer(2);
-                t2.setNumPlayer(2);
-                t3.setNumPlayer(2);
+                t1.setNumPlayer(Globals.AllPlayers.Count);
+                t2.setNumPlayer(Globals.AllPlayers.Count);
+                t3.setNumPlayer(Globals.AllPlayers.Count);
                 a1.init(3, 0);
                 a2.init(3, 1);
                 a3.init(3, 2);
@@ -297,14 +319,14 @@ namespace Alcatraz
                 Alcatraz a2 = new Alcatraz();
                 Alcatraz a3 = new Alcatraz();
                 Alcatraz a4 = new Alcatraz();
-                t1.setNumPlayer(2);
-                t2.setNumPlayer(2);
-                t3.setNumPlayer(2);
-                t4.setNumPlayer(2);
-                a1.init(3, 0);
-                a2.init(3, 1);
-                a3.init(3, 2);
-                a4.init(3, 2);
+                t1.setNumPlayer(Globals.AllPlayers.Count);
+                t2.setNumPlayer(Globals.AllPlayers.Count);
+                t3.setNumPlayer(Globals.AllPlayers.Count);
+                t4.setNumPlayer(Globals.AllPlayers.Count);
+                a1.init(4, 0);
+                a2.init(4, 1);
+                a3.init(4, 2);
+                a4.init(4, 3);
                 a1.getPlayer(0).Name = Globals.AllPlayers.ElementAt(0).playerName;
                 a1.getPlayer(1).Name = Globals.AllPlayers.ElementAt(1).playerName;
                 a1.getPlayer(2).Name = Globals.AllPlayers.ElementAt(2).playerName;
@@ -404,7 +426,7 @@ namespace Alcatraz
             string lastMoveJson = JsonConvert.SerializeObject(lastMove);
             foreach (var item in Globals.remoteActorAddresses)
             {
-                Globals.ActSys.ActorSelection(item.ToString()).Tell(lastMoveJson);
+                Globals.ActSys.ActorSelection(item).Tell(lastMoveJson);
             }
 
 
