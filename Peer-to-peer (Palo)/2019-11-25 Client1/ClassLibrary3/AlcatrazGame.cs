@@ -64,7 +64,6 @@ namespace Alcatraz
                 {
                     Console.WriteLine(messageString);
 
-                    line = Console.ReadLine();
                 }
 
                 if (messageString.Contains("deleted"))
@@ -184,9 +183,11 @@ namespace Alcatraz
                     remoteChatActorClient1.Tell(playerName, localChatActor);
                     
                     
-                        while (line != "gamestart") {
-                            
-                            if(line == "delete")
+                    while (line != "gamestart") {
+
+                        line = Console.ReadLine();
+
+                        if(line == "delete")
                         {
                             remoteChatActorClient1.Tell("delete|" + playerName, localChatActor);
                             line = string.Empty;
