@@ -29,7 +29,6 @@ namespace final_client_logic_akka
         private static Test t1;
         private static string line;
         public static ActorSystem mainActorSystem { get; set; }
-        public static List<ClientData> allPlayers { get; set; }
 
         public Test()
         {
@@ -79,7 +78,7 @@ namespace final_client_logic_akka
                         while (line != null) {
                             line = Console.ReadLine();
                             
-                        if(line == "delete")
+                            if(line == "delete")
                         {
                             remoteChatActorClient1.Tell("delete|" + playerName, localChatActor);
                         }

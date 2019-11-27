@@ -28,13 +28,11 @@ namespace Interface
         {
             //_helloTask = Context.System.Scheduler.ScheduleTellRepeatedlyCancelable(TimeSpan.FromSeconds(1),
             //    TimeSpan.FromSeconds(1), Context.Self, new Hello("hi"), ActorRefs.NoSender);
-            File.Delete(path + fileName);
         }
 
         protected override void PostStop()
         {
-            //_helloTask.Cancel();
-            
+            _helloTask.Cancel();
         }
 
 
@@ -98,8 +96,6 @@ namespace Interface
 
             if (exisitingClients.Count == Globals.groupSize)
             {
-
-                string allPlayersContent = File.ReadAllText(path + fileName);
                 foreach (var item in exisitingClients)
                 {
                     string clientAdress = $"{item.protocol}://{item.system}@{item.host}:{item.port}/user/{item.actorName}";
@@ -107,7 +103,7 @@ namespace Interface
 
                     if (remoteChatActorClient != null)
                     {
-                        remoteChatActorClient.Tell(allPlayersContent, Self);
+                        remoteChatActorClient.Tell(content, Self);
                     }
                 }
             }
