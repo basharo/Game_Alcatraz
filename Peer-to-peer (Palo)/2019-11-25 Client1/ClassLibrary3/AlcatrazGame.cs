@@ -181,7 +181,7 @@ namespace Alcatraz
 
                 var localChatActor = Globals.ActSys.ActorOf(Props.Create<RegisterActor>(), "RegisterActor");
 
-                string remoteActorAddressClient1 = "akka.tcp://alcatraz@localhost:5555/user/RegisterActor";
+                string remoteActorAddressClient1 = "akka.tcp://alcatraz@192.168.43.249:5555/user/RegisterActor";
                 var remoteChatActorClient1 = Globals.ActSys.ActorSelection(remoteActorAddressClient1);
 
                 if (remoteChatActorClient1 != null)
