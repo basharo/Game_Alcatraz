@@ -76,9 +76,14 @@ namespace Alcatraz
                 {
                     List<ClientData> exisitingClients = JsonConvert.DeserializeObject<List<ClientData>>(messageString);
 
+                    foreach (var item in exisitingClients)
+                    {
+                        item.actorName = "ReceivingActor";
+                    }
+
                     Globals.AllPlayers = exisitingClients;
 
-                    line = "gamestart";
+                    Console.WriteLine("Please enter 'gamestart' to start the game.");
                 }
             }
         }

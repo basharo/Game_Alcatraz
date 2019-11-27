@@ -36,8 +36,8 @@ namespace Alcatraz
         //++++++++++++++++++++++++++++++++
         //+++++ ANBINDUNG ZUM SERVER +++++
         //++++++++++++++++++++++++++++++++
-        
- 
+
+
         public class RegisterActor : UntypedActor
         {
 
@@ -76,7 +76,14 @@ namespace Alcatraz
                 {
                     List<ClientData> exisitingClients = JsonConvert.DeserializeObject<List<ClientData>>(messageString);
 
+                    foreach (var item in exisitingClients)
+                    {
+                        item.actorName = "ReceivingActor";
+                    }
+
                     Globals.AllPlayers = exisitingClients;
+
+                    Console.WriteLine("Please enter 'gamestart' to start the game.");
                 }
             }
         }
@@ -106,7 +113,7 @@ namespace Alcatraz
 
                 Move receivedMove = JsonConvert.DeserializeObject<Move>(message.ToString());
                 myGame.doMove(myGame.getPlayer(receivedMove.playerId), myGame.getPrisoner(receivedMove.prisonerId), receivedMove.rowOrCol, receivedMove.row, receivedMove.col);
-           
+
             }
         }
 
@@ -151,7 +158,7 @@ namespace Alcatraz
             //++++++++++++++++++++++++++++++++
             //+++++ ANBINDUNG ZUM SERVER +++++
             //++++++++++++++++++++++++++++++++
-            
+
             Console.WriteLine("To cancel the registration enter 'delete'");
             Console.WriteLine("Please choose a player name:");
             playerName = Console.ReadLine();
@@ -173,37 +180,39 @@ namespace Alcatraz
                 Globals.ActSys.EventStream.Subscribe(deadletterWatchActorRef, typeof(DeadLetter));
 
                 var localChatActor = Globals.ActSys.ActorOf(Props.Create<RegisterActor>(), "RegisterActor");
-         
+
                 string remoteActorAddressClient1 = "akka.tcp://alcatraz@localhost:5555/user/RegisterActor";
                 var remoteChatActorClient1 = Globals.ActSys.ActorSelection(remoteActorAddressClient1);
 
                 if (remoteChatActorClient1 != null)
                 {
-                        
-                    remoteChatActorClient1.Tell(playerName, localChatActor);
-                    
-                    
-                    while (line != "gamestart") {
 
+                    remoteChatActorClient1.Tell(playerName, localChatActor);
+
+
+                    while (line != "gamestart")
+                    {
                         line = Console.ReadLine();
 
-                        if(line == "delete")
+                        if (line == "delete")
                         {
                             remoteChatActorClient1.Tell("delete|" + playerName, localChatActor);
                             line = string.Empty;
                         }
                     }
 
-                    } else {
+                }
+                else
+                {
                     Console.WriteLine("Could not get remote actor ref");
                     Console.ReadLine();
-                }  
+                }
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
             }
-    
+
             //ANBINDUNG ZUM SERRVER - end
 
             Globals.myName = playerName;
@@ -231,7 +240,7 @@ namespace Alcatraz
 
             //Console.WriteLine(Globals.remoteActorAddresses.ElementAt(0));
 
-            
+
             foreach (var item in Globals.AllPlayers)
             {
                 //Console.WriteLine(item.ToString());
@@ -282,7 +291,9 @@ namespace Alcatraz
                 a2.getWindow().FormClosed += new FormClosedEventHandler(Test_FormClosed);
                 a1.start();
                 a2.start();
-            } else if (Globals.AllPlayers.Count == 3) {
+            }
+            else if (Globals.AllPlayers.Count == 3)
+            {
                 Game t1 = new Game();
                 Game t2 = new Game();
                 Game t3 = new Game();
@@ -440,7 +451,7 @@ namespace Alcatraz
 
         public void doMove(Player player, Prisoner prisoner, int rowOrCol, int row, int col)
         {
-            
+
 
             Move lastMove = new Move();
             lastMove.playerId = player.Id;
@@ -458,7 +469,7 @@ namespace Alcatraz
             }
 
 
-            for (int i = 0; i < getNumPlayer()-1; i++)
+            for (int i = 0; i < getNumPlayer() - 1; i++)
             {
                 other[i].doMove(other[i].getPlayer(player.Id), other[i].getPrisoner(prisoner.Id), rowOrCol, row, col);
                 Console.WriteLine("Player " + other[i].getPlayer(player.Id) + "Prisoner " + prisoner + rowOrCol + row + "col" + col);
@@ -469,7 +480,7 @@ namespace Alcatraz
         {
             Console.WriteLine("Undoing move");
         }
-            
+
         public void gameWon(Player player)
         {
             Console.WriteLine("Player " + player.Id + " wins.");
