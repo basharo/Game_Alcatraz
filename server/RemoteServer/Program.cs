@@ -19,6 +19,7 @@ namespace Server
             Console.Title = actorName;
             
 
+
             try
             {
 
@@ -29,11 +30,6 @@ namespace Server
                 string line = string.Empty;
                 while (line != null)
                 {
-                    if(line == "gamestart")
-                    {
-                                
-                        return;
-                    }
                     line = Console.ReadLine();
                        
                 }

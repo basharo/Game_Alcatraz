@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Akka;
 using Akka.Actor;
+using Akka.Configuration;
 using Akka.Event;
 using Alcatraz;
 
@@ -15,6 +16,7 @@ namespace final_client_logic_akka
 {
     public class Test : MoveListener
     {
+
         private static Client clientItem;
         private static Client[] clientItems;
         private static ClientClass clientClass;
@@ -65,7 +67,7 @@ namespace final_client_logic_akka
                 var localChatActor = mainActorSystem.ActorOf(Props.Create<GameActor>(), "GameActor");
 
                 
-                string remoteActorAddressClient1 = "akka.tcp://alcatraz@192.168.43.249:5555/user/RegisterActor";
+                string remoteActorAddressClient1 = "akka.tcp://alcatraz@localhost:5555/user/RegisterActor";
                 var remoteChatActorClient1 = mainActorSystem.ActorSelection(remoteActorAddressClient1);
 
                 if (remoteChatActorClient1 != null)

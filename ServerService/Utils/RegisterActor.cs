@@ -1,14 +1,12 @@
 ﻿using Akka.Actor;
-using Interface;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace Interface
+namespace ServerService.Utils
 {
     public class RegisterActor : UntypedActor
     {
@@ -23,7 +21,6 @@ namespace Interface
         {
         }
 
-        
         protected override void PreStart()
         {
             //_helloTask = Context.System.Scheduler.ScheduleTellRepeatedlyCancelable(TimeSpan.FromSeconds(1),
@@ -34,22 +31,23 @@ namespace Interface
         protected override void PostStop()
         {
             //_helloTask.Cancel();
-            
+
         }
 
 
-        
+
 
         protected override void OnReceive(object message)
         {
             string messageString = message.ToString();
-            if (messageString.StartsWith("delete")){
+            if (messageString.StartsWith("delete"))
+            {
                 string playerNameToDelete = messageString.Split('|')[1];
 
                 string fileContent = File.ReadAllText(path + fileName);
                 exisitingClients = JsonConvert.DeserializeObject<List<ClientData>>(fileContent);
                 var item = exisitingClients.SingleOrDefault(x => x.playerName == playerNameToDelete);
-                if(item != null)
+                if (item != null)
                     exisitingClients.Remove(item);
 
                 WriteToFile(JsonConvert.SerializeObject(exisitingClients));
@@ -58,13 +56,13 @@ namespace Interface
 
                 if (remoteChatActorClient != null)
                 {
-                    remoteChatActorClient.Tell(item.playerName + " was successfully deleted." , Self);
+                    remoteChatActorClient.Tell(item.playerName + " was successfully deleted.", Self);
                 }
 
                 return;
 
             }
-                
+
             var temp = Sender.Path.Address;
             string playerName = messageString;
 
@@ -89,7 +87,7 @@ namespace Interface
                 }
             }
 
-            ClientData clientToAdd = new ClientData(temp.Protocol, temp.System, temp.Host, temp.Port, Sender.Path.Name, exisitingClients.Count, playerName);
+            ClientData clientToAdd = new ClientData(temp.Protocol, temp.System, temp.Host, temp.Port, Sender.Path.Name, exisitingClients.Count + 1, playerName);
             exisitingClients.Add(clientToAdd);
 
             this.WriteToFile(JsonConvert.SerializeObject(exisitingClients));
@@ -122,9 +120,9 @@ namespace Interface
             {
                 File.Delete(path + fileName);
             }
-                
+
             File.WriteAllText(path + fileName, line);
-            
+
         }
     }
 }

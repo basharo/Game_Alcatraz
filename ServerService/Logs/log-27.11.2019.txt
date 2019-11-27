@@ -1,0 +1,39 @@
+2019-11-27 01:09:59.224 +01:00 [INF] Starting up the  service.
+2019-11-27 01:10:03.454 +01:00 [INF] Initializing Spread connection...
+2019-11-27 01:10:03.457 +01:00 [DBG] Connecting to the Spread Deamon with address: 10.42.24.25 and port 4803
+2019-11-27 01:10:03.760 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2019-11-27 01:10:03.763 +01:00 [INF] Hosting environment: Development
+2019-11-27 01:10:03.764 +01:00 [INF] Content root path: C:\Users\fgruber\Source\Repos\Game_Alcatraz\ServerService
+2019-11-27 01:10:25.504 +01:00 [INF] Starting up the  service.
+2019-11-27 01:10:37.335 +01:00 [INF] Initializing Spread connection...
+2019-11-27 01:10:37.338 +01:00 [DBG] Connecting to the Spread Deamon with address: 10.42.24.25 and port 4803
+2019-11-27 01:11:05.948 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2019-11-27 01:11:05.950 +01:00 [INF] Hosting environment: Development
+2019-11-27 01:11:05.950 +01:00 [INF] Content root path: C:\Users\fgruber\Source\Repos\Game_Alcatraz\ServerService
+2019-11-27 01:13:01.793 +01:00 [INF] Application is shutting down...
+2019-11-27 01:15:21.631 +01:00 [INF] Starting up the  service.
+2019-11-27 01:15:24.076 +01:00 [INF] Initializing Spread connection...
+2019-11-27 01:15:24.078 +01:00 [DBG] Connecting to the Spread Deamon with address: 10.42.24.25 and port 4803
+2019-11-27 01:15:24.346 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2019-11-27 01:15:24.348 +01:00 [INF] Hosting environment: Development
+2019-11-27 01:15:24.348 +01:00 [INF] Content root path: C:\Users\fgruber\Source\Repos\Game_Alcatraz\ServerService
+2019-11-27 01:15:40.224 +01:00 [INF] Starting up the  service.
+2019-11-27 01:15:45.818 +01:00 [INF] Initializing Spread connection...
+2019-11-27 01:15:45.821 +01:00 [DBG] Connecting to the Spread Deamon with address: 10.42.24.25 and port 4803
+2019-11-27 01:16:41.032 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2019-11-27 01:16:41.034 +01:00 [INF] Hosting environment: Development
+2019-11-27 01:16:41.035 +01:00 [INF] Content root path: C:\Users\fgruber\Source\Repos\Game_Alcatraz\ServerService
+2019-11-27 01:20:15.769 +01:00 [INF] Starting up the  service.
+2019-11-27 01:20:18.288 +01:00 [INF] Initializing Spread connection...
+2019-11-27 01:20:18.291 +01:00 [DBG] Connecting to the Spread Deamon with address: 10.42.24.25 and port 4803
+2019-11-27 01:20:25.530 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2019-11-27 01:20:25.532 +01:00 [INF] Hosting environment: Development
+2019-11-27 01:20:25.533 +01:00 [INF] Content root path: C:\Users\fgruber\Source\Repos\Game_Alcatraz\ServerService
+2019-11-27 01:25:39.264 +01:00 [INF] Application is shutting down...
+2019-11-27 01:26:33.734 +01:00 [INF] Starting up the  service.
+2019-11-27 01:26:35.694 +01:00 [INF] Initializing Spread connection...
+2019-11-27 01:26:35.696 +01:00 [DBG] Connecting to the Spread Deamon with address: 10.42.24.25 and port 4803
+2019-11-27 01:26:35.984 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2019-11-27 01:26:35.986 +01:00 [INF] Hosting environment: Development
+2019-11-27 01:26:35.987 +01:00 [INF] Content root path: C:\Users\fgruber\Source\Repos\Game_Alcatraz\ServerService
+2019-11-27 01:26:47.134 +01:00 [INF] Application is shutting down...

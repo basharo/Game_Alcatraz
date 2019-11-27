@@ -6,6 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="NewFile1.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Akka" Version="1.3.16" />
+    <PackageReference Include="Akka.Remote" Version="1.3.16" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.2.7" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="3.0.0" />
@@ -19,7 +25,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\other\data\alcatraz\cspread-src\cspread.User\cspread.User.csproj" />
-    <ProjectReference Include="..\..\..\other\data\alcatraz\cspread-src\cspread\cspread.csproj" />
+    <Reference Include="cspread">
+      <HintPath>..\..\..\..\..\..\spread-bin-4.0.0\cspread.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>

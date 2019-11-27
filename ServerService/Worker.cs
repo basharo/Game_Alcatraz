@@ -25,6 +25,7 @@ namespace ServerService
         private InformClientOfChange _delegate;
         private bool isDisconnected = false;
         private bool isInitState = false;
+        private string privateGroup;
 
         public Worker(ILogger<Worker> logger, IServerService serverService, ISpreadService spreadService)
         {
@@ -37,7 +38,12 @@ namespace ServerService
             if (connected)
             {
                 var spreadGroupName = _spreadService.JoinSpreadGroup();
+                
                 Console.WriteLine($"Joined the group {spreadGroupName} ...");
+
+                privateGroup = _spreadService._spreadConnection.PrivateGroup.ToString();
+
+                Console.WriteLine($"Private group: {privateGroup} ...");
 
                 Console.WriteLine("Preparing message listener\'s ...");
 
@@ -137,7 +143,7 @@ namespace ServerService
                     //receive full state
                 }
 
-                _delegate.Invoke(ServerOptions.IPAddress, ServerOptions.Port);
+                //_delegate.Invoke(ServerOptions.IPAddress, ServerOptions.Port);
             }
         }
 
@@ -227,6 +233,8 @@ namespace ServerService
             //    }
             //}
             #endregion
+
+
 
 
             if (isDisconnected)
