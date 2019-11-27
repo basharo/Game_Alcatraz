@@ -48,10 +48,8 @@ namespace ServerService
                 Console.WriteLine($"Joined the group {spreadGroupName} ...");
 
                 Console.WriteLine("Preparing message listener\'s ...");
-
                 _spreadService._spreadConnection.OnMembershipMessage += _spreadConnection_OnMembershipMessage;
                 _spreadService._spreadConnection.OnRegularMessage += _spreadConnection_OnRegularMessage;
-
             }
             else
             {
@@ -98,7 +96,7 @@ namespace ServerService
             {
                 var deserializedMessage = msg.ParseRegularSpreadMessage();
                 //save to File
-                //_spreadService.SendACK();
+                _spreadService.SendACK();
             }
         }
 
@@ -166,8 +164,8 @@ namespace ServerService
                     //receive full state
                 }
 
-                _delegate = new InformClientOfChange(NotifyClient);
-                _delegate.Invoke(ServerOptions.IPAddress, ServerOptions.Port);
+                //_delegate = new InformClientOfChange(NotifyClient);
+                //_delegate.Invoke(ServerOptions.IPAddress, ServerOptions.Port);
             }
         }
 
@@ -258,13 +256,15 @@ namespace ServerService
             //}
             #endregion
 
-            if (isDisconnected)
-            {
-                _delegate = new InformClientOfChange(NotifyClient);
-                _delegate = NotifyClient;
-            }
+                if (isDisconnected)
+                {
+                    _delegate = new InformClientOfChange(NotifyClient);
+                    _delegate = NotifyClient;
+                }
 
-            await Task.Delay(2000, stoppingToken);
+                await Task.Delay(2000, stoppingToken);
+
+
         }
 
         private string NotifyClient(string ipAddress, int port)
