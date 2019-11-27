@@ -42,13 +42,14 @@ namespace Interface
         protected override void OnReceive(object message)
         {
             string messageString = message.ToString();
-            if (messageString.StartsWith("delete")){
+            if (messageString.StartsWith("delete"))
+            {
                 string playerNameToDelete = messageString.Split('|')[1];
 
                 string fileContent = File.ReadAllText(path + fileName);
                 exisitingClients = JsonConvert.DeserializeObject<List<ClientData>>(fileContent);
                 var item = exisitingClients.SingleOrDefault(x => x.playerName == playerNameToDelete);
-                if(item != null)
+                if (item != null)
                     exisitingClients.Remove(item);
 
                 WriteToFile(JsonConvert.SerializeObject(exisitingClients));
@@ -57,59 +58,72 @@ namespace Interface
 
                 if (remoteChatActorClient != null)
                 {
-                    remoteChatActorClient.Tell(item.playerName + " was successfully deleted." , Self);
+                    remoteChatActorClient.Tell(item.playerName + " was successfully deleted.", Self);
                 }
 
                 return;
 
             }
-                
-            var temp = Sender.Path.Address;
-            string playerName = messageString;
-
-            if (!File.Exists(path + fileName))
+            else if (messageString.StartsWith("register"))
             {
-                var myFile = File.Create(path + fileName);
-                myFile.Close();
-            }
-
-            string content = File.ReadAllText(path + fileName);
-            if (content != "")
-            {
-                exisitingClients = JsonConvert.DeserializeObject<List<ClientData>>(content);
-
-                foreach (var item in exisitingClients)
+                // register
+                messageString = messageString.Replace("register", "");
+                int wishedgamesize = 0;
+                // first player will set the game size
+                if (!File.Exists(path + fileName))
                 {
-                    if (item.playerName == playerName)
+                    int.TryParse(messageString.Split('|')[1], out wishedgamesize);
+                    if (Globals.groupSize == 0)
+                        Globals.groupSize = wishedgamesize;
+                }
+                messageString = messageString.Split('|')[0];
+                var temp = Sender.Path.Address;
+                string playerName = messageString;
+
+                if (!File.Exists(path + fileName))
+                {
+                    var myFile = File.Create(path + fileName);
+                    myFile.Close();
+                }
+
+                string content = File.ReadAllText(path + fileName);
+                if (content != "")
+                {
+                    exisitingClients = JsonConvert.DeserializeObject<List<ClientData>>(content);
+
+                    foreach (var item in exisitingClients)
                     {
-                        Sender.Tell(playerName + " already exists. Please choose another name:");
-                        return;
+                        if (item.playerName == playerName)
+                        {
+                            Sender.Tell(playerName + " already exists. Please choose another name:");
+                            return;
+                        }
+                    }
+                }
+
+                ClientData clientToAdd = new ClientData(temp.Protocol, temp.System, temp.Host, temp.Port, Sender.Path.Name, exisitingClients.Count, playerName);
+                exisitingClients.Add(clientToAdd);
+
+                this.WriteToFile(JsonConvert.SerializeObject(exisitingClients));
+                if (wishedgamesize == 0)
+                    Sender.Tell(playerName + " was successfully registered on server.");
+                else
+                    Sender.Tell(playerName + " was successfully registered on server,the game size is set already to:" + Globals.groupSize + " active registered Players number: " + exisitingClients.Count);
+
+                if (exisitingClients.Count == Globals.groupSize)
+                {
+                    foreach (var item in exisitingClients)
+                    {
+                        string clientAdress = $"{item.protocol}://{item.system}@{item.host}:{item.port}/user/{item.actorName}";
+                        var remoteChatActorClient = Globals.mainActorSystem.ActorSelection(clientAdress);
+
+                        if (remoteChatActorClient != null)
+                        {
+                            remoteChatActorClient.Tell(content, Self);
+                        }
                     }
                 }
             }
-
-            ClientData clientToAdd = new ClientData(temp.Protocol, temp.System, temp.Host, temp.Port, Sender.Path.Name, exisitingClients.Count, playerName);
-            exisitingClients.Add(clientToAdd);
-
-            this.WriteToFile(JsonConvert.SerializeObject(exisitingClients));
-
-            Sender.Tell(playerName + " was successfully registered on server.");
-
-            if (exisitingClients.Count == Globals.groupSize)
-            {
-                string allPlayerContent = File.ReadAllText(path + fileName);
-                foreach (var item in exisitingClients)
-                {
-                    string clientAdress = $"{item.protocol}://{item.system}@{item.host}:{item.port}/user/{item.actorName}";
-                    var remoteChatActorClient = Globals.mainActorSystem.ActorSelection(clientAdress);
-
-                    if (remoteChatActorClient != null)
-                    {
-                        remoteChatActorClient.Tell(allPlayerContent, Self);
-                    }
-                }
-            }
-
 
         }
 

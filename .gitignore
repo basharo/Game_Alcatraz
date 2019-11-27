@@ -490,3 +490,26 @@ MigrationBackup/
 # End of https://www.gitignore.io/api/dotnetcore,aspnetcore,visualstudio
 test/client1/.vs/Client/v14/.suo
 /client/InterfaceShared/AlcatrazClass.cs
+server/InterfaceShared/bin/Debug/Interface.dll
+server/InterfaceShared/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
+server/InterfaceShared/app.config
+server/.vs/Server/v16/Server/sqlite3/storage.ide
+server/.vs/Server/v16/.suo
+server/.vs/Server/v14/.suo
+server - Copy/RemoteServer/Server.csproj
+server - Copy/RemoteServer/Properties/AssemblyInfo.cs
+server - Copy/RemoteServer/Program.cs
+server - Copy/RemoteServer/packages.config
+server - Copy/RemoteServer/App.config
+Peer-to-peer (Palo)/2019-11-25 Client2/ClassLibrary3/GameActor.cs
+Peer-to-peer (Palo)/2019-11-25 Client2/ClassLibrary3/Client2.csproj
+Peer-to-peer (Palo)/2019-11-25 Client2/ClassLibrary3/AlcatrazGame.cs
+Peer-to-peer (Palo)/2019-11-25 Client1/ClassLibrary3/GameActor.cs
+Peer-to-peer (Palo)/2019-11-25 Client1/ClassLibrary3/clientData.cs
+Peer-to-peer (Palo)/2019-11-25 Client1/ClassLibrary3/Client1.csproj
+Peer-to-peer (Palo)/2019-11-25 Client1/ClassLibrary3/Client.cs
+Peer-to-peer (Palo)/2019-11-25 Client1/ClassLibrary3/AlcatrazGame.cs
+/Peer-to-peer (Palo)/2019-11-25 Client2/ClassLibrary3/DeadletterMonitor.cs
+/Peer-to-peer (Palo)/2019-11-25 Client2/ClassLibrary3
+/Peer-to-peer (Palo)/2019-11-25 Client1/ClassLibrary3/DeadletterMonitor.cs
+/Peer-to-peer (Palo)/2019-11-25 Client1/ClassLibrary3
