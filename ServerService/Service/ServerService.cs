@@ -151,8 +151,8 @@ namespace ServerService.Service
         //        }
 
         //        return new ClientResponse();
-        ////    }
-        //    //#endregion
+        //    }
+        //    #endregion
 
         //    #region Client other data
 
@@ -180,10 +180,10 @@ namespace ServerService.Service
             }
         }
 
-        //public string SetPrimaryServer(string ipAddress, int port)
-        //{
-        //    throw new NotImplementedException();
-        //}
+        public string SetPrimaryServer(string ipAddress, int port)
+        {
+            throw new NotImplementedException();
+        }
 
         //public void UpdatePlayerList(ClientDemo[] clients)
         //{

@@ -10,11 +10,6 @@ namespace ServerService.Utils
             return spreadRegularMessage.ToCustomString();
         }
 
-        public static string ParseMembershipMessage(this SpreadMessage spreadMembershipMessage)
-        {
-            return spreadMembershipMessage.ToCustomString();
-        }
-
         private static string ToCustomString(this SpreadMessage spreadMessage)
         {
             int length = spreadMessage.Data.Length;
@@ -28,9 +23,7 @@ namespace ServerService.Utils
                 messageData = Encoding.ASCII.GetString(spreadMessage.Data, 0, length);
             }
 
-            MembershipInfo info = spreadMessage.MembershipInfo;
-
-            return $"{info.Group.ToString()}|{info.GroupID}|{messageData}|{spreadMessage.Sender.ToString()}";
+            return $"{spreadMessage.Groups[0].ToString()}|{spreadMessage.ServiceType}|{messageData}|{spreadMessage.Sender.ToString()}";
         }
     }
 }
