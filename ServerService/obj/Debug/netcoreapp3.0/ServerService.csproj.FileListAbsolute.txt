@@ -143,4 +143,3 @@ C:\Users\fgruber\Source\Repos\Game_Alcatraz\ServerService\bin\Debug\netcoreapp3.
 C:\Users\fgruber\Source\Repos\Game_Alcatraz\ServerService\bin\Debug\netcoreapp3.0\DotNetty.Handlers.dll
 C:\Users\fgruber\Source\Repos\Game_Alcatraz\ServerService\bin\Debug\netcoreapp3.0\DotNetty.Transport.dll
 C:\Users\fgruber\Source\Repos\Game_Alcatraz\ServerService\bin\Debug\netcoreapp3.0\Google.Protobuf.dll
-C:\Users\fgruber\Source\Repos\Game_Alcatraz\ServerService\bin\Debug\netcoreapp3.0\AkkaConfig.config

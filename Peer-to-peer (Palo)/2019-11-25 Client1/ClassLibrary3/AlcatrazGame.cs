@@ -21,6 +21,8 @@ namespace Alcatraz
     {
         private Alcatraz[] other = new Alcatraz[4];
         private int numPlayer = Globals.AllPlayers.Count;
+        private static string playerName = "";
+        private static string line = string.Empty;
         class Move
         {
             public int playerId;
@@ -34,10 +36,12 @@ namespace Alcatraz
         //++++++++++++++++++++++++++++++++
         //+++++ ANBINDUNG ZUM SERVER +++++
         //++++++++++++++++++++++++++++++++
-        /*
-        public class GameActor : UntypedActor
+        
+ 
+        public class RegisterActor : UntypedActor
         {
-            public GameActor()
+
+            public RegisterActor()
             {
 
 
@@ -59,15 +63,25 @@ namespace Alcatraz
                 if (messageString.Contains("successfully registered"))
                 {
                     Console.WriteLine(messageString);
+
+                    line = Console.ReadLine();
+                }
+
+                if (messageString.Contains("deleted"))
+                {
+                    Console.WriteLine(messageString);
                 }
 
 
-                if (messageString == "start")
+                if (messageString.StartsWith("[{\"protocol"))
                 {
-                    return;
+                    List<ClientData> exisitingClients = JsonConvert.DeserializeObject<List<ClientData>>(messageString);
+
+                    Globals.AllPlayers = exisitingClients;
                 }
             }
         }
+
         public class DeadletterMonitor : ReceiveActor
         {
             public DeadletterMonitor()
@@ -78,7 +92,7 @@ namespace Alcatraz
             {
                 Console.WriteLine($"DeadLetter captured: {dl.Message}, sender: {dl.Sender}, recipient: {dl.Recipient}");
             }
-        }*/
+        }
 
 
         class ReceivingActor : UntypedActor
@@ -90,8 +104,10 @@ namespace Alcatraz
             }
             protected override void OnReceive(object message)
             {
+
                 Move receivedMove = JsonConvert.DeserializeObject<Move>(message.ToString());
                 myGame.doMove(myGame.getPlayer(receivedMove.playerId), myGame.getPrisoner(receivedMove.prisonerId), receivedMove.rowOrCol, receivedMove.row, receivedMove.col);
+           
             }
         }
 
@@ -136,7 +152,7 @@ namespace Alcatraz
             //++++++++++++++++++++++++++++++++
             //+++++ ANBINDUNG ZUM SERVER +++++
             //++++++++++++++++++++++++++++++++
-            /*
+            
             Console.WriteLine("To cancel the registration enter 'delete'");
             Console.WriteLine("Please choose a player name:");
             playerName = Console.ReadLine();
@@ -157,9 +173,9 @@ namespace Alcatraz
                 // subscribe to the event stream for messages of type "DeadLetter"
                 Globals.ActSys.EventStream.Subscribe(deadletterWatchActorRef, typeof(DeadLetter));
 
-                var localChatActor = Globals.ActSys.ActorOf(Props.Create<GameActor>(), "GameActor");
+                var localChatActor = Globals.ActSys.ActorOf(Props.Create<RegisterActor>(), "RegisterActor");
          
-                string remoteActorAddressClient1 = "akka.tcp://alcatraz@192.168.43.249:5555/user/RegisterActor";
+                string remoteActorAddressClient1 = "akka.tcp://alcatraz@localhost:5555/user/RegisterActor";
                 var remoteChatActorClient1 = Globals.ActSys.ActorSelection(remoteActorAddressClient1);
 
                 if (remoteChatActorClient1 != null)
@@ -167,13 +183,13 @@ namespace Alcatraz
                         
                     remoteChatActorClient1.Tell(playerName, localChatActor);
                     
-                    string line = string.Empty;
-                        while (line != null) {
-                            line = Console.ReadLine();
+                    
+                        while (line != "gamestart") {
                             
                             if(line == "delete")
                         {
                             remoteChatActorClient1.Tell("delete|" + playerName, localChatActor);
+                            line = string.Empty;
                         }
                     }
 
@@ -186,11 +202,12 @@ namespace Alcatraz
             {
                 Console.WriteLine(ex);
             }
-            */
+    
             //ANBINDUNG ZUM SERRVER - end
 
-            Globals.myName = "Franz";
+            Globals.myName = playerName;
 
+            /*
             string testJSON = @"[
                 {""protocol"":""akka.tcp"",""system"":""alcatraz"",""host"":""localhost"",""port"":5248,""actorName"":""ReceivingActor"",""playerId"":0,""playerName"":""Franz""},
                 {""protocol"":""akka.tcp"",""system"":""alcatraz"",""host"":""localhost"",""port"":5249,""actorName"":""ReceivingActor"",""playerId"":1,""playerName"":""Bashar""}
@@ -209,10 +226,11 @@ namespace Alcatraz
                 {""protocol"":""akka.tcp"",""system"":""alcatraz"",""host"":""localhost"",""port"":5250,""actorName"":""ReceivingActor"",""playerId"":2,""playerName"":""Indrit""},
                 {""protocol"":""akka.tcp"",""system"":""alcatraz"",""host"":""localhost"",""port"":5251,""actorName"":""ReceivingActor"",""playerId"":3,""playerName"":""Palo""}
             ]";
+            */
 
             //Console.WriteLine(Globals.remoteActorAddresses.ElementAt(0));
 
-            Globals.AllPlayers = JsonConvert.DeserializeObject<List<ClientData>>(testJSON3);
+            
             foreach (var item in Globals.AllPlayers)
             {
                 //Console.WriteLine(item.ToString());

@@ -16,7 +16,6 @@ namespace ServerService.Service
         public SpreadGroup _spreadGroup { get; set; }
         ILogger<SpreadService> _logger { get; set; }
         ConfigurationManager _configurationManager { get; set; }
-        private bool isConnectedToDeamon { get; set; }
 
         public SpreadService(ILogger<SpreadService> logger)
         {
@@ -24,11 +23,10 @@ namespace ServerService.Service
             _configurationManager = new ConfigurationManager();
         }
 
-        public string JoinSpreadGroup()
+        public void JoinSpreadGroup()
         {
             _spreadGroup = new SpreadGroup();
             _spreadGroup.Join(_spreadConnection, _configurationManager.SpreadGroup);
-            return _spreadGroup.ToString();
         }
 
         public SpreadMessage SendSpreadMessage(string data)
@@ -36,6 +34,8 @@ namespace ServerService.Service
             SpreadMessage msg = new SpreadMessage();
 
             msg.AddGroup(_spreadGroup);
+            msg.IsSafe = true;
+            msg.ServiceType = SpreadMessage.FIFO_MESS;
             msg.Data = Encoding.ASCII.GetBytes(data);
 
             _spreadConnection.Multicast(msg);
@@ -43,7 +43,7 @@ namespace ServerService.Service
             return msg;
         }
 
-        public bool ConnectToSpread()
+        public SpreadConnection ConnectToSpread()
         {
             _logger.LogInformation("Initializing Spread connection...");
             _spreadConnection = new SpreadConnection();
@@ -51,25 +51,21 @@ namespace ServerService.Service
             {
                 _logger.LogDebug($"Connecting to the Spread Deamon with address: {_configurationManager.SpreadDeamon} and port {_configurationManager.SpreadPort}");
                 _spreadConnection.Connect(_configurationManager.SpreadDeamon, _configurationManager.SpreadPort, _configurationManager.SpreadUser, false, true);
-                Console.WriteLine($"Connected to the deamon with IP {_configurationManager.SpreadDeamon} and port {_configurationManager.SpreadPort}");
-                isConnectedToDeamon = true;
 
             }
             catch (SpreadException spreadException)
             {
                 _logger.LogError($"There was an error connecting to the daemon.");
                 _logger.LogError($"{spreadException.Message} : {spreadException.InnerException}");
-                isConnectedToDeamon = false;
             }
             catch (Exception exception)
             {
                 _logger.LogError($"Can't find the daemon: {_configurationManager.SpreadDeamon}");
                 var msg = $"{exception.Message} : {exception.InnerException}";
                 _logger.LogError(msg);
-                isConnectedToDeamon = false;
             }
 
-            return isConnectedToDeamon;
+            return _spreadConnection;
         }
 
         public SpreadMessage ReceiveSpreadMessage()
@@ -218,7 +214,8 @@ namespace ServerService.Service
         {
             SpreadMessage msg = new SpreadMessage();
             msg.AddGroup(_spreadGroup);
-            msg.Data = Encoding.ASCII.GetBytes($"Received");
+            msg.Data = Encoding.ASCII.GetBytes($"Received|{_spreadGroup.ToString()}");
+            msg.IsSafe = true;
 
             _spreadConnection.Multicast(msg);
 

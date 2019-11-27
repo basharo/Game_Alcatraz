@@ -1,4 +1,6 @@
 using System;
+using System.IO;
+using System.Linq;
 using Akka.Actor;
 using Akka.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,11 +16,37 @@ namespace ServerService
     public class Program
     {
         private static ConfigurationManager ConfigurationManager { get; set; }
+       
 
         public static void Main(string[] args)
         {
 
-            var config = ConfigurationFactory.Load();
+            string actorName = "server";
+            Globals.groupSize = 2;
+            Console.Title = actorName;
+
+
+
+            try
+            {
+
+                startActorSystem("alcatraz");
+                var localChatActor = Globals.mainActorSystem.ActorOf(Props.Create<RegisterActor>(), "RegisterActor");
+
+
+                string line = string.Empty;
+                while (line != null)
+                {
+                    line = Console.ReadLine();
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+        
 
             try
             {
@@ -45,7 +73,9 @@ namespace ServerService
 
         public static void startActorSystem(string actorSystemName)
         {
-            Globals.mainActorSystem = ActorSystem.Create(actorSystemName);
+            var config = File.ReadAllText($"{Path.GetDirectoryName(Directory.GetFiles(Directory.GetCurrentDirectory(), "AkkaConfig.txt", SearchOption.AllDirectories).FirstOrDefault())}/AkkaConfig.txt");
+            var conf = ConfigurationFactory.ParseString(config);
+            Globals.mainActorSystem = ActorSystem.Create(actorSystemName, conf);
 
         }
 

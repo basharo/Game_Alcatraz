@@ -173,12 +173,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Client.cs" />
     <Compile Include="..\..\..\..\..\OneDrive - Capgemini\Desktop\ClientData.cs">
       <Link>ClientData.cs</Link>
     </Compile>
     <Compile Include="Globals.cs" />
-    <Compile Include="Hello.cs" />
     <Compile Include="RegisterActor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

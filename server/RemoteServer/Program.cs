@@ -30,7 +30,7 @@ namespace Server
                 string line = string.Empty;
                 while (line != null)
                 {
-                    line = Console.ReadLine();
+                    
                        
                 }
             

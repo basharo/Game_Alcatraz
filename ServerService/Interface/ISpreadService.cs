@@ -10,9 +10,9 @@ namespace ServerService.Interface
         public SpreadConnection _spreadConnection { get; set; }
         public SpreadGroup _spreadGroup { get; set; }
 
-        bool ConnectToSpread();
+        SpreadConnection ConnectToSpread();
 
-        string JoinSpreadGroup();
+        void JoinSpreadGroup();
 
         SpreadMessage SendSpreadMessage(string spreadMessage);
 

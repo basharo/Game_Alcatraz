@@ -28,6 +28,7 @@ namespace Interface
         {
             //_helloTask = Context.System.Scheduler.ScheduleTellRepeatedlyCancelable(TimeSpan.FromSeconds(1),
             //    TimeSpan.FromSeconds(1), Context.Self, new Hello("hi"), ActorRefs.NoSender);
+            File.Delete(path + fileName);
         }
 
         protected override void PostStop()
